@@ -1,0 +1,24 @@
+Can improve the OpenAI API e.g. cache 
+  https://deno.com/blog/openai_sdk_deno
+cloc --exclude-dir=node_modules,.git .
+Integrate Jupyter AI - but it does not work with Deno
+Dockerfile should set deno user ? Also need to modify devcontainer
+Deno caches imports so can require restarting the notebook to refresh the cache
+Integrate something like langchain into Javascript rather than Jupyter AI
+https://www.deeplearning.ai/short-courses/build-llm-apps-with-langchain-js/
+Examples with deno + Jupyter https://github.com/rgbkrk/denotebooks
+We don't need widgets but it is perhaps possible with 
+  https://github.com/rgbkrk/denotebooks/blob/main/anywidget.ipynb
+
+Uses:
+  Maintain FAQ
+  Editorial review
+    Prioritizing feedback
+    Recommended edits
+  Complete document rewrite based on target audience
+    Role based presentation
+  Automated Glossary and Indexing
+  Model of the project/author
+    Clarifying questions
+  Define what good documentation is
+

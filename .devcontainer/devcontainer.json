@@ -1,0 +1,7 @@
+{
+    "name": "AI Markdown Tool Dev Container",
+    "build": {
+      "dockerfile": "../Dockerfile",
+      "context": ".."
+    }
+}

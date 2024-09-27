@@ -1,0 +1,21 @@
+{
+    "imports": {
+      "axios": "https://deno.land/x/axiod/mod.ts",
+      "dotenv": "https://deno.land/x/dotenv@v3.2.0/mod.ts",
+      "remark": "https://esm.sh/remark@14.0.2",
+      "remark-html": "https://esm.sh/remark-html@15.0.1",
+      "remark-preset-lint-recommended": "https://esm.sh/remark-preset-lint-recommended@7.0.0",
+      "remark-stringify": "https://esm.sh/remark-stringify@11.0.0",
+      "langchain": "npm:/langchain@0.1.1",
+      "langchain/": "npm:/langchain@0.1.1/",
+      "@langchain/openai": "npm:/@langchain/openai@0.0.10",
+      "@langchain/openai/": "npm:/@langchain/openai@0.0.10/",
+      "@langchain/core": "npm:/@langchain/core@0.1.10",
+      "@langchain/core/": "npm:/@langchain/core@0.1.10/",
+      "dotenv/config": "npm:/dotenv/config",
+      "ignore": "npm:/ignore",
+      "pdf-parse": "npm:/pdf-parse",
+      "ml-distance": "npm:/ml-distance"
+    }
+  }
+  
