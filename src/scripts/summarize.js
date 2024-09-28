@@ -5,7 +5,7 @@ import { callOpenAI } from '../utils/ai.ts';
 
 export const summarize = async () => {
   try {
-    const content = await readMarkdown('md-files/example.md');
+    const content = await readMarkdown('example.md');
     const prompt = getSummaryPrompt(content);
     const summary = await callOpenAI(prompt);
     console.log('Summary:', summary);

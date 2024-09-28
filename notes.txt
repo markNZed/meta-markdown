@@ -1,14 +1,16 @@
 Can improve the OpenAI API e.g. cache 
   https://deno.com/blog/openai_sdk_deno
-cloc --exclude-dir=node_modules,.git .
+How to provide meta-meta level generating JS
+  Can a cell in notebook create a new cell ?
+  Can just use a cell to generate code and store in variable that can eval
+Define what good documentation is
+  System prompt ?
+Use notebooks for /scripts and /prompts
+
 Integrate Jupyter AI - but it does not work with Deno
-Dockerfile should set deno user ? Also need to modify devcontainer
-Deno caches imports so can require restarting the notebook to refresh the cache
-Integrate something like langchain into Javascript rather than Jupyter AI
+Deno caches imports so requires restarting the kernel ini notebook to refresh
 https://www.deeplearning.ai/short-courses/build-llm-apps-with-langchain-js/
 Examples with deno + Jupyter https://github.com/rgbkrk/denotebooks
-We don't need widgets but it is perhaps possible with 
-  https://github.com/rgbkrk/denotebooks/blob/main/anywidget.ipynb
 
 Uses:
   Maintain FAQ
@@ -20,5 +22,9 @@ Uses:
   Automated Glossary and Indexing
   Model of the project/author
     Clarifying questions
-  Define what good documentation is
 
+cloc --exclude-dir=node_modules,.git .
+We don't need widgets but it is perhaps possible with 
+  https://github.com/rgbkrk/denotebooks/blob/main/anywidget.ipynb
+jupyter notebook list
+jupyter kernelspec list

@@ -1,8 +1,8 @@
-// config/ai-config.ts
-import { config } from 'https://deno.land/std@0.203.0/dotenv/mod.ts';
+import { load } from "dotenv";
 
-const env = config();
+const env = await load({ envPath: '../../.env' });  // Adjust path if .env is in root
 
+// Now you can use the env variables
 export interface OpenAIConfig {
   apiKey: string;
   model: string;
@@ -51,8 +51,10 @@ export interface OpenAIErrorResponse {
 }
 
 export const openAI: OpenAIConfig = {
-  apiKey: env.OPENAI_API_KEY,
-  model: env.OPENAI_MODEL,
+  apiKey: env.OPENAI_API_KEY || '',
+  model: env.OPENAI_MODEL || 'gpt-4o-mini',
   maxTokens: parseInt(env.OPENAI_MAX_TOKENS) || 150,
   temperature: parseFloat(env.OPENAI_TEMPERATURE) || 0.7,
 };
+
+export const markdownDir = env.MARKDOWN_DIR || '/workspace/markdown_example';

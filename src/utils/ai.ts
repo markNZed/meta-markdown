@@ -1,5 +1,5 @@
 // Import the OpenAI configuration
-import { openAI } from '../../config/ai-config.ts';
+import { openAI } from '../config/ai-config.ts';
 
 /**
  * Calls the OpenAI API with the provided prompt and returns the assistant's reply.

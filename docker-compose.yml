@@ -1,0 +1,14 @@
+services:
+  devcontainer:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: meta-markdown:dev
+    volumes:
+      - .:/workspace
+      # Conditionally mount external Markdown directory, or fallback to /workspace/markdown
+      #- ${MARKDOWN_DIR:-./markdown}:/markdown
+    ports:
+      # Expose Jupyter port
+      - 8888:8888
+    #user: "1000:1000"  # Adjust user ID as per your system, or remove this line if unnecessary

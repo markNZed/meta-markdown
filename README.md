@@ -2,23 +2,24 @@
 
 ## Overview
 
-This tool integrates with Visual Studio Code (VS Code) to provide AI-enhanced manipulation and management of Markdown (MD) files. Leveraging GPT-4 via the OpenAI API, it offers functionalities like formatting, content generation, text summarization, grammar checking, and style improvements directly within VS Code Notebooks.
+This tool integrates with Visual Studio Code (VS Code) to provide AI-enhanced manipulation and management of Markdown (MD) files. Leveraging the OpenAI API, it offers functionality within VS Code Notebooks.
 
 ## Setup
 
 1. **Clone the Repository:**
    ```bash
    git clone <repository-url>
-   cd ai-markdown-tool
+   cd meta-markdown
    ```
-
-2. **Install Dependencies:**
-   ```bash
-   npm install
-   ```
+2. **Mount markdown directory:**
+   - Modify docker-compose.yml to mount your directory at /markdown
 
 3. **Configure AI Service:**
    - Rename `.env.example` to `.env` and add your OpenAI API key.
 
-4. **Run Notebook:**
-   - Open the `src/notebooks/ManipulateMD.ipynb` in VS Code and execute cells for AI-based manipulations.
+4. **Run devcontainer from VS Code**
+   - Use Dev Containers extension to launch
+   ```
+
+5. **Run Notebook:**
+   - Open the `src/notebooks/demo.ipynb` in VS Code and execute cells for AI-based manipulations.

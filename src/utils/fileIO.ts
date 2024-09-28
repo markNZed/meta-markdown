@@ -10,6 +10,8 @@ import { remark } from "https://esm.sh/remark@14.0.2";
 import presetLintRecommended from "https://esm.sh/remark-preset-lint-recommended@6.0.0";
 import remarkStringify from "https://esm.sh/remark-stringify@10.0.0";
 
+import { markdownDir } from '../config/ai-config.ts';
+
 // Support for __dirname in ESM
 const __filename = fromFileUrl(import.meta.url);
 const __dirname = dirname(__filename);
@@ -24,7 +26,7 @@ const __dirname = dirname(__filename);
 export const readMarkdown = async (filePath: string): Promise<string> => {
   try {
     // Resolve the absolute path to the Markdown file
-    const absolutePath = resolve(__dirname, "../../", filePath);
+    const absolutePath = resolve(markdownDir, filePath);
     console.log(`Attempting to read Markdown file at: ${absolutePath}`);
 
     // Read the file content as text
@@ -54,7 +56,7 @@ export const writeMarkdown = async (
 ): Promise<void> => {
   try {
     // Resolve the absolute path where the Markdown file will be written
-    const absolutePath = resolve(__dirname, "../../", filePath);
+    const absolutePath = resolve(markdownDir, filePath);
 
     // Ensure the directory exists
     const dir = dirname(absolutePath);
