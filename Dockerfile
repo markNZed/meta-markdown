@@ -29,5 +29,7 @@ RUN groupmod -g ${GROUP_ID} deno && \
 # Set the user back to 'deno' by default
 USER deno
 
+RUN deno jupyter --unstable --install
+
 # Start Jupyter Notebook on container startup (use the full path to Python's Jupyter)
 CMD ["/usr/local/bin/jupyter", "notebook", "--ip=0.0.0.0", "--port=8888", "--no-browser", "--allow-root", "--NotebookApp.token=''"]

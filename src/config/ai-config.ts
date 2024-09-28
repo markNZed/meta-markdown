@@ -1,6 +1,13 @@
 import { load } from "dotenv";
 
-const env = await load({ envPath: '../../.env' });  // Adjust path if .env is in root
+// Load .env file if it exists
+const envFromFile = await load({ envPath: '../../.env' });
+
+// Merge system environment variables with those from the .env file
+const env = {
+  ...envFromFile, // Variables from .env file
+  ...Deno.env.toObject() // System environment variables
+};
 
 // Now you can use the env variables
 export interface OpenAIConfig {

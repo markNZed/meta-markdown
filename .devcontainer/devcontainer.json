@@ -4,4 +4,17 @@
   "service": "devcontainer",
   "remoteUser": "deno",
   "workspaceFolder": "/workspace",
+  "customizations": {
+    // Configure properties specific to VS Code.
+    "vscode": {
+      "extensions": [
+          "ms-toolsai.jupyter",
+          "denoland.vscode-deno"
+      ],
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash",
+        "terminal.integrated.profiles.linux": {"bash": {"path": "/bin/bash"}},
+      }
+    }
+  }
 }
