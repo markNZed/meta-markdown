@@ -1,6 +1,3 @@
-Concurrency for TTS requests to improve performance.
-Disk space checks to handle potential file system issues.
-Enhance text splitting for better coherence in more complex text structures.
 Can improve the OpenAI API e.g. cache 
   https://deno.com/blog/openai_sdk_deno
 How to provide meta-meta level generating JS
@@ -10,8 +7,13 @@ Define what good documentation is
   System prompt ?
 Use notebooks for /scripts and /prompts
 
+TTS
+  Concurrency for TTS requests to improve performance.
+  Disk space checks to handle potential file system issues.
+  Enhance text splitting for better coherence in more complex text structures.
+
 Integrate Jupyter AI - but it does not work with Deno
-Deno caches imports so requires restarting the kernel ini notebook to refresh
+Deno caches imports so requires restarting the kernel in notebook to refresh
 https://www.deeplearning.ai/short-courses/build-llm-apps-with-langchain-js/
 Examples with deno + Jupyter https://github.com/rgbkrk/denotebooks
 
