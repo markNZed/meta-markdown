@@ -1,3 +1,6 @@
+Concurrency for TTS requests to improve performance.
+Disk space checks to handle potential file system issues.
+Enhance text splitting for better coherence in more complex text structures.
 Can improve the OpenAI API e.g. cache 
   https://deno.com/blog/openai_sdk_deno
 How to provide meta-meta level generating JS

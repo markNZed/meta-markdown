@@ -1,7 +1,8 @@
 FROM denoland/deno
 
 # Install Python and pip for Jupyter
-RUN apt-get update && apt-get install -y python3 python3-pip python3-dev git && \
+RUN apt-get update && \
+    apt-get install -y python3 python3-pip python3-dev git ffmpeg sudo curl vim procps && \
     apt-get clean -y && rm -rf /var/lib/apt/lists/*
 
 # Install Jupyter (you can include --break-system-packages if needed)
@@ -20,11 +21,19 @@ WORKDIR /workspace
 ARG USER_ID=1000
 ARG GROUP_ID=1000
 
+# deno user exists in denoland/deno container
+
 # Create a 'deno' user with a specific UID and GID
 RUN groupmod -g ${GROUP_ID} deno && \
     usermod -u ${USER_ID} -g ${GROUP_ID} deno && \
     mkdir -p /home/deno && \
     chown -R deno:deno /home/deno /deno-dir /workspace /usr/local/share/jupyter
+
+# Add 'deno' user to the 'sudo' group
+RUN usermod -aG sudo deno
+
+# Configure passwordless sudo for 'sudo' group members
+RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
 # Set the user back to 'deno' by default
 USER deno

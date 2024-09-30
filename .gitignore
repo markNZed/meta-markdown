@@ -16,3 +16,5 @@ npm-debug.log*
 .vscode/
 
 project_review.txt
+tts-cache/
+llm-cache/

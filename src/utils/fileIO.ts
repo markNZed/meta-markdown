@@ -10,10 +10,15 @@ import { remark } from "https://esm.sh/remark@14.0.2";
 import presetLintRecommended from "https://esm.sh/remark-preset-lint-recommended@6.0.0";
 import remarkStringify from "https://esm.sh/remark-stringify@10.0.0";
 
-import { markdownDir } from '../config/ai-config.ts';
+import { config } from '../../config.ts';
+
+const markdownDir = config.markdownDir;
 
 // Support for __dirname in ESM
-const __filename = fromFileUrl(import.meta.url);
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 /**

@@ -10,7 +10,7 @@
     "lock": true,
     "fmt": {
       "files": {
-        "include": ["src/**/*.{ts,js}"]
+        "include": ["src/**/*.{ts,js}"] 
       }
     }
   }

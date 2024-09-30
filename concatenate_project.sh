@@ -20,7 +20,7 @@ fi
 EXCLUDE_DIRS=("node_modules" ".git" ".vscode" "dist" "build")
 
 # Define file extensions to include (add or remove as needed)
-INCLUDE_EXTENSIONS=("*.js" "*.json" "*.md" "*.ipynb" "Dockerfile" "devcontainer.json" "launch.json" "README.md")
+INCLUDE_EXTENSIONS=("*.js" "*.ts" "*.json" "*.md" "*.ipynb" "Dockerfile" "devcontainer.json" "launch.json" "README.md")
 
 # Define file regex patterns to exclude (e.g., "package-lock.json", "some-other-file.json")
 EXCLUDE_FILES=("package-lock.json" ".env")
