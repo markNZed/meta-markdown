@@ -1,17 +1,9 @@
 {
-    "tasks": {
-      "start": "deno run --allow-net --allow-read --allow-env src/index.ts",
-      "format": "deno run --allow-net --allow-read --allow-env src/index.ts --script format",
-      "summarize": "deno run --allow-net --allow-read --allow-env src/index.ts --script summarize",
-      "grammar-check": "deno run --allow-net --allow-read --allow-env src/index.ts --script grammarCheck",
-      "style-improve": "deno run --allow-net --allow-read --allow-env src/index.ts --script styleImprove"
-    },
-    "importMap": "./import_map.json",
-    "lock": true,
-    "fmt": {
-      "files": {
-        "include": ["src/**/*.{ts,js}"] 
-      }
-    }
+  "importMap": "./import_map.json",
+  "lock": true,
+  "fmt": {
+    "include": ["src/**/*.ts", "tests/**/*.ts"],
+    "exclude": ["node_modules/", "dist/"]
   }
+}
   
