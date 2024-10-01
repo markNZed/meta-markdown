@@ -1,7 +1,8 @@
-import { resolve } from "https://deno.land/std@0.203.0/path/mod.ts";
 import { ensureDir } from "https://deno.land/std@0.203.0/fs/mod.ts";
+import OpenAI from "https://deno.land/x/openai@v4.66.1/mod.ts";
 import { config } from '../../config.ts';
 import logger from './logger.ts';
+import { resolve } from '@std/path';
 
 // Define cache directory relative to module location
 const __dirname = new URL('.', import.meta.url).pathname;
@@ -24,7 +25,6 @@ interface OpenAIChoice {
 
 interface OpenAIResponse {
   choices: OpenAIChoice[];
-  // Include other relevant fields if necessary
 }
 
 interface CachedResponse {
@@ -43,27 +43,15 @@ const hashText = async (text: string): Promise<string> => {
   return hashHex;
 };
 
+// Initialize OpenAI client
+const openai = new OpenAI({
+  apiKey: config.openAI.apiKey,
+});
+
 export const callOpenAI = async (prompt: string, requestId: string): Promise<string> => {
   if (typeof prompt !== 'string' || prompt.trim().length === 0) {
     throw new Error('Invalid prompt: Prompt must be a non-empty string.');
   }
-
-  const url = 'https://api.openai.com/v1/chat/completions';
-  
-  const headers = {
-    'Content-Type': 'application/json',
-    'Authorization': `Bearer ${config.openAI.apiKey}`,
-  };
-
-  const body = {
-    model: config.openAI.model,
-    messages: [
-      { role: 'system', content: 'You are a helpful assistant.' },
-      { role: 'user', content: prompt },
-    ],
-    max_tokens: config.openAI.maxTokens,
-    temperature: config.openAI.temperature,
-  };
 
   const cacheKeyInput = JSON.stringify({
     model: config.openAI.model,
@@ -97,21 +85,20 @@ export const callOpenAI = async (prompt: string, requestId: string): Promise<str
     }
   }
 
-  // Fetch from OpenAI
+  // Fetch from OpenAI using openai client
   try {
-    const response = await fetch(url, {
-      method: 'POST',
-      headers,
-      body: JSON.stringify(body),
+
+    const completion = await openai.chat.completions.create({
+      model: config.openAI.model,
+      messages: [
+        { role: 'system', content: 'You are a helpful assistant.' },
+        { role: 'user', content: prompt },
+      ],
+      max_tokens: config.openAI.maxTokens,
+      temperature: config.openAI.temperature,
     });
-    
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(`OpenAI API error: ${JSON.stringify(errorData)}`);
-    }
-    
-    const data: OpenAIResponse = await response.json();
-    const reply = data.choices?.[0]?.message?.content?.trim();
+
+    const reply = completion.choices?.[0]?.message?.content?.trim();
     
     if (!reply) {
       throw new Error('No reply received from OpenAI API');

@@ -1,14 +1,15 @@
-import { resolve } from "https://deno.land/std@0.203.0/path/mod.ts";
+// Import necessary modules and dependencies
+import { resolve, join } from "https://deno.land/std@0.203.0/path/mod.ts";
 import logger from './logger.ts';
-import { OpenAI, toFile } from 'https://deno.land/x/openai@v4.64.0/mod.ts';
+import { OpenAI } from 'https://deno.land/x/openai@v4.64.0/mod.ts';
 import { config } from '../../config.ts';
-import { ffmpeg } from "https://deno.land/x/deno_ffmpeg@v3.1.0/mod.ts";
+import { ensureDir } from "https://deno.land/std@0.203.0/fs/mod.ts"; // Changed 'remove' to 'rm'
+import { pLimit } from "https://deno.land/x/p_limit@v1.0.0/mod.ts";
 
 // Define cache directory
 const CACHE_DIR = resolve('../../tts-cache');
 
 // Ensure cache directory exists
-import { ensureDir } from "https://deno.land/std@0.203.0/fs/mod.ts";
 await ensureDir(CACHE_DIR);
 logger.info(`Cache directory is ready at ${CACHE_DIR}`, { requestId: 'system' });
 
@@ -71,32 +72,74 @@ const splitTextIntoChunks = (text: string, maxLength: number = 4096): string[] =
 };
 
 /**
- * Merges multiple MP3 files into a single MP3 file using deno_ffmpeg.
+ * Merges multiple MP3 files into a single MP3 file using FFmpeg's concat demuxer.
  * 
  * @param {string[]} inputFiles - Array of input MP3 file paths.
  * @param {string} outputFile - The path for the merged output MP3 file.
  * @param {string} requestId - Unique identifier for the request.
  * @returns {Promise<void>}
  */
-const mergeAudioFiles = async (inputFiles: string[], outputFile: string, requestId: string): Promise<void> => {
+const mergeAudioFiles = async (
+  inputFiles: string[],
+  outputFile: string,
+  requestId: string,
+): Promise<void> => {
   logger.debug('Starting audio merging process', { requestId });
 
   try {
-    // Create an ffmpeg instance
-    let ffmpegProcess = ffmpeg({
-      input: inputFiles[0],   // Set the first input file
-      ffmpegDir: "/usr/bin/ffmpeg",  // Path to the ffmpeg binary
+    if (inputFiles.length === 0) {
+      throw new Error("No input files provided for merging.");
+    }
+
+    // Create a temporary file list for FFmpeg
+    const listFilePath = join(CACHE_DIR, `${requestId}_filelist.txt`);
+    const fileListContent = inputFiles.map(file => `file '${file}'`).join('\n');
+    await Deno.writeTextFile(listFilePath, fileListContent);
+    logger.debug(`Created FFmpeg file list at ${listFilePath}`, { requestId });
+
+    // Execute FFmpeg command using Deno's subprocess
+    const ffmpegCmd = [
+      "ffmpeg",
+      "-f",
+      "concat",
+      "-y",
+      "-safe",
+      "0",
+      "-i",
+      listFilePath,
+      "-c",
+      "copy",
+      outputFile,
+    ];
+
+    logger.debug(`Running FFmpeg command: ${ffmpegCmd.join(' ')}`, { requestId });
+
+    const process = Deno.run({
+      cmd: ffmpegCmd,
+      stdout: "piped",
+      stderr: "piped",
     });
 
-    // Add the rest of the input files
-    inputFiles.slice(1).forEach((file) => {
-      ffmpegProcess = ffmpegProcess.addInput(file);
-    });
+    const { code } = await process.status();
 
-    // Chain methods and save the output
-    await ffmpegProcess.save(outputFile);
+    const rawOutput = await process.output(); // stdout
+    const rawError = await process.stderrOutput(); // stderr
+
+    const output = new TextDecoder().decode(rawOutput);
+    const errorOutput = new TextDecoder().decode(rawError);
+
+    process.close();
+
+    if (code !== 0) {
+      logger.error(`FFmpeg failed with code ${code}: ${errorOutput}`, { requestId });
+      throw new Error(`FFmpeg failed: ${errorOutput}`);
+    }
 
     logger.info(`Audio merged successfully into ${outputFile}`, { requestId });
+
+    // Optionally, delete the temporary file list
+    await Deno.remove(listFilePath); // Changed 'remove' to 'rm'
+    logger.debug(`Deleted temporary FFmpeg file list at ${listFilePath}`, { requestId });
   } catch (error) {
     logger.error(`FFmpeg error during merging: ${error}`, { requestId });
     throw new Error(`FFmpeg failed: ${error}`);
@@ -117,7 +160,6 @@ export const createAudioFromText = async (
   requestId: string,
   voice: string,
 ): Promise<string> => {
-
   try {
     logger.info(`Processing TTS request.`, { requestId });
 
@@ -125,10 +167,12 @@ export const createAudioFromText = async (
     const chunks = splitTextIntoChunks(text, 4096);
     logger.info(`Text split into ${chunks.length} chunk(s).`, { requestId });
 
-    const audioFilePaths: string[] = [];
+    // Initialize p-limit with concurrency of 10
+    const limit = pLimit(10);
 
-    for (let i = 0; i < chunks.length; i++) {
-      const chunk = chunks[i];
+    // Function to process each chunk
+    const processChunk = async (chunk: string, index: number): Promise<string> => {
+      const chunkNumber = index + 1;
       const chunkHash = await hashText(chunk + voice);
       const cachedFilePath = resolve(CACHE_DIR, `${chunkHash}.mp3`);
 
@@ -136,13 +180,13 @@ export const createAudioFromText = async (
       try {
         await Deno.stat(cachedFilePath);
         logger.info(
-          `Cache hit for chunk ${i + 1}/${chunks.length} with hash ${chunkHash}.`,
+          `Cache hit for chunk ${chunkNumber}/${chunks.length} with hash ${chunkHash}.`,
           { requestId },
         );
-        audioFilePaths.push(cachedFilePath);
+        return cachedFilePath;
       } catch {
         logger.info(
-          `Cache miss for chunk ${i + 1}/${chunks.length}. Requesting TTS from OpenAI.`,
+          `Cache miss for chunk ${chunkNumber}/${chunks.length}. Requesting TTS from OpenAI.`,
           { requestId },
         );
 
@@ -163,16 +207,17 @@ export const createAudioFromText = async (
 
         // Assuming response.body is a ReadableStream of the MP3 data
         const chunksArray: Uint8Array[] = [];
-        for await (const chunk of response.body) {
-          chunksArray.push(chunk);
+        for await (const chunkData of response.body) {
+          chunksArray.push(chunkData);
         }
-        const audioBuffer = new Uint8Array(
-          chunksArray.reduce((acc, curr) => acc + curr.length, 0),
-        );
+
+        // Concatenate all chunks into a single buffer
+        const totalLength = chunksArray.reduce((acc, curr) => acc + curr.length, 0);
+        const audioBuffer = new Uint8Array(totalLength);
         let offset = 0;
-        for (const chunk of chunksArray) {
-          audioBuffer.set(chunk, offset);
-          offset += chunk.length;
+        for (const chunkData of chunksArray) {
+          audioBuffer.set(chunkData, offset);
+          offset += chunkData.length;
         }
 
         // Write the MP3 chunk to the cache
@@ -181,9 +226,14 @@ export const createAudioFromText = async (
           requestId,
         });
 
-        audioFilePaths.push(cachedFilePath);
+        return cachedFilePath;
       }
-    }
+    };
+
+    // Process all chunks with concurrency limit
+    const audioFilePaths = await Promise.all(
+      chunks.map((chunk, index) => limit(() => processChunk(chunk, index)))
+    );
 
     // Define the output file path
     const outputFile = resolve(CACHE_DIR, `${requestId}_merged.mp3`);
