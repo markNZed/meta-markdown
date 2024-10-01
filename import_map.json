@@ -8,6 +8,8 @@
     "@std/node/buffer": "https://deno.land/std@0.201.0/node/buffer.ts",
     "axios": "https://deno.land/x/axiod/mod.ts",
     "dotenv": "https://deno.land/x/dotenv@v3.2.0/mod.ts",
+    "unified": "https://esm.sh/unified@10.1.2",
+    "remark-parse": "https://esm.sh/remark-parse@10.0.1",
     "remark": "https://esm.sh/remark@14.0.2",
     "remark-html": "https://esm.sh/remark-html@15.0.1",
     "remark-preset-lint-recommended": "https://esm.sh/remark-preset-lint-recommended@7.0.0",

@@ -1,12 +1,17 @@
+// tts.ts
+
 // Import necessary modules and dependencies
-import { resolve, join } from "https://deno.land/std@0.203.0/path/mod.ts";
+import { resolve } from "https://deno.land/std@0.203.0/path/mod.ts";
 import logger from './logger.ts';
 import { OpenAI } from 'https://deno.land/x/openai@v4.64.0/mod.ts';
 import { config } from '../../config.ts';
-import { ensureDir } from "https://deno.land/std@0.203.0/fs/mod.ts"; // Changed 'remove' to 'rm'
+import { ensureDir } from "https://deno.land/std@0.203.0/fs/mod.ts";
 import { pLimit } from "https://deno.land/x/p_limit@v1.0.0/mod.ts";
 
-// Define cache directory
+// Import the shared merge function
+import { mergeAudioFiles, MergeAudioParams } from './audioUtils.ts';
+
+// Initialize cache directory
 const CACHE_DIR = resolve('../../tts-cache');
 
 // Ensure cache directory exists
@@ -72,81 +77,6 @@ const splitTextIntoChunks = (text: string, maxLength: number = 4096): string[] =
 };
 
 /**
- * Merges multiple MP3 files into a single MP3 file using FFmpeg's concat demuxer.
- * 
- * @param {string[]} inputFiles - Array of input MP3 file paths.
- * @param {string} outputFile - The path for the merged output MP3 file.
- * @param {string} requestId - Unique identifier for the request.
- * @returns {Promise<void>}
- */
-const mergeAudioFiles = async (
-  inputFiles: string[],
-  outputFile: string,
-  requestId: string,
-): Promise<void> => {
-  logger.debug('Starting audio merging process', { requestId });
-
-  try {
-    if (inputFiles.length === 0) {
-      throw new Error("No input files provided for merging.");
-    }
-
-    // Create a temporary file list for FFmpeg
-    const listFilePath = join(CACHE_DIR, `${requestId}_filelist.txt`);
-    const fileListContent = inputFiles.map(file => `file '${file}'`).join('\n');
-    await Deno.writeTextFile(listFilePath, fileListContent);
-    logger.debug(`Created FFmpeg file list at ${listFilePath}`, { requestId });
-
-    // Execute FFmpeg command using Deno's subprocess
-    const ffmpegCmd = [
-      "ffmpeg",
-      "-f",
-      "concat",
-      "-y",
-      "-safe",
-      "0",
-      "-i",
-      listFilePath,
-      "-c",
-      "copy",
-      outputFile,
-    ];
-
-    logger.debug(`Running FFmpeg command: ${ffmpegCmd.join(' ')}`, { requestId });
-
-    const process = Deno.run({
-      cmd: ffmpegCmd,
-      stdout: "piped",
-      stderr: "piped",
-    });
-
-    const { code } = await process.status();
-
-    const rawOutput = await process.output(); // stdout
-    const rawError = await process.stderrOutput(); // stderr
-
-    const output = new TextDecoder().decode(rawOutput);
-    const errorOutput = new TextDecoder().decode(rawError);
-
-    process.close();
-
-    if (code !== 0) {
-      logger.error(`FFmpeg failed with code ${code}: ${errorOutput}`, { requestId });
-      throw new Error(`FFmpeg failed: ${errorOutput}`);
-    }
-
-    logger.info(`Audio merged successfully into ${outputFile}`, { requestId });
-
-    // Optionally, delete the temporary file list
-    await Deno.remove(listFilePath); // Changed 'remove' to 'rm'
-    logger.debug(`Deleted temporary FFmpeg file list at ${listFilePath}`, { requestId });
-  } catch (error) {
-    logger.error(`FFmpeg error during merging: ${error}`, { requestId });
-    throw new Error(`FFmpeg failed: ${error}`);
-  }
-};
-
-/**
  * Converts text to MP3 using OpenAI's Text-to-Speech (TTS) API with caching.
  * Handles texts longer than 4096 characters by splitting them into smaller chunks.
  *
@@ -186,7 +116,7 @@ export const createAudioFromText = async (
         return cachedFilePath;
       } catch {
         logger.info(
-          `Cache miss for chunk ${chunkNumber}/${chunks.length}. Requesting TTS from OpenAI.`,
+          `Cache miss for chunk ${chunkNumber}/${chunks.length} ${chunkHash} Requesting TTS from OpenAI.`,
           { requestId },
         );
 
@@ -235,13 +165,25 @@ export const createAudioFromText = async (
       chunks.map((chunk, index) => limit(() => processChunk(chunk, index)))
     );
 
-    // Define the output file path
-    const outputFile = resolve(CACHE_DIR, `${requestId}_merged.mp3`);
+    console.log("audioFilePaths", audioFilePaths);
 
-    // Merge all audio files into a single MP3
-    await mergeAudioFiles(audioFilePaths, outputFile, requestId);
-
-    return outputFile;
+    if (audioFilePaths.length === 1) {
+      return audioFilePaths[0]; 
+    } else {
+      // Define the output file path
+      const outputFilePath = resolve(CACHE_DIR, `${requestId}_merged.mp3`);
+      // Prepare parameters for the shared merge function
+      const mergeParams: MergeAudioParams = {
+        inputFiles: audioFilePaths,
+        outputFile: outputFilePath,
+        requestId: requestId,
+        cacheDir: CACHE_DIR,
+      };
+      // Merge all audio files into a single MP3 using the shared function
+      await mergeAudioFiles(mergeParams);
+      logger.info(`Audio merged successfully into ${outputFilePath}`, { requestId });
+      return outputFilePath;
+    }
   } catch (error: any) {
     logger.error('Error in TTS process', { requestId, error: error.message });
     throw new Error('Failed to generate MP3 from text.');
