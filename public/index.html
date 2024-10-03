@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Markdown Tool</title>
+</head>
+<body>
+    <h1>Markdown Tool!</h1>
+    <p>Welcome to the Markdown Tool!</p>
+
+    <!-- Container for dynamic content -->
+    <div id="app"></div>
+
+    <script type="module">
+        // Function to load app.html content into the #app div
+        async function loadAppHtml() {
+            try {
+                const response = await fetch(`/app.html?v=${Date.now()}`);
+                if (response.ok) {
+                    const content = await response.text();
+                    document.getElementById('app').innerHTML = content;
+                } else {
+                    console.error('Failed to load app.html:', response.statusText);
+                }
+            } catch (error) {
+                console.error('Error fetching app.html:', error);
+            }
+        }
+
+        // Function to load app.js dynamically as a module
+        async function loadAppJs() {
+            try {
+                const appJsModuleUrl = `/app.js?v=${Date.now()}`;
+                // Remove the old module from cache
+                const module = await import(appJsModuleUrl);
+                // Call an exported function or initialize your app
+                if (module.initApp) {
+                    module.initApp();
+                }
+            } catch (error) {
+                console.error('Error loading app.js module:', error);
+            }
+        }
+
+        // Initial load of app.html and app.js
+        loadAppHtml();
+        loadAppJs();
+
+        // Set up WebSocket connection
+        const ws = new WebSocket(`ws://${location.host}/ws`);
+
+        ws.onmessage = (event) => {
+            if (event.data === 'reload-app-html') {
+                console.log('app.html changed, reloading content...');
+                loadAppHtml();
+            } else if (event.data === 'reload-app-js') {
+                console.log('app.js changed, reloading script...');
+                loadAppJs();
+            }
+        };
+
+        ws.onopen = () => {
+            console.log("WebSocket connection established");
+        };
+
+        ws.onclose = () => {
+            console.log("WebSocket connection closed");
+        };
+
+        ws.onerror = (error) => {
+            console.error("WebSocket error:", error);
+        };
+    </script>
+</body>
+</html>
