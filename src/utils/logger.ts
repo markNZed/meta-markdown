@@ -107,7 +107,7 @@ function truncate(value: any, maxLength: number = config.maxLogEntryLength): str
   }
   const halfLength = Math.floor(maxLength / 2);
   // Get first half and last half, adding "..." in between
-  const truncated = strValue.substring(0, halfLength) + " ...TRUNCATED... " + strValue.substring(strValue.length - halfLength);
+  const truncated = strValue.substring(0, halfLength) + " !!!TRUNCATED!!! " + strValue.substring(strValue.length - halfLength);
   return truncated;
 }
 
@@ -166,7 +166,12 @@ interface LogRecordWithExtra extends LogRecord {
 
 // Custom formatter for console handler (human-readable format)
 function consoleFormatter(logRecord: LogRecordWithExtra): string {
-  const datetime = logRecord.datetime.toISOString().substring(11, 19);
+  const datetime = logRecord.datetime.toLocaleTimeString([], {
+    hour12: false,
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+  });
   let sourceInfo = "";
   let requestId = "";
   const extraArgs: any[] = [];
@@ -208,8 +213,15 @@ function consoleFormatter(logRecord: LogRecordWithExtra): string {
 
 // Custom formatter for file handler (structured JSONL)
 function jsonFileFormatter(logRecord: LogRecord): string {
+  const datetime = logRecord.datetime.toLocaleTimeString([], {
+    hour12: false,
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+  });
+  
   const logEntry: Record<string, any> = {
-    datetime: logRecord.datetime.toISOString().substring(11, 19),
+    datetime: datetime,
     level: logRecord.levelName.padEnd(5),
     msg: logRecord.msg,
   };
@@ -251,14 +263,14 @@ function jsonFileFormatter(logRecord: LogRecord): string {
   // If there are extra arguments, append them
   if (logEntry.extra) {
     const extraFormatted = logEntry.extra
-      .map((value) => JSON.stringify(truncate(value)))
+      .map((value: any) => JSON.stringify(truncate(value))) // Specify the type of 'value'
       .join(", ");
     msg += ` - ${extraFormatted}`;
   }
 
   return msg;
 
-  return JSON.stringify(truncatedLogEntry, null, 2);  // Return the truncated log entry
+  //return JSON.stringify(truncatedLogEntry, null, 2);  // Return the truncated log entry
 }
 
 

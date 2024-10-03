@@ -3,7 +3,7 @@ import { remark } from "https://esm.sh/remark@14.0.2";
 import presetLintRecommended from "https://esm.sh/remark-preset-lint-recommended@6.0.0";
 import remarkStringify from "https://esm.sh/remark-stringify@10.0.0";
 
-import { config } from '../../config.ts';
+import { config } from '../../../config.ts';
 
 const markdownDir = config.markdownDir;
 

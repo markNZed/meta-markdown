@@ -4,7 +4,7 @@ The rapid development of artificial intelligence (AI) has profound implications 
 
 ## Automated Enhancements
 
-Sure! Please provide the Markdown content you'd like me to review, and I'll check it for grammatical errors and style improvements.
+Certainly! Please provide the Markdown content you'd like me to review and correct.
 
 ## Summary
 

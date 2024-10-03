@@ -1,4 +1,4 @@
-import { readMarkdown } from '../utils/fileIO.ts';
+import { readMarkdown } from '../utils/markdown/fileIO.ts';
 import { getSummaryPrompt } from '../prompts/getSummaryPrompt.js';
 import { callOpenAI } from '../utils/ai.ts';
 

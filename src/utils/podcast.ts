@@ -4,6 +4,8 @@ import { createAudioFromText } from './tts.ts';
 import logger from './logger.ts';
 import { resolve } from "https://deno.land/std@0.203.0/path/mod.ts";
 import { mergeAudioFiles, MergeAudioParams } from './audioUtils.ts';
+import type { Root } from "npm:@types/mdast";
+
 // Initialize cache directory
 const CACHE_DIR = resolve('../../tts-cache');
 
@@ -18,7 +20,7 @@ const CACHE_DIR = resolve('../../tts-cache');
  * @returns {Promise<Uint8Array>} - The generated MP3 as a Uint8Array.
  */
 export const convertToPodcast = async (
-  tree: any,
+  tree: Root,
   parameters: any,
   requestId: string,
   config: any,
@@ -45,7 +47,7 @@ export const convertToPodcast = async (
     const audioFilePaths: string[] = [];
     let i = 0;
     for (const block of conversation) {
-      const { speaker, text } = block;
+      const { speaker, text } = block as { speaker: string; text: string }; // Type assertion
       const voice = speakerMap.get(speaker.toLowerCase());
       if (!voice) {
         throw new Error(`No TTS voice found for speaker: ${speaker}`);
@@ -93,10 +95,10 @@ export const convertToPodcast = async (
  * @param {object} tree - The Markdown AST.
  * @returns {Array} - Array of conversation blocks with speaker and text.
  */
-const extractConversation = (tree) => {
-  const conversation = [];
-  let currentSpeaker = null;
-  let currentText = [];
+const extractConversation = (tree: Root) => {
+  const conversation: any[] = []; // Specify type for conversation
+  let currentSpeaker: string | null = null; // Explicitly define type for currentSpeaker
+  let currentText: string[] = []; // Specify type for currentText
 
   //console.log(tree);
 

@@ -3,6 +3,7 @@ import OpenAI from "https://deno.land/x/openai@v4.66.1/mod.ts";
 import { config } from '../../config.ts';
 import logger from './logger.ts';
 import { resolve } from '@std/path';
+import { countTokens } from './tokenizer.ts';
 
 // Define cache directory relative to module location
 const __dirname = new URL('.', import.meta.url).pathname;
@@ -52,6 +53,12 @@ export const callOpenAI = async (prompt: string, requestId: string): Promise<str
   if (typeof prompt !== 'string' || prompt.trim().length === 0) {
     throw new Error('Invalid prompt: Prompt must be a non-empty string.');
   }
+  const tokenCount = countTokens(prompt);
+  if (tokenCount > config.openAI.maxTokens) {
+    // Handle token limit exceeded, e.g., split prompt
+    throw new Error('Prompt exceeds maximum token limit.');
+  }
+
 
   const cacheKeyInput = JSON.stringify({
     model: config.openAI.model,

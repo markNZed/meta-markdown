@@ -25,8 +25,10 @@ Build markdown features with scripts
       ME --> LE
       ME --> CE2
 
+Duplicate Text Detection and Monitoring
 Define what good documentation is
   System prompt ?
+Sanity tests
 
 UI options:
   CLI https://github.com/c4spar/deno-cliffy

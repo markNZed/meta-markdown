@@ -5,8 +5,10 @@ import remarkParse from "npm:remark-parse";
 import remarkStringify from "npm:remark-stringify";
 import type { Root, Heading, Paragraph, Text } from "npm:@types/mdast";
 import type { Node } from "npm:unist";
-import { callOpenAI } from './ai.ts';
-import logger from './logger.ts';
+import { callOpenAI } from '../ai.ts';
+import logger from '../logger.ts';
+import { readMarkdown, writeMarkdown } from './fileIO.ts';
+
 
 /**
  * Defines a Processor instance with Root as input and string as output.
@@ -156,4 +158,51 @@ export const checkGrammarAI = async (ast: Root, requestId: string): Promise<Root
     logger.error('Error during grammar checking.', { requestId, error: error.message });
     throw error;
   }
+};
+
+import { MarkdownNode } from '../../types/markdown.ts';
+
+export const parseMarkdownToAST = (markdownContent: string): MarkdownNode => {
+  const tree = unified().use(remarkParse).parse(markdownContent);
+  return tree as MarkdownNode;
+};
+
+/**
+ * Processes an array of markdown files using a provided processing function.
+ *
+ * @param {string[]} filePaths - The paths to the markdown files.
+ * @param {(ast: MarkdownNode) => void} processFunction - The function to process each AST.
+ */
+export const processMarkdownFiles = async (
+    filePaths: string[],
+    processFunction: (ast: MarkdownNode) => void,
+) => {
+for (const filePath of filePaths) {
+    const content = await readMarkdown(filePath);
+    const ast = parseMarkdownToAST(content);
+
+    // Apply the passed-in processing function to the AST
+    processFunction(ast);
+
+    const updatedContent = stringifyMarkdown(ast as Root);
+    await writeMarkdown(filePath, updatedContent);
+}
+};
+
+export const addTimestamp = (ast: MarkdownNode) => {
+    const timestampNode: MarkdownNode = {
+      type: 'paragraph',
+      children: [
+        {
+          type: 'text',
+          value: `Last updated on ${new Date().toLocaleString()}`,
+        },
+      ],
+    };
+
+    if (!ast.children) {
+        ast.children = []; // Initialize as an empty array if undefined
+    }
+  
+    ast.children.unshift(timestampNode);
 };

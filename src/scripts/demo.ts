@@ -1,6 +1,6 @@
 // src/scripts/demo.ts
 
-import { readMarkdown, writeMarkdown } from '../utils/fileIO.ts';
+import { readMarkdown, writeMarkdown } from '../utils/markdown/fileIO.ts';
 import {
     createHeading,
     createParagraph,
@@ -10,7 +10,7 @@ import {
     summarizeContentAI,
     improveStyleAI,
     checkGrammarAI,
-  } from '../utils/markdown.ts';
+  } from '../utils/markdown/markdown.ts';
 import logger from '../utils/logger.ts';
 import type { Root, Paragraph } from "npm:@types/mdast";
 
