@@ -18,3 +18,5 @@ npm-debug.log*
 project_review.txt
 tts-cache/
 llm-cache/
+markdown_private/
+

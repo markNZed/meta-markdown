@@ -1,23 +1,50 @@
-Can improve the OpenAI API e.g. cache 
-  https://deno.com/blog/openai_sdk_deno
-How to provide meta-meta level generating JS
-  Can a cell in notebook create a new cell ?
-  Can just use a cell to generate code and store in variable that can eval
+
+Build markdown features with scripts
+  Editorial review
+    Developmental Editor – Focuses on the big picture, structure, and content development.
+    Line Editor – Reviews sentence structure, tone, and style for flow and clarity.
+    Copy Editor – Corrects grammar, punctuation, and syntax on a detailed level.
+    Proofreader – Conducts final checks for typos and formatting errors before publishing.
+      Could be visual.
+    Content Editor – Aligns content with goals, strategy, and audience relevance.
+    Technical Editor – Ensures technical accuracy and clarity for specialized fields.
+    Fact Checker – Verifies the correctness of claims, data, and references.
+    Managing Editor – Oversees workflow, deadlines, and coordination in content production.
+    SEO Editor – Optimizes content for search engine visibility through keywords and structure.
+    flowchart TD
+      CE[Content Editor] --> DE[Developmental Editor] 
+      DE --> TE[Technical Editor]
+      TE --> FC[Fact Checker] 
+      FC --> LE[Line Editor]
+      LE --> SE[SEO Editor] 
+      SE --> CE2[Copy Editor]
+      CE2 --> P[Proofreader]
+      ME[Managing Editor] -->|Coordinates throughout| CE
+      ME --> DE
+      ME --> TE
+      ME --> LE
+      ME --> CE2
+
 Define what good documentation is
   System prompt ?
-Use notebooks for /scripts and /prompts
+
+UI options:
+  CLI https://github.com/c4spar/deno-cliffy
+  GUI https://github.com/webview/webview_deno
 
 TTS
-  Concurrency for TTS requests to improve performance.
+  Concurrency for TTS requests to improve performance (for the podcast generation)
   Disk space checks to handle potential file system issues.
   Enhance text splitting for better coherence in more complex text structures.
 
-Integrate Jupyter AI - but it does not work with Deno
+upyter AI - does not work with Deno
 Deno caches imports so requires restarting the kernel in notebook to refresh
+  Even then it seems it can cache some files sometimes ?
 https://www.deeplearning.ai/short-courses/build-llm-apps-with-langchain-js/
 Examples with deno + Jupyter https://github.com/rgbkrk/denotebooks
 
-Uses:
+Uses Cases
+----------
   Maintain FAQ
   Editorial review
     Prioritizing feedback
@@ -28,8 +55,22 @@ Uses:
   Model of the project/author
     Clarifying questions
 
+Useful
+------
 cloc --exclude-dir=node_modules,.git .
 We don't need widgets but it is perhaps possible with 
   https://github.com/rgbkrk/denotebooks/blob/main/anywidget.ipynb
 jupyter notebook list
 jupyter kernelspec list
+With VS Code we can zoom in/out (Ctrl- Ctrl+) to fit external monitor scaling on Wayland.
+To run deno tasks e.g.
+  deno task watch-scripts
+F5 runs the debugger again on the file
+
+Lessons
+-------
+The notebook provides formatted output (with some limits when in VS Code)
+Writing scripts may be preferrable for amny tasks - with the terminal visible we have basic UI
+Finding libraries with deno is painful and even more so with depednencies
+  We can use NPM "npm:unified" then `deno run --lock=lock.json --lock-write your_script.ts` to create a lock.json file where exact vesions can be found (and I guess reused)
+

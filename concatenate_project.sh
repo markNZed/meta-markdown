@@ -17,13 +17,13 @@ if [ -f "$OUTPUT_FILE" ]; then
 fi
 
 # Define directories to exclude (separated by spaces)
-EXCLUDE_DIRS=("node_modules" ".git" ".vscode" "dist" "build")
+EXCLUDE_DIRS=("node_modules" ".git" ".vscode" "dist" "build" "llm-cache" "tts-cache" "src/notebooks" "markdown_example" "markdown_private")
 
 # Define file extensions to include (add or remove as needed)
-INCLUDE_EXTENSIONS=("*.js" "*.ts" "*.json" "*.md" "*.ipynb" "Dockerfile" "devcontainer.json" "launch.json" "README.md")
+INCLUDE_EXTENSIONS=("*.js" "*.ts" "*.json" "*.md" "*.ipynb" "*.txt")
 
 # Define file regex patterns to exclude (e.g., "package-lock.json", "some-other-file.json")
-EXCLUDE_FILES=("package-lock.json" ".env")
+EXCLUDE_FILES=("package-lock.json" ".env" "convert-js-to-ts.js")
 
 # Function to check if a file matches any exclude patterns
 should_exclude_file() {

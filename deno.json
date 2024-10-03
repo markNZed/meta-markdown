@@ -4,6 +4,10 @@
   "fmt": {
     "include": ["src/**/*.ts", "tests/**/*.ts"],
     "exclude": ["node_modules/", "dist/"]
+  },
+  "tasks": {
+    "run-with-permissions": "deno run --allow-all /workspace/src/scripts/demo.ts",
+    "watch-scripts": "deno run --allow-run --allow-read --allow-write watch-scripts.ts"
   }
 }
   

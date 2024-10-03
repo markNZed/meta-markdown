@@ -34,7 +34,6 @@ export const mergeAudioFiles = async ({
     // Create a temporary file list for FFmpeg
     const listFilePath = join(cacheDir, `${requestId}_filelist.txt`);
     const fileListContent = inputFiles.map(file => `file '${file}'`).join('\n');
-    console.log("HERE ", `${requestId}_filelist.txt`)
     await Deno.writeTextFile(listFilePath, fileListContent);
     logger.debug(`fileListContent ${fileListContent}`, { requestId });
     logger.debug(`Created FFmpeg file list at ${listFilePath}`, { requestId });
