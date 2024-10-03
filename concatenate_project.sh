@@ -23,7 +23,7 @@ EXCLUDE_DIRS=("node_modules" ".git" ".vscode" "dist" "build" "llm-cache" "tts-ca
 INCLUDE_EXTENSIONS=("*.js" "*.ts" "*.json" "*.md" "*.ipynb" "*.txt")
 
 # Define file regex patterns to exclude (e.g., "package-lock.json", "some-other-file.json")
-EXCLUDE_FILES=("package-lock.json" ".env" "convert-js-to-ts.js")
+EXCLUDE_FILES=("package-lock.json" ".env" "convert-js-to-ts.js" "lock.json" "notes.txt")
 
 # Function to check if a file matches any exclude patterns
 should_exclude_file() {

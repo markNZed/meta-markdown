@@ -1,6 +1,6 @@
 // src/utils/editorial.ts
 
-import { callOpenAI } from '../ai.ts';
+import { callOpenAI } from '../llm/llm.ts';
 import { parseMarkdown, stringifyMarkdown } from './markdown.ts';
 
 export const developmentalEdit = async (markdownContent: string, requestId: string): Promise<string> => {

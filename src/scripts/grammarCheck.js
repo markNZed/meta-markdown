@@ -1,5 +1,5 @@
 import { readMarkdown, writeMarkdown } from '../utils/markdown/fileIO.ts';
-import { callOpenAI } from '../utils/ai.ts';
+import { callOpenAI } from '../utils/llm/llm.ts';
 
 export const grammarCheck = async () => {
   try {

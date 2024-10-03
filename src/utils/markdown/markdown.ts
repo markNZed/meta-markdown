@@ -5,7 +5,7 @@ import remarkParse from "npm:remark-parse";
 import remarkStringify from "npm:remark-stringify";
 import type { Root, Heading, Paragraph, Text } from "npm:@types/mdast";
 import type { Node } from "npm:unist";
-import { callOpenAI } from '../ai.ts';
+import { callOpenAI } from '../llm/llm.ts';
 import logger from '../logger.ts';
 import { readMarkdown, writeMarkdown } from './fileIO.ts';
 
