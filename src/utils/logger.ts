@@ -118,6 +118,7 @@ function getLogFilePath(): string {
   const scriptDir = dirname(scriptPath);
   const scriptName = basename(scriptPath, extname(scriptPath));
   const logFilePath = join(scriptDir, `${scriptName}.log`);
+  console.log("logFilePath", logFilePath)
   return logFilePath;
 }
 
@@ -272,40 +273,61 @@ function jsonFileFormatter(logRecord: LogRecord): string {
 
   //return JSON.stringify(truncatedLogEntry, null, 2);  // Return the truncated log entry
 }
-
-
-
-try {
-  // Get log file path
-  const logFilePath = getLogFilePath();
-
-  // Configure the logger with console and file handlers
-  await setup({
-    handlers: {
-      console: new handlers.ConsoleHandler("INFO", {
-        formatter: consoleFormatter,
-      }),
-      file: new handlers.FileHandler("DEBUG", {
-        filename: logFilePath,
-        mode: "w", // Could change to append mode to allow continuous logging
-        // Ensure that the formatter is correctly assigned
-        formatter: jsonFileFormatter,
-      }),
-    },
-    loggers: {
-      default: {
-        level: "DEBUG",
-        handlers: ["console", "file"],
-      },
-    },
-  });
-} catch (error) {
-  console.error("Failed to configure logger:", error);
-  Deno.exit(1);
+// Extend globalThis to include a logger setup flag and the logger instance
+declare global {
+  var __loggerSetup__: boolean;
+  var __loggerInstance__: any;
 }
 
-// Get the default logger
-const logger = getLogger();
+if (!globalThis.__loggerSetup__) {
+  globalThis.__loggerSetup__ = true;
+
+  (async () => {
+    try {
+      const logFilePath = getLogFilePath();
+      console.log(`Logger initialized. Log file path: ${logFilePath}`);
+
+      await setup({
+        handlers: {
+          console: new handlers.ConsoleHandler("INFO", {
+            formatter: consoleFormatter,
+          }),
+          file: new handlers.FileHandler("DEBUG", {
+            filename: logFilePath,
+            mode: "a", // Use append mode to prevent overwriting
+            formatter: jsonFileFormatter,
+          }),
+        },
+        loggers: {
+          default: {
+            level: "DEBUG",
+            handlers: ["console", "file"],
+          },
+        },
+      });
+
+      globalThis.__loggerInstance__ = getLogger();
+      console.log("Logger setup completed successfully.");
+    } catch (error) {
+      console.error("Failed to configure logger:", error);
+      Deno.exit(1);
+    }
+  })();
+}
+
+// Wait for the logger to be initialized before exporting
+// This ensures that logger is ready to use in the current cell
+const waitForLogger = async () => {
+  while (!globalThis.__loggerInstance__) {
+    await new Promise((resolve) => setTimeout(resolve, 50)); // Wait 50ms
+  }
+};
+
+// Immediately invoke the wait function to ensure logger is ready
+await waitForLogger();
+
+// Get the global logger instance
+const logger = globalThis.__loggerInstance__;
 
 // Wrapper functions to capture source info
 const loggerWithSource = {
