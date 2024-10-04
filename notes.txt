@@ -1,3 +1,4 @@
+Preference for importing with @/
 Before generating doc create a sanity test for the file and check that this passes.
 Then if it does not improve it
 Then add the doc and check it still runs

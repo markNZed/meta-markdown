@@ -6,9 +6,7 @@ import logger from '../logger.ts';
 import { resolve } from '@std/path';
 import { countTokens } from './tokenizer.ts';
 
-// Define cache directory relative to module location
-const __dirname = new URL('.', import.meta.url).pathname;
-const CACHE_DIR = resolve(__dirname, '../../../llm-cache');
+const CACHE_DIR = resolve(config.cacheDir, 'llm');
 
 // Ensure cache directory exists
 await ensureDir(CACHE_DIR);

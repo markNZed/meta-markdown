@@ -1,4 +1,4 @@
-// src/utils/markdown.ts
+// src/utils/markdown/markdown.ts
 
 import {unified} from "npm:unified";
 import remarkParse from "npm:remark-parse";
@@ -113,7 +113,7 @@ export const summarizeContentAI = async (ast: Root, requestId: string): Promise<
     const markdown = stringifyMarkdown(ast);
     const prompt = `Please provide a concise summary of the following Markdown content:\n\n${markdown}`;
     const summary = await callOpenAI(prompt, requestId);
-    return summary;
+    return summary as string;
   } catch (error: any) {
     logger.error('Error during content summarization.', { requestId, error: error.message });
     throw error;
@@ -131,7 +131,7 @@ export const improveStyleAI = async (ast: Root, requestId: string): Promise<Root
   try {
     const markdown = stringifyMarkdown(ast);
     const prompt = `Please review the following Markdown content for style improvements and provide a revised version:\n\n${markdown}`;
-    const improvedMarkdown = await callOpenAI(prompt, requestId);
+    const improvedMarkdown = await callOpenAI(prompt, requestId) as string;
     const improvedAst = parseMarkdown(improvedMarkdown);
     return improvedAst;
   } catch (error: any) {
@@ -151,7 +151,7 @@ export const checkGrammarAI = async (ast: Root, requestId: string): Promise<Root
   try {
     const markdown = stringifyMarkdown(ast);
     const prompt = `Please review the following Markdown content for grammatical errors and provide a corrected version:\n\n${markdown}`;
-    const correctedMarkdown = await callOpenAI(prompt, requestId);
+    const correctedMarkdown = await callOpenAI(prompt, requestId) as string;
     const correctedAst = parseMarkdown(correctedMarkdown);
     return correctedAst;
   } catch (error: any) {

@@ -1,4 +1,4 @@
-// utils/audioUtils.ts
+// utils/audio/audioUtils.ts
 
 import { join } from "https://deno.land/std@0.203.0/path/mod.ts";
 import logger from '../logger.ts';

@@ -1,4 +1,4 @@
-// src/utils/astUtils.ts
+// src/utils/markdown/astUtils.ts
 
 import { MarkdownNode } from '../../types/markdown.ts';
 

@@ -9,10 +9,11 @@ import { dirname, join, relative, basename, extname } from 'https://deno.land/st
 import { zodResponseFormat } from "npm:openai/helpers/zod";
 import { z } from "npm:zod";
 import { getGenerateTest } from "@/prompts/getGenerateTest.js";
+import { exists } from "@std/fs";
 
 const DEV_MODE = true;
-const SPECIFIC_FILE_PATH = './src/utils/file.ts'; // Adjust this path as needed
-const TEST_DIR = './tests'; // Adjust this path as needed
+const SPECIFIC_FILE_PATH = './src/utils/audio/tts.ts'; // Adjust this path as needed
+const TEST_DIR = resolvePath('./tests'); // Adjust this path as needed
 
 export async function generateTestForFile(filePath: string): Promise<string | null> {
   const requestId = `test-gen-${Date.now()}`;
@@ -25,17 +26,11 @@ export async function generateTestForFile(filePath: string): Promise<string | nu
     const testFilePath = join(TEST_DIR, dirname(relativePath), testFileName);
 
     // Skip if test file already exists
-    try {
-      await Deno.stat(testFilePath);
+    if (await exists(testFilePath)) {
       logger.info(`Test file already exists, skipping: ${testFilePath}`, { requestId });
       return testFilePath;
-    } catch (err) {
-      if (err instanceof Deno.errors.NotFound) {
-        logger.info(`No existing test file found, proceeding to generate: ${testFilePath}`, { requestId });
-      } else {
-        throw err;
-      }
     }
+    logger.info(`No existing test file found, proceeding to generate: ${testFilePath}`, { requestId });
 
     const content = await Deno.readTextFile(filePath);
 
@@ -72,7 +67,7 @@ export async function runTest(testFilePath: string): Promise<{ success: boolean;
   try {
 
     const p = await new Deno.Command("deno", {
-      args: ["test", testFilePath],
+      args: ["test", "--allow-all", testFilePath],
       stdout: "piped",
       stderr: "piped",
     }).output();
@@ -97,49 +92,74 @@ export async function runTest(testFilePath: string): Promise<{ success: boolean;
   }
 }
 
-export async function regenerateAndRunTest(testFilePath: string, attempt: number): Promise<boolean> {
+export async function regenerateAndRunTest(testFilePath: string, testPath: string, attempt: number): Promise<boolean> {
   const requestId = `test-retry-${Date.now()}`;
   try {
-    // Define a Zod schema for the expected response
-    const LLMCheckResponseSchema = z.object({
-      completeness: z.enum(["yes", "no"]),
-      problems: z.array(z.string()),
-    });
-
-    // Create response_format using zodResponseFormat
-    const responseFormat = zodResponseFormat(LLMCheckResponseSchema, "completeness");
-
-    const llmCheckPrompt = `
-    You are an expert TypeScript developer. Please analyze the following unit test code and determine if it is complete and executable as it stands. If any information is missing, such as additional mock data, imports, or missing function definitions. Indicate if the test is OK by setting completeness to "yes" or "no". For each problem you see in the test create an entry in the problems array.
-
-    Unit test code:
-    \`\`\`typescript
-    ${await Deno.readTextFile(testFilePath)}
-    \`\`\`
-    `;
-
-    const llmCheckResponse = await callOpenAI(llmCheckPrompt, requestId, responseFormat) as Record<string, string>;
-
-    // Process the response
-    if (llmCheckResponse.completeness === 'no') {
-      logger.warning(`The generated test file may be incomplete. User input may be required: ${testFilePath}`, { requestId });
-      llmCheckResponse.problems.forEach((problem) => {
-        logger.warning(`    Problem: ${problem}`, { requestId });
-      })
-      return false;
-    }
-
-    const result = await runTest(testFilePath);
+    // First, run the test and see if it fails
+    const result = await runTest(testPath);
     if (result.success) {
-      logger.info(`Test passed for ${testFilePath}`, { requestId });
+      logger.info(`Test passed for ${testPath}`, { requestId });
       return true;
     } else {
-      logger.error(`Test failed for ${testFilePath}: ${result.errorMessage}`, { requestId });
-      if (attempt < 3) {
-        logger.info(`Regenerating test for ${testFilePath}, attempt ${attempt + 1}`, { requestId });
-        const originalContent = await Deno.readTextFile(testFilePath.replace(/\.test\.ts$/, '.ts'));
+      logger.info(`Test failed for ${testPath}: ${result.errorMessage}`, { requestId });
+    }
 
-        const prompt = `
+    // If the test fails and it's the first attempt, check for missing data
+    if (attempt === 3) {
+      // Define a Zod schema for the expected response
+      const LLMCheckResponseSchema = z.object({
+        completeness: z.enum(["yes", "no"]),
+        problems: z.array(z.string()),
+      });
+
+      // Create response_format using zodResponseFormat
+      const responseFormat = zodResponseFormat(LLMCheckResponseSchema, "completeness");
+
+      const originalContent = await Deno.readTextFile(testFilePath);
+
+      const llmCheckPrompt = `
+      You are an expert TypeScript developer. Please analyze the following unit test code and the original code it is testing. Determine why this test is failing. Indicate if the test is OK by setting completeness to "yes" or "no". For each problem you see in the test, create an entry in the problems array explaining what is missing and why.
+
+      Original code:
+      \`\`\`typescript
+      ${originalContent}
+      \`\`\`
+
+      Unit test code:
+      \`\`\`typescript
+      ${await Deno.readTextFile(testPath)}
+      \`\`\`
+
+      Failing test result:
+      ${result.errorMessage}
+      `;
+
+      const llmCheckResponse = await callOpenAI(llmCheckPrompt, requestId, responseFormat) as z.infer<typeof LLMCheckResponseSchema>;
+
+      // Process the response
+      if (llmCheckResponse.completeness === 'no') {
+        logger.warning(`The generated test file may be incomplete. User input may be required: ${testPath}`, { requestId });
+        llmCheckResponse.problems.forEach((problem) => {
+          logger.warning(`    Problem: ${problem}`, { requestId });
+        })
+        return false;
+      }
+    }
+
+    // If the response indicates completeness, attempt regeneration if needed
+    if (attempt < 3) {
+      logger.info(`Regenerating test for ${testFilePath}, attempt ${attempt + 1}`, { requestId });
+
+      const newTestPath = testPath.replace(/(\.test)?\.ts$/, `_${attempt + 1}.test.ts`);
+
+      if (await exists(newTestPath)) {
+        logger.info(`Test file already exists, skipping: ${newTestPath}`, { requestId });
+        return regenerateAndRunTest(testFilePath, newTestPath, attempt + 1);
+      }
+
+      const originalContent = await Deno.readTextFile(testFilePath);
+
+      const prompt = `
 You are an expert TypeScript developer. A unit test failed for the following code. Please regenerate a different version of the unit test. The resulting code should be written in TypeScript and use Deno.test.
 
 Original code:
@@ -149,23 +169,26 @@ ${originalContent}
 
 Failed test:
 \`\`\`typescript
-${await Deno.readTextFile(testFilePath)}
+${await Deno.readTextFile(testPath)}
 \`\`\`
-        `;
 
-        const aiResponse = await callOpenAI(prompt, requestId) as string;
-        const newTestContent = extractTypeScriptCode(aiResponse);
+Test Output:
+\`\`\`
+${result.errorMessage}
+\`\`\`
+      `;
 
-        if (!newTestContent) {
-          logger.error(`Failed to extract regenerated TypeScript code for ${testFilePath}.`, { requestId });
-          return false;
-        }
+      const aiResponse = await callOpenAI(prompt, requestId) as string;
+      const newTestContent = extractTypeScriptCode(aiResponse);
 
-        const newTestFilePath = testFilePath.replace(/(\.test)?\.ts$/, `_${attempt + 1}.test.ts`);
-        await Deno.writeTextFile(newTestFilePath, newTestContent);
-        logger.info(`Regenerated test file created: ${newTestFilePath}`, { requestId });
-        return regenerateAndRunTest(newTestFilePath, attempt + 1);
+      if (!newTestContent) {
+        logger.error(`Failed to extract regenerated TypeScript code for ${testPath}.`, { requestId });
+        return false;
       }
+
+      await Deno.writeTextFile(newTestPath, newTestContent);
+      logger.info(`Regenerated test file created: ${newTestPath}`, { requestId });
+      return regenerateAndRunTest(testFilePath, newTestPath, attempt + 1);
     }
   } catch (error: unknown) {
     if (error instanceof Error) {
@@ -181,7 +204,7 @@ export async function processFile(filePath: string, summary: { total: number; pa
   summary.total++;
   const testFilePath = await generateTestForFile(filePath);
   if (testFilePath) {
-    const passed = await regenerateAndRunTest(testFilePath, 1);
+    const passed = await regenerateAndRunTest(filePath, testFilePath, 1);
     if (passed) {
       summary.passed++;
     } else {

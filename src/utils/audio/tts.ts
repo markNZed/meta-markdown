@@ -1,5 +1,3 @@
-// tts.ts
-
 // Import necessary modules and dependencies
 import { resolve } from "https://deno.land/std@0.203.0/path/mod.ts";
 import logger from '../logger.ts';
@@ -12,7 +10,7 @@ import { pLimit } from "https://deno.land/x/p_limit@v1.0.0/mod.ts";
 import { mergeAudioFiles, MergeAudioParams } from './audioUtils.ts';
 
 // Initialize cache directory
-const CACHE_DIR = resolve('../../tts-cache');
+const CACHE_DIR = resolve(config.cacheDir, 'tts');
 
 // Ensure cache directory exists
 await ensureDir(CACHE_DIR);

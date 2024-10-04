@@ -16,17 +16,19 @@ const env = {
   ...Deno.env.toObject(), // System environment variables
 };
 
+const ROOT_DIR = env.ROOT_DIR || '/workspace';
 
 // Configuration object
 export const config = {
   openAI:{
     apiKey: env.OPENAI_API_KEY || '',
-    model: env.OPENAI_MODEL || 'gpt-4o-mini',
+    model: env.OPENAI_MODEL || 'gpt-4o',
     maxTokens: parseInt(env.OPENAI_MAX_TOKENS) || 150,
     temperature: parseFloat(env.OPENAI_TEMPERATURE) || 0.7,
   },
-  markdownDir: env.MARKDOWN_DIR || '/workspace/markdown_example',
+  markdownDir: env.MARKDOWN_DIR || resolve(ROOT_DIR, 'markdown_example'),
   maxLogEntryLength: 1000,
-  rootDir: '/workspace',
+  rootDir: ROOT_DIR,
+  cacheDir: resolve(ROOT_DIR, 'cache'),
 };
 

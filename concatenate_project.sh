@@ -17,7 +17,7 @@ if [ -f "$OUTPUT_FILE" ]; then
 fi
 
 # Define directories to exclude (separated by spaces)
-EXCLUDE_DIRS=("node_modules" ".git" ".vscode" "dist" "build" "llm-cache" "tts-cache" "src/notebooks" "markdown_example" "markdown_private" "tests")
+EXCLUDE_DIRS=("node_modules" ".git" ".vscode" "dist" "build" "cache" "src/notebooks" "markdown_example" "markdown_private" "tests")
 
 # Define file extensions to include (add or remove as needed)
 INCLUDE_EXTENSIONS=("*.js" "*.ts" "*.json" "*.md" "*.ipynb" "*.txt")

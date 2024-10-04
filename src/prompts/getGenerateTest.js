@@ -52,7 +52,14 @@ The project is an **AI-Powered Markdown Manipulation Tool** developed using **De
 │       ├── misc.ts
 │       └── file.ts
 ├── tests
-
+│   └── utils
+│       ├── audio
+│       │   └── tts.test.ts
+│       ├── llm
+│       │   └── tokenizer.test.ts
+│       ├── markdown
+│       │   └── fileIO.test.ts
+│       └── file.test.ts
 ---
 
 **Overview of Key Utilities:**
