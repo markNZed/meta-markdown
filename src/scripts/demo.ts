@@ -1,6 +1,6 @@
 // src/scripts/demo.ts
 
-import { readMarkdown, writeMarkdown } from '../utils/markdown/fileIO.ts';
+import { readMarkdown, writeMarkdown } from '@/utils/markdown/fileIO.ts';
 import {
     createHeading,
     createParagraph,
@@ -10,8 +10,8 @@ import {
     summarizeContentAI,
     improveStyleAI,
     checkGrammarAI,
-  } from '../utils/markdown/markdown.ts';
-import logger from '../utils/logger.ts';
+  } from '@/utils/markdown/markdown.ts';
+import logger from '@/utils/logger.ts';
 import type { Root, Paragraph } from "npm:@types/mdast";
 
 // Unique identifier for logging (could be a UUID or timestamp)

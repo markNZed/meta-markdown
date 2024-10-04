@@ -1,4 +1,4 @@
-import { formatMarkdown } from '../utils/markdown/fileIO.ts';
+import { formatMarkdown } from '@/utils/markdown/fileIO.ts';
 
 export const format = async () => {
   try {

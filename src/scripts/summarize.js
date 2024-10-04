@@ -1,6 +1,6 @@
-import { readMarkdown } from '../utils/markdown/fileIO.ts';
+import { readMarkdown } from '@/utils/markdown/fileIO.ts';
 import { getSummaryPrompt } from '../prompts/getSummaryPrompt.js';
-import { callOpenAI } from '../utils/llm/llm.ts';
+import { callOpenAI } from '@/utils/llm/llm.ts';
 
 
 export const summarize = async () => {

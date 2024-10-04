@@ -4,7 +4,7 @@
 import { resolve } from "https://deno.land/std@0.203.0/path/mod.ts";
 import logger from '../logger.ts';
 import { OpenAI } from 'https://deno.land/x/openai@v4.64.0/mod.ts';
-import { config } from '../../../config.ts';
+import { config } from '@/config.ts';
 import { ensureDir } from "https://deno.land/std@0.203.0/fs/mod.ts";
 import { pLimit } from "https://deno.land/x/p_limit@v1.0.0/mod.ts";
 

@@ -167,28 +167,6 @@ export const parseMarkdownToAST = (markdownContent: string): MarkdownNode => {
   return tree as MarkdownNode;
 };
 
-/**
- * Processes an array of markdown files using a provided processing function.
- *
- * @param {string[]} filePaths - The paths to the markdown files.
- * @param {(ast: MarkdownNode) => void} processFunction - The function to process each AST.
- */
-export const processMarkdownFiles = async (
-    filePaths: string[],
-    processFunction: (ast: MarkdownNode) => void,
-) => {
-for (const filePath of filePaths) {
-    const content = await readMarkdown(filePath);
-    const ast = parseMarkdownToAST(content);
-
-    // Apply the passed-in processing function to the AST
-    processFunction(ast);
-
-    const updatedContent = stringifyMarkdown(ast as Root);
-    await writeMarkdown(filePath, updatedContent);
-}
-};
-
 export const addTimestamp = (ast: MarkdownNode) => {
     const timestampNode: MarkdownNode = {
       type: 'paragraph',

@@ -1,7 +1,7 @@
 // src/scripts/rewriteForAudience.ts
 
-import { readMarkdown, writeMarkdown } from '../utils/markdown/fileIO.ts';
-import { rewriteForAudience } from '../utils/markdown/rewriter.ts';
+import { readMarkdown, writeMarkdown } from '@/utils/markdown/fileIO.ts';
+import { rewriteForAudience } from '@/utils/markdown/rewriter.ts';
 
 const requestId = `rewrite-${Date.now()}`;
 

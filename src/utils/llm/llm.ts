@@ -1,13 +1,14 @@
 import { ensureDir } from "https://deno.land/std@0.203.0/fs/mod.ts";
-import OpenAI from "https://deno.land/x/openai@v4.66.1/mod.ts";
-import { config } from '../../../config.ts';
+import OpenAI from "@openai";
+import { type AutoParseableResponseFormat } from "@openai/parser";
+import { config } from '@/config.ts';
 import logger from '../logger.ts';
 import { resolve } from '@std/path';
 import { countTokens } from './tokenizer.ts';
 
 // Define cache directory relative to module location
 const __dirname = new URL('.', import.meta.url).pathname;
-const CACHE_DIR = resolve(__dirname, '../../llm-cache');
+const CACHE_DIR = resolve(__dirname, '../../../llm-cache');
 
 // Ensure cache directory exists
 await ensureDir(CACHE_DIR);
@@ -29,11 +30,11 @@ interface OpenAIResponse {
 }
 
 interface CachedResponse {
-  reply: string;
+  reply: string | Record<string, any>;
   timestamp: string;
 }
 
-const CACHE_DURATION = 24 * 60 * 60 * 1000; // 24 hours
+const CACHE_DURATION = 24 * 60 * 60 * 1000 * 7; // 7 days
 
 const hashText = async (text: string): Promise<string> => {
   const encoder = new TextEncoder();
@@ -49,14 +50,18 @@ const openai = new OpenAI({
   apiKey: config.openAI.apiKey,
 });
 
-export const callOpenAI = async (prompt: string, requestId: string): Promise<string> => {
+export const callOpenAI = async (
+  prompt: string, 
+  requestId: string = "", 
+  responseFormat: AutoParseableResponseFormat<Record<string, any>> | null = null,
+): Promise<string | Record<string, any>> => {
   if (typeof prompt !== 'string' || prompt.trim().length === 0) {
     throw new Error('Invalid prompt: Prompt must be a non-empty string.');
   }
   const tokenCount = countTokens(prompt);
   if (tokenCount > config.openAI.maxTokens) {
     // Handle token limit exceeded, e.g., split prompt
-    throw new Error('Prompt exceeds maximum token limit.');
+    throw new Error(`Prompt with ${tokenCount} tokens exceeds maximum token limit ${config.openAI.maxTokens}`);
   }
 
 
@@ -77,6 +82,7 @@ export const callOpenAI = async (prompt: string, requestId: string): Promise<str
 
     if (Date.now() - cachedTime < CACHE_DURATION) {
       logger.info(`Cache hit for prompt with hash ${cacheKey}.`, { requestId });
+      logger.debug(`Cached response: ${JSON.stringify(cachedResponse.reply)}`, { requestId });
       return cachedResponse.reply;
     } else {
       logger.info(`Cache expired for prompt with hash ${cacheKey}.`, { requestId });
@@ -95,17 +101,43 @@ export const callOpenAI = async (prompt: string, requestId: string): Promise<str
   // Fetch from OpenAI using openai client
   try {
 
-    const completion = await openai.chat.completions.create({
-      model: config.openAI.model,
-      messages: [
-        { role: 'system', content: 'You are a helpful assistant.' },
-        { role: 'user', content: prompt },
-      ],
-      max_tokens: config.openAI.maxTokens,
-      temperature: config.openAI.temperature,
-    });
+    let completion;
+    let reply;
 
-    const reply = completion.choices?.[0]?.message?.content?.trim();
+    if (responseFormat) {
+      completion = await openai.beta.chat.completions.parse({
+        model: config.openAI.model,
+        messages: [
+          { role: 'system', content: 'You are a helpful assistant.' },
+          { role: 'user', content: prompt },
+        ],
+        max_tokens: config.openAI.maxTokens,
+        temperature: config.openAI.temperature,
+        response_format: responseFormat,
+      });
+
+      const completionMessage = completion.choices[0].message;
+
+      // If the model refuses to respond, you will get a refusal message
+      if (completionMessage.refusal) {
+        logger.error(`Error completion refusal: ${completionMessage.refusal}`, { requestId });
+        reply = completionMessage.refusal;
+      } else {
+        reply = completionMessage.parsed;
+      }
+
+    } else {
+      completion = await openai.chat.completions.create({
+        model: config.openAI.model,
+        messages: [
+          { role: 'system', content: 'You are a helpful assistant.' },
+          { role: 'user', content: prompt },
+        ],
+        max_tokens: config.openAI.maxTokens,
+        temperature: config.openAI.temperature,
+      });
+      reply = completion.choices?.[0]?.message?.content?.trim();
+    }
     
     if (!reply) {
       throw new Error('No reply received from OpenAI API');
@@ -118,6 +150,7 @@ export const callOpenAI = async (prompt: string, requestId: string): Promise<str
     };
     await Deno.writeTextFile(cachedFilePath, JSON.stringify(cacheData), { create: true, append: false });
     logger.info(`Response cached at ${cachedFilePath}.`, { requestId });
+    logger.debug(`Cached response: ${reply}`, { requestId });
 
     return reply;
   } catch (error) {
@@ -130,3 +163,15 @@ export const callOpenAI = async (prompt: string, requestId: string): Promise<str
     }
   }
 };
+
+/**
+ * Extracts TypeScript code from the OpenAI API response.
+ * 
+ * @param {string} response - The raw response from the OpenAI API.
+ * @returns {string | null} - The extracted TypeScript code or null if not found.
+ */
+export function extractTypeScriptCode(response: string): string | null {
+  const regex = /```typescript\s*([\s\S]*?)\s*```/;
+  const match = response.match(regex);
+  return match ? match[1] : null;
+}

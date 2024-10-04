@@ -1,7 +1,7 @@
 // src/scripts/generateGlossary.ts
 
-import { readMarkdown, writeMarkdown } from '../utils/markdown/fileIO.ts';
-import { generateGlossary } from '../utils/markdown/glossary.ts';
+import { readMarkdown, writeMarkdown } from '@/utils/markdown/fileIO.ts';
+import { generateGlossary } from '@/utils/markdown/glossary.ts';
 
 const requestId = `glossary-index-${Date.now()}`;
 

@@ -1,3 +1,11 @@
+Before generating doc create a sanity test for the file and check that this passes.
+Then if it does not improve it
+Then add the doc and check it still runs
+You can use Deno's TypeScript compiler API to perform a basic syntax check.
+
+deno test --allow-all --filter "getFilePaths" tests/utils/file.test.ts
+
+
 
 Build markdown features with scripts
   Editorial review

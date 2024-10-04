@@ -97,7 +97,7 @@ import {
   extname,
   basename,
 } from "https://deno.land/std@0.201.0/path/mod.ts";
-import { config } from '../../config.ts';
+import { config } from '@/config.ts';
 
 // Helper function to truncate strings
 function truncate(value: any, maxLength: number = config.maxLogEntryLength): string {
@@ -107,7 +107,7 @@ function truncate(value: any, maxLength: number = config.maxLogEntryLength): str
   }
   const halfLength = Math.floor(maxLength / 2);
   // Get first half and last half, adding "..." in between
-  const truncated = strValue.substring(0, halfLength) + " !!!TRUNCATED!!! " + strValue.substring(strValue.length - halfLength);
+  const truncated = "!!!TRUNCATED!!! " + strValue.substring(0, halfLength) + " ...TRUNCATED... " + strValue.substring(strValue.length - halfLength) + " !!!TRUNCATED!!!";
   return truncated;
 }
 
@@ -294,7 +294,7 @@ if (!globalThis.__loggerSetup__) {
           }),
           file: new handlers.FileHandler("DEBUG", {
             filename: logFilePath,
-            mode: "a", // Use append mode to prevent overwriting
+            mode: "w", // Use append mode to prevent overwriting
             formatter: jsonFileFormatter,
           }),
         },

@@ -2,7 +2,7 @@
 import { remark } from "npm:remark";
 import presetLintRecommended from "npm:remark-preset-lint-recommended";
 import remarkStringify from "npm:remark-stringify";
-import { config } from '../../../config.ts';
+import { config } from '@/config.ts';
 
 
 const markdownDir = config.markdownDir;
