@@ -7,10 +7,59 @@ import { resolvePath } from '@/utils/file.ts';
 import { extractTypeScriptCode } from '@/utils/llm/llm.ts';
 
 // Toggle Development Mode: Set to true during development to process a single file
-const DEV_MODE = true;
+const DEV_MODE = false;
 
 // Optional: Specify a particular file to process in development mode
 const SPECIFIC_FILE_PATH = './src/utils/logger.ts'; // Adjust this path as needed
+
+/**
+ * Regular expression to match existing header comments (single-line and multi-line)
+ * before any import statements.
+ */
+const HEADER_COMMENT_REGEX = /^(?:\s*(?:\/\/.*|\/\*[\s\S]*?\*\/))+\s*/;
+
+/**
+ * Executes a Deno syntax check on the specified file.
+ * @param filePath The path to the TypeScript file to check.
+ * @returns A promise that resolves to true if syntax is valid, false otherwise.
+ */
+async function checkSyntax(filePath: string): Promise<boolean> {
+  try {
+    const cmd = new Deno.Command("deno", {
+      args: ["check", filePath],
+      stdout: "piped",
+      stderr: "piped",
+    });
+
+    const { success, stdout, stderr } = await cmd.output();
+
+    if (!success) {
+      const errorOutput = new TextDecoder().decode(stderr);
+      logger.error(`Syntax check failed for ${filePath}:\n${errorOutput}`);
+      return false;
+    }
+
+    logger.info(`Syntax check passed for ${filePath}`);
+    return true;
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      logger.error(`Failed to execute syntax check for ${filePath}: ${error.message}`);
+    } else {
+      logger.error(`Unknown error during syntax check for ${filePath}`);
+    }
+    return false;
+  }
+}
+
+/**
+ * Validates that the JSDoc comment is properly closed.
+ * @param comments The JSDoc comments to validate.
+ * @returns True if valid, false otherwise.
+ */
+function validateJSDoc(comments: string): boolean {
+  console.log("comments", comments)
+  return comments.trim().endsWith('*/');
+}
 
 /**
  * Generates JSDoc comments for a TypeScript file and updates the file.
@@ -24,34 +73,63 @@ export async function generateDocumentationForFile(filePath: string): Promise<vo
     logger.info(`Processing file: ${filePath}`, { requestId });
 
     // Read the content of the TypeScript file
-    const content = await Deno.readTextFile(filePath);
+    const originalContent = await Deno.readTextFile(filePath);
 
-    // Create a prompt to generate JSDoc comments
+    // Remove existing header comments to get clean code for documentation generation
+    const contentWithoutHeader = originalContent.replace(HEADER_COMMENT_REGEX, '');
+
+    // Create a prompt to generate JSDoc comments using the clean content
     const prompt = `
-You are an expert TypeScript developer. I will provide you with TypeScript code, and I want you to generate clear and concise JSDoc comments for each function, class, or interface. Include descriptions for parameters, return types, and usage examples where appropriate.
+You are an expert TypeScript developer. I will provide you with TypeScript code, and I want you to generate clear and concise JSDoc comments to be inserted at the top of the file for the use of the exported functions. 
 
-Please return only the TypeScript code with added JSDoc comments, enclosed within a markdown code block.
+Any examples of importing files from the src directory should use "@/" e.g.
+import { convertToPodcast } from '@/utils/audio/podcast.ts';
+
+Please return only the comments enclosed within a markdown code block, and ensure that all comment blocks are properly closed.
 
 TypeScript code:
 \`\`\`typescript
-${content}
+${contentWithoutHeader}
 \`\`\`
 `;
 
     // Call the OpenAI API to generate documentation
     const aiResponse = await callOpenAI(prompt, requestId);
 
-    // Extract the TypeScript code from the AI response
-    const documentedContent = extractTypeScriptCode(aiResponse);
+    console.log("contentWithoutHeader", contentWithoutHeader)
 
-    if (!documentedContent) {
-      logger.error(`Failed to extract TypeScript code from OpenAI response for file ${filePath}.`, { requestId });
+    // Extract the JSDoc comments from the AI response
+    const documentedComments = extractTypeScriptCode(aiResponse as string);
+
+    if (!documentedComments) {
+      logger.error(`Failed to extract JSDoc comments from OpenAI response for file ${filePath}.`, { requestId });
       return;
     }
 
-    // Update the file with the generated documentation
-    await Deno.writeTextFile(filePath, documentedContent);
-    logger.info(`Documentation added to: ${filePath}`, { requestId });
+    // Validate the extracted comments
+    if (!validateJSDoc(documentedComments)) {
+      logger.error(`Extracted JSDoc comments are improperly formatted for file ${filePath}.`, { requestId });
+      logger.error(`Extracted Comments:\n${documentedComments}`, { requestId });
+      return;
+    }
+
+    // Combine the new documentation with the content without the old header
+    const newContent = `${documentedComments}\n\n${contentWithoutHeader}`;
+
+    // Write the updated content back to the original file
+    await Deno.writeTextFile(filePath, newContent);
+    logger.info(`Documentation updated for: ${filePath}`, { requestId });
+
+    // Perform a syntax check using Deno
+    const isSyntaxValid = await checkSyntax(filePath);
+
+    if (!isSyntaxValid) {
+      logger.error(`Syntax check failed after updating documentation for file ${filePath}.`, { requestId });
+      return;
+    }
+
+    logger.info(`Documentation and syntax check successful for: ${filePath}`, { requestId });
+
   } catch (error: unknown) {
     if (error instanceof Error) {
       logger.error(`Error processing file ${filePath}: ${error.message}`, { requestId });

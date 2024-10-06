@@ -1,87 +1,31 @@
-// src/utils/logger.ts
-
 /**
- * =============================================================================
- * Logger Utility
- * =============================================================================
- *
- * **File:** `src/utils/logger.ts`
- *
- * **Description:**
- * Provides a robust logging utility for Deno applications, enabling logging to both
- * the console and a dynamically named log file. Each log entry includes a timestamp
- * and source information (function name, file path, line, and column).
- *
- * **Features:**
- * - **Log Levels:** `DEBUG`, `INFO`, `WARNING`, `ERROR`, `CRITICAL`
- * - **Dual Handlers:** Console and file logging with different formats
- * - **Custom Formatting:** ISO timestamp and source info for console; structured JSON for file
- * - **Automatic Log File Naming:** Based on the calling script's name
- *
- * **Installation:**
- * Ensure Deno has permissions to read/write files and access URLs.
- *
- * **Usage:**
- *
- * 1. **Import the Logger:**
- *    ```typescript
- *    import logger from "./utils/logger.ts";
- *    ```
- *
- * 2. **Log Messages:**
- *    ```typescript
- *    logger.debug("Debug message");
- *    logger.info("Info message");
- *    logger.warning("Warning message");
- *    logger.error("Error message");
- *    logger.critical("Critical message");
- *    ```
- *
- * **API Reference:**
- *
- * - `debug(msg: string, ...args: any[])`
- * - `info(msg: string, ...args: any[])`
- * - `warning(msg: string, ...args: any[])`
- * - `error(msg: string, ...args: any[])`
- * - `critical(msg: string, ...args: any[])`
- *
- * **Log Message Formats:**
- * - **Console:**
- *   ```
- *   2024-04-27T12:34:56.789Z INFO Message (FunctionName (/path/to/file.ts:42:13)) - {"key":"value"}
- *   ```
- * - **File (JSONL):**
- *   ```json
- *   {"datetime":"2024-04-27T12:34:56.789Z","level":"INFO","msg":"Message","sourceInfo":"FunctionName (/path/to/file.ts:42:13)","extra":{"key":"value"}}
- *   ```
- *
- * **Configuration:**
- * - **Log File Path:** Automatically determined based on the calling script
- * - **Handlers:**
- *   - **ConsoleHandler:** Minimum level `INFO`, human-readable format
- *   - **FileHandler:** Minimum level `DEBUG`, structured JSON format
- *
- * **Notes:**
- * - Ensure necessary permissions for file operations.
- * - Source info capture via stack trace may impact performance.
- *
- * **Example Integration:**
- *
+ * A utility module for logging with enhanced features like source information capture
+ * and custom formatting for console and file handlers.
+ * 
+ * This module sets up a global logger instance using Deno's standard logging library.
+ * It exports functions for various log levels, each capturing the source information
+ * automatically.
+ * 
+ * The log entries are formatted differently for console and file outputs:
+ * - Console: Human-readable format
+ * - File: Structured JSONL format
+ * 
+ * Import Example:
  * ```typescript
- * // src/main.ts
- * import logger from "./utils/logger.ts";
- *
- * function authenticateUser(userId: number) {
- *   logger.info("Authentication started", { userId });
- *   // Logic...
- *   logger.info("Authentication successful", { userId });
- * }
- *
- * authenticateUser(123);
+ * import logger from '@/utils/logger.ts';
  * ```
- *
- * =============================================================================
+ * 
+ * Exported Functions:
+ * - `debug(msg: string, ...args: any[])`: Logs a debug message with optional arguments.
+ * - `info(msg: string, ...args: any[])`: Logs an info message with optional arguments.
+ * - `warning(msg: string, ...args: any[])`: Logs a warning message with optional arguments.
+ * - `error(msg: string, ...args: any[])`: Logs an error message with optional arguments.
+ * - `critical(msg: string, ...args: any[])`: Logs a critical message with optional arguments.
+ * 
+ * Each function automatically appends the source information (file path, line, and column)
+ * to the log arguments, providing precise traceability of where the log entry was made.
  */
+
 
 import {
   getLogger,

@@ -194,7 +194,7 @@ export const callOpenAI = async (
  * @returns {string | null} - The extracted TypeScript code or null if not found.
  */
 export function extractTypeScriptCode(response: string): string | null {
-  const regex = /```typescript\s*([\s\S]*?)\s*```/;
+  const regex = /```typescript\s*([\s\S]*)\s*```/;
   const match = response.match(regex);
   return match ? match[1] : null;
 }
