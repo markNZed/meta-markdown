@@ -12,9 +12,6 @@ npm-debug.log*
 # OS-specific files
 .DS_Store
 
-# VS Code specific
-.vscode/
-
 project_review.txt
 tts-cache/
 llm-cache/
