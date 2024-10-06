@@ -1,4 +1,21 @@
-// Import remark and its plugins via esm.sh
+/**
+ * This module provides utility functions for handling Markdown files, including reading,
+ * writing, and formatting. It utilizes the Deno runtime for file operations and the remark
+ * library for Markdown processing.
+ *
+ * Exported Functions:
+ * 
+ * - `readMarkdown(filePath: string): Promise<string>`: Reads the content of a Markdown file
+ *   specified by `filePath` and returns it as a string. Throws an error if the file cannot be read.
+ *
+ * - `writeMarkdown(filePath: string, content: string): Promise<void>`: Writes the specified
+ *   `content` to a Markdown file at `filePath`. Ensures the directory exists and throws an error
+ *   if the file cannot be written.
+ *
+ * - `formatMarkdown(filePath: string): Promise<void>`: Formats the Markdown file at `filePath`
+ *   using remark with preset linting and stringification rules. Throws an error if formatting fails.
+ */
+
 import { remark } from "npm:remark";
 import presetLintRecommended from "npm:remark-preset-lint-recommended";
 import remarkStringify from "npm:remark-stringify";

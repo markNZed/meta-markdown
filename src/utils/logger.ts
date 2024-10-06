@@ -1,31 +1,25 @@
 /**
- * A utility module for logging with enhanced features like source information capture
- * and custom formatting for console and file handlers.
- * 
- * This module sets up a global logger instance using Deno's standard logging library.
- * It exports functions for various log levels, each capturing the source information
- * automatically.
- * 
- * The log entries are formatted differently for console and file outputs:
- * - Console: Human-readable format
- * - File: Structured JSONL format
- * 
- * Import Example:
- * ```typescript
- * import logger from '@/utils/logger.ts';
- * ```
- * 
+ * This module provides a logging utility with enhanced features for capturing source information.
+ * It includes custom formatters for both console and file logging, along with the ability to track
+ * additional metadata like request IDs and source information.
+ *
  * Exported Functions:
- * - `debug(msg: string, ...args: any[])`: Logs a debug message with optional arguments.
- * - `info(msg: string, ...args: any[])`: Logs an info message with optional arguments.
- * - `warning(msg: string, ...args: any[])`: Logs a warning message with optional arguments.
- * - `error(msg: string, ...args: any[])`: Logs an error message with optional arguments.
- * - `critical(msg: string, ...args: any[])`: Logs a critical message with optional arguments.
- * 
- * Each function automatically appends the source information (file path, line, and column)
- * to the log arguments, providing precise traceability of where the log entry was made.
+ *
+ * - `loggerWithSource.debug(msg: string, ...args: any[]): void`: Logs a debug message with source info.
+ * - `loggerWithSource.info(msg: string, ...args: any[]): void`: Logs an info message with source info.
+ * - `loggerWithSource.warning(msg: string, ...args: any[]): void`: Logs a warning message with source info.
+ * - `loggerWithSource.error(msg: string, ...args: any[]): void`: Logs an error message with source info.
+ * - `loggerWithSource.critical(msg: string, ...args: any[]): void`: Logs a critical message with source info.
+ *
+ * Usage:
+ * Import the default export `loggerWithSource` to log messages at various levels while automatically
+ * capturing the calling function's source information. Additional arguments can be passed to include extra
+ * metadata or context.
+ *
+ * Note:
+ * Ensure that the logger is initialized before using it by awaiting the logger setup within your application
+ * startup sequence.
  */
-
 
 import {
   getLogger,

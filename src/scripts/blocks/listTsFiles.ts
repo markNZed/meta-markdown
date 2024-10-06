@@ -1,4 +1,12 @@
-// src/scripts/listTsFiles.ts
+/**
+ * @fileoverview Provides a function to list all relevant TypeScript (.ts) files
+ * within the 'src' directory of a project. The function `listTsFiles` returns a
+ * promise that resolves to an array of absolute paths to TypeScript files,
+ * excluding test files, 'server.ts', and files in directories such as 'node_modules',
+ * 'dist', and 'scripts' (excluding 'scripts/blocks'). To use, call the `listTsFiles`
+ * function, which logs the process and results, and handles potential errors
+ * related to directory access.
+ */
 
 import { walk } from "https://deno.land/std@0.203.0/fs/mod.ts";
 import { resolve } from "https://deno.land/std@0.203.0/path/mod.ts";

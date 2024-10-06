@@ -1,4 +1,26 @@
-// utils/audio/audioUtils.ts
+/**
+ * This module provides functionality to merge multiple audio files into a single output file using FFmpeg.
+ * The main exported function `mergeAudioFiles` takes a set of parameters specifying the input files, output file,
+ * a request ID for logging, and a cache directory for temporary files.
+ * 
+ * Usage:
+ * 
+ * ```typescript
+ * import { mergeAudioFiles, MergeAudioParams } from './yourModulePath';
+ * 
+ * const params: MergeAudioParams = {
+ *   inputFiles: ['audio1.mp3', 'audio2.mp3'],
+ *   outputFile: 'mergedAudio.mp3',
+ *   requestId: 'unique-request-id',
+ *   cacheDir: '/path/to/cache',
+ * };
+ * 
+ * await mergeAudioFiles(params);
+ * ```
+ * 
+ * The function will throw an error if the merging process fails, which can be caught and handled by the caller.
+ * Ensure that FFmpeg is installed and accessible in the system PATH as the function relies on it for processing.
+ */
 
 import { join } from "https://deno.land/std@0.203.0/path/mod.ts";
 import logger from '../logger.ts';

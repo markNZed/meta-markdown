@@ -1,4 +1,12 @@
-// src/utils/llm/tokenizer.ts
+/**
+ * @fileoverview This module exports a function for counting the number of tokens in a given string using the GPT-3 encoder.
+ * 
+ * @function countTokens
+ * @description Counts the number of tokens in a given string using the GPT-3 encoder.
+ * @param {string} text - The text to be tokenized.
+ * @returns {number} The number of tokens in the provided text.
+ * @throws {TypeError} Throws an error if the input is not a string.
+ */
 
 import { encode } from 'npm:gpt-3-encoder'; // Updated version
 

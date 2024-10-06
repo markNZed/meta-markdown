@@ -1,6 +1,29 @@
-// config.ts
+/**
+ * @fileoverview Configuration module for handling environment variables and default settings.
+ * 
+ * This module imports environment variables from a `.env` file and the system,
+ * and provides a configuration object for use in applications. The configuration
+ * includes settings for OpenAI API integration, directory paths, and logging.
+ *
+ * @example
+ * import { config } from '@/path/to/this/module';
+ * 
+ * console.log(config.openAI.apiKey);  // Access OpenAI API key
+ * console.log(config.markdownDir);    // Get directory for markdown files
+ *
+ * @exports
+ * @constant {Object} config - Configuration object with the following properties:
+ *   @property {Object} openAI - OpenAI API configuration
+ *     @property {string} apiKey - API key for OpenAI
+ *     @property {string} model - Model name for OpenAI (default: 'gpt-4o')
+ *     @property {number} maxTokens - Maximum number of tokens (default: 150)
+ *     @property {number} temperature - Sampling temperature for OpenAI (default: 0.7)
+ *   @property {string} markdownDir - Directory path for markdown files
+ *   @property {number} maxLogEntryLength - Maximum length for log entries
+ *   @property {string} rootDir - Root directory path
+ *   @property {string} cacheDir - Directory path for cache files
+ */
 
-// Import the 'config' function from the Deno-compatible dotenv module
 import { config as envConfig } from "https://deno.land/x/dotenv@v3.2.2/mod.ts";
 import { dirname, fromFileUrl, resolve } from "https://deno.land/std@0.224.0/path/mod.ts";
 

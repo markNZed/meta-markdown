@@ -1,3 +1,20 @@
+/**
+ * Provides utility functions to interact with the OpenAI API and process responses.
+ * 
+ * @function callOpenAI
+ * @description Calls the OpenAI API with a given prompt, utilizing caching to improve performance. This function checks for cached responses and returns them if available and valid. Otherwise, it makes a request to the OpenAI API. The response can be either a string or a parsed object, depending on the provided response format.
+ * @param {string} prompt - The prompt to send to the OpenAI API. Must be a non-empty string.
+ * @param {string} [requestId=""] - An optional request identifier for logging purposes.
+ * @param {AutoParseableResponseFormat<Record<string, any>> | null} [responseFormat=null] - An optional response format for parsing the API's response.
+ * @returns {Promise<string | Record<string, any>>} - The OpenAI API response, either as a string or a parsed object.
+ * @throws Will throw an error if the prompt is invalid, the token limit is exceeded, or if there are issues accessing the cache or calling the OpenAI API.
+ * 
+ * @function extractTypeScriptCode
+ * @description Extracts TypeScript code from a given OpenAI API response. Searches for code blocks in the response and returns the code found within.
+ * @param {string} response - The raw response from the OpenAI API.
+ * @returns {string | null} - The extracted TypeScript code or null if no code block is found.
+ */
+
 import { ensureDir } from '@/utils/file.ts';
 import OpenAI from "@openai";
 import { type AutoParseableResponseFormat } from "@openai/parser";
