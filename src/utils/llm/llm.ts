@@ -18,7 +18,7 @@
 import { ensureDir } from '@/utils/file.ts';
 import OpenAI from "@openai";
 import { type AutoParseableResponseFormat } from "@openai/parser";
-import { config } from '@/config.ts';
+import { config, OpenAIConfig } from '@/config.ts';
 import logger from '../logger.ts';
 import { resolve } from '@std/path';
 import { countTokens } from './tokenizer.ts';
@@ -60,32 +60,49 @@ const hashText = async (text: string): Promise<string> => {
   return hashHex;
 };
 
-
+interface CallOpenAIOptions {
+  prompt: string;
+  requestId?: string;
+  responseFormat?: AutoParseableResponseFormat<Record<string, any>>;
+  configOverrides?: Partial<OpenAIConfig>; // Allows overriding default config
+}
 
 export const callOpenAI = async (
-  prompt: string, 
-  requestId: string = "", 
-  responseFormat: AutoParseableResponseFormat<Record<string, any>> | null = null,
+  options: CallOpenAIOptions
 ): Promise<string | Record<string, any>> => {
+  const {
+    prompt,
+    requestId = '',
+    responseFormat = null,
+    configOverrides = {},
+  } = options;
+
   if (typeof prompt !== 'string' || prompt.trim().length === 0) {
     throw new Error('Invalid prompt: Prompt must be a non-empty string.');
   }
+
+  // Merge default config with any overrides
+  const mergedConfig: OpenAIConfig = {
+    ...config.openAI,
+    ...configOverrides,
+  };
+  
   const tokenCount = countTokens(prompt);
-  if (tokenCount > config.openAI.maxTokens) {
+  if (tokenCount > mergedConfig.maxInputTokens) {
     // Handle token limit exceeded, e.g., split prompt
-    throw new Error(`Prompt with ${tokenCount} tokens exceeds maximum token limit ${config.openAI.maxTokens}`);
+    throw new Error(`Prompt with ${tokenCount} tokens exceeds maximum token limit ${mergedConfig.max_completion_tokens}`);
   }
 
   // Initialize OpenAI client
   const openai = new OpenAI({
-    apiKey: config.openAI.apiKey,
+    apiKey: mergedConfig.apiKey,
   });
 
   const cacheKeyInput = JSON.stringify({
-    model: config.openAI.model,
+    model: mergedConfig.model,
     prompt,
-    max_tokens: config.openAI.maxTokens,
-    temperature: config.openAI.temperature,
+    max_tokens: mergedConfig.max_completion_tokens,
+    temperature: mergedConfig.temperature,
   });
   const cacheKey = await hashText(cacheKeyInput);
   const cachedFilePath = resolve(CACHE_DIR, `${cacheKey}.json`);
@@ -121,23 +138,23 @@ export const callOpenAI = async (
     let reply;
 
     if (responseFormat) {
-      if (config.openAI.model === 'o1-mini') {
+      if (mergedConfig.model === 'o1-mini') {
         completion = await openai.beta.chat.completions.parse({
-          model: config.openAI.model,
+          model: mergedConfig.model,
           messages: [
             { role: 'user', content: prompt }
           ],
-          max_completion_tokens: config.openAI.maxTokens,
+          max_completion_tokens: mergedConfig.max_completion_tokens,
         });
       } else {
         completion = await openai.beta.chat.completions.parse({
-          model: config.openAI.model,
+          model: mergedConfig.model,
           messages: [
             { role: 'system', content: 'You are a helpful assistant.' },
             { role: 'user', content: prompt }
           ],
-          max_tokens: config.openAI.maxTokens,
-          temperature: config.openAI.temperature,
+          max_tokens: mergedConfig.max_completion_tokens,
+          temperature: mergedConfig.temperature,
           response_format: responseFormat,
         });
       }
@@ -149,7 +166,7 @@ export const callOpenAI = async (
         logger.error(`Error completion refusal: ${completionMessage.refusal}`, { requestId });
         reply = completionMessage.refusal;
       } else {
-        if (config.openAI.model === 'o1-mini') {
+        if (mergedConfig.model === 'o1-mini') {
           reply = completionMessage.content;
         } else {
           reply = completionMessage.parsed;
@@ -157,23 +174,23 @@ export const callOpenAI = async (
       }
 
     } else {
-      if (config.openAI.model === 'o1-mini') {
+      if (mergedConfig.model === 'o1-mini') {
         completion = await openai.chat.completions.create({
-          model: config.openAI.model,
+          model: mergedConfig.model,
           messages: [
             { role: 'user', content: prompt },
           ],
-          max_completion_tokens: config.openAI.maxTokens,
+          max_completion_tokens: mergedConfig.max_completion_tokens,
         });
       } else {
         completion = await openai.chat.completions.create({
-          model: config.openAI.model,
+          model: mergedConfig.model,
           messages: [
             { role: 'system', content: 'You are a helpful assistant.' },
             { role: 'user', content: prompt },
           ],
-          max_tokens: config.openAI.maxTokens,
-          temperature: config.openAI.temperature,
+          max_tokens: mergedConfig.max_completion_tokens,
+          temperature: mergedConfig.temperature,
         });
       }
       reply = completion.choices?.[0]?.message?.content?.trim();

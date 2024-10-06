@@ -125,7 +125,7 @@ ${contentWithoutHeader}
 `;
 
     // Call the OpenAI API to generate documentation
-    const aiResponse = await callOpenAI(prompt, requestId);
+    const aiResponse = await callOpenAI({prompt, requestId});
 
     // Log the raw AI response for debugging
     logger.debug(`Raw AI response for ${filePath}:\n${aiResponse}`, { requestId });

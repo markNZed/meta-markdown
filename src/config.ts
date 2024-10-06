@@ -16,7 +16,7 @@
  *   @property {Object} openAI - OpenAI API configuration
  *     @property {string} apiKey - API key for OpenAI
  *     @property {string} model - Model name for OpenAI (default: 'gpt-4o')
- *     @property {number} maxTokens - Maximum number of tokens (default: 150)
+ *     @property {number} max_completion_tokens - Maximum number of tokens (default: 150)
  *     @property {number} temperature - Sampling temperature for OpenAI (default: 0.7)
  *   @property {string} markdownDir - Directory path for markdown files
  *   @property {number} maxLogEntryLength - Maximum length for log entries
@@ -41,13 +41,31 @@ const env = {
 
 const ROOT_DIR = env.ROOT_DIR || '/workspace';
 
+export interface OpenAIConfig {
+  apiKey: string;
+  model: string;
+  max_completion_tokens: number;
+  // Add any new configuration entries here
+  temperature?: number; // Example of a new config entry
+  maxInputTokens: number;
+}
+
+export interface AppConfig {
+  openAI: OpenAIConfig;
+  markdownDir: string;
+  maxLogEntryLength: number;
+  rootDir: string;
+  cacheDir: string;
+}
+
 // Configuration object
-export const config = {
+export const config: AppConfig = {
   openAI:{
     apiKey: env.OPENAI_API_KEY || '',
     model: env.OPENAI_MODEL || 'gpt-4o',
-    maxTokens: parseInt(env.OPENAI_MAX_TOKENS) || 150,
+    max_completion_tokens: parseInt(env.OPENAI_MAX_COMPLETION_TOKENS) || 150,
     temperature: parseFloat(env.OPENAI_TEMPERATURE) || 0.7,
+    maxInputTokens: parseInt(env.OPENAI_MAX_INPUT_TOKENS) || 2048,
   },
   markdownDir: env.MARKDOWN_DIR || resolve(ROOT_DIR, 'markdown_example'),
   maxLogEntryLength: 1000,

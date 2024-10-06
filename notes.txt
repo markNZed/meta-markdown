@@ -1,14 +1,10 @@
+Modify callOpenAI so we pass in a map, then we can update config in the call and not use config
+
 Tests are probably much easier to produce in JS rather than TS
 deps.ts could allow for easy mocking with sinon
   Could use a custom import_map.json and pass with --import-map
-Before generating doc create a sanity test for the file and check that this passes.
-Then if it does not improve it
-Then add the doc and check it still runs
-Deno's TypeScript compiler API to perform a basic syntax check.
-
 deno test --allow-all --filter "getFilePaths" tests/utils/file.test.ts
-
-
+deno run --allow-read src/scripts/tokenCount.ts markdown_private
 
 Build markdown features with scripts
   Editorial review
@@ -51,7 +47,7 @@ TTS
   Disk space checks to handle potential file system issues.
   Enhance text splitting for better coherence in more complex text structures.
 
-upyter AI - does not work with Deno
+Jupyter AI - does not work with Deno
 Deno caches imports so requires restarting the kernel in notebook to refresh
   Even then it seems it can cache some files sometimes ?
 https://www.deeplearning.ai/short-courses/build-llm-apps-with-langchain-js/
@@ -84,7 +80,7 @@ F5 runs the debugger again on the file
 Lessons
 -------
 The notebook provides formatted output (with some limits when in VS Code)
-Writing scripts may be preferrable for amny tasks - with the terminal visible we have basic UI
-Finding libraries with deno is painful and even more so with depednencies
-  We can use NPM "npm:unified" then `deno run --lock=lock.json --lock-write your_script.ts` to create a lock.json file where exact vesions can be found (and I guess reused)
+Writing scripts may be preferrable for many tasks - with the terminal visible we have basic UI
+Finding libraries with deno is painful and even more so with dependencies
+  We can use NPM "npm:unified" then `deno run --lock=lock.json --lock-write your_script.ts` to create a lock.json file where exact versions can be found (and I guess reused)
 

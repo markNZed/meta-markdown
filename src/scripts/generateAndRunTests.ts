@@ -37,7 +37,7 @@ export async function generateTestForFile(filePath: string): Promise<string | nu
     const prompt = getGenerateTest(content);
 
     config.openAI.model = 'o1-mini';
-    const aiResponse = await callOpenAI(prompt, requestId) as string;
+    const aiResponse = await callOpenAI({ prompt, requestId }) as string;
     const testContent = extractTypeScriptCode(aiResponse);
 
     if (!testContent) {
@@ -136,7 +136,7 @@ export async function regenerateAndRunTest(testFilePath: string, testPath: strin
       `;
 
       config.openAI.model = 'gpt-4o';
-      const llmCheckResponse = await callOpenAI(llmCheckPrompt, requestId, responseFormat) as z.infer<typeof LLMCheckResponseSchema>;
+      const llmCheckResponse = await callOpenAI({ prompt: llmCheckPrompt, requestId, responseFormat}) as z.infer<typeof LLMCheckResponseSchema>;
 
       // Process the response
       if (llmCheckResponse.completeness === 'no') {
@@ -182,7 +182,7 @@ ${result.errorMessage}
 
       const prompt = getGenerateTest(content);
 
-      const aiResponse = await callOpenAI(prompt, requestId) as string;
+      const aiResponse = await callOpenAI({prompt, requestId}) as string;
       const newTestContent = extractTypeScriptCode(aiResponse);
 
       if (!newTestContent) {

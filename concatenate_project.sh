@@ -4,6 +4,7 @@
 # Script Name: concatenate_project.sh
 # Description: Concatenates relevant project documentation and
 #              code files into a single file for AI review.
+#              For .ts files, only extracts header comments.
 # Usage:        ./concatenate_project.sh
 # ------------------------------------------------------------------
 
@@ -29,11 +30,52 @@ EXCLUDE_FILES=("package-lock.json" ".env" "convert-js-to-ts.js" "lock.json" "not
 should_exclude_file() {
     local file="$1"
     for pattern in "${EXCLUDE_FILES[@]}"; do
-        if [[ "$file" =~ $pattern ]]; then
+        if [[ "$(basename "$file")" == "$pattern" ]]; then
             return 0 # The file matches an exclusion pattern
         fi
     done
     return 1 # The file does not match any exclusion patterns
+}
+
+# Function to extract header comments from a .ts file
+extract_ts_header_comments() {
+    local file="$1"
+    # Initialize variables
+    local in_block_comment=0
+    local header_comments=""
+
+    while IFS= read -r line; do
+        # Check for start of block comment
+        if [[ $in_block_comment -eq 0 && "$line" =~ ^[[:space:]]*/\* ]]; then
+            in_block_comment=1
+            header_comments+="$line"$'\n'
+            # Check if block comment ends on the same line
+            if [[ "$line" =~ \*/ ]]; then
+                in_block_comment=0
+            fi
+            continue
+        fi
+
+        # Check for end of block comment
+        if [[ $in_block_comment -eq 1 ]]; then
+            header_comments+="$line"$'\n'
+            if [[ "$line" =~ \*/ ]]; then
+                in_block_comment=0
+            fi
+            continue
+        fi
+
+        # Check for single-line comment
+        if [[ "$line" =~ ^[[:space:]]*// ]]; then
+            header_comments+="$line"$'\n'
+            continue
+        fi
+
+        # If the line is not a comment, stop processing
+        break
+    done < "$file"
+
+    echo "$header_comments"
 }
 
 # Build the find command with exclusions
@@ -72,11 +114,25 @@ for FILE in $FILES; do
     # Add a header with the file name
     echo "===== File: $FILE =====" >> "$OUTPUT_FILE"
     echo "" >> "$OUTPUT_FILE"
-    
-    # Append the file content
-    cat "$FILE" >> "$OUTPUT_FILE"
+
+    # Determine the file extension
+    EXT="${FILE##*.}"
+
+    if [[ "$EXT" == "ts" ]]; then
+        # Extract and append only header comments for .ts files
+        HEADER_COMMENTS=$(extract_ts_header_comments "$FILE")
+        if [[ -n "$HEADER_COMMENTS" ]]; then
+            echo "$HEADER_COMMENTS" >> "$OUTPUT_FILE"
+        else
+            echo "// No header comments found." >> "$OUTPUT_FILE"
+        fi
+    else
+        # Append the entire file content for other file types
+        cat "$FILE" >> "$OUTPUT_FILE"
+    fi
+
     echo "" >> "$OUTPUT_FILE"
-    
+
     # Add a footer for separation
     echo "===========================" >> "$OUTPUT_FILE"
     echo "" >> "$OUTPUT_FILE"

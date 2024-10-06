@@ -7,7 +7,7 @@ export const summarize = async () => {
   try {
     const content = await readMarkdown('example.md');
     const prompt = getSummaryPrompt(content);
-    const summary = await callOpenAI(prompt);
+    const summary = await callOpenAI({ prompt });
     console.log('Summary:', summary);
   } catch (error) {
     console.error('Error summarizing Markdown:', error);
