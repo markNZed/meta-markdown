@@ -1,8 +1,8 @@
 // src/scripts/generateDocumentation.ts
 
 import { listTsFiles } from './blocks/listTsFiles.ts'; // Import the function to list TypeScript files
-import { callOpenAI } from '@/utils/llm/llm.ts'; // Your existing OpenAI utility
-import logger from '@/utils/logger.ts'; // Your existing logger utility
+import { callOpenAI } from '@/utils/llm/llm.ts';
+import logger from '@/utils/logger.ts';
 import { resolvePath } from '@/utils/file.ts';
 
 // Toggle Development Mode: Set to true during development to process a single file

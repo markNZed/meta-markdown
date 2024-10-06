@@ -19,5 +19,6 @@ project_review.txt
 tts-cache/
 llm-cache/
 markdown_private/
+markdown_test/
 
 cache/
