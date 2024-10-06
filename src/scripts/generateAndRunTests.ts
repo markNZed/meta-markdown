@@ -1,6 +1,6 @@
 // src/scripts/generateAndRunTests.ts
-
-import { listTsFiles } from './blocks/listTsFiles.ts';
+import { config } from '@/config.ts';
+import { listTsFiles } from '@/scripts/blocks/listTsFiles.ts';
 import { callOpenAI } from '@/utils/llm/llm.ts';
 import logger from '@/utils/logger.ts';
 import { resolvePath, ensureDir } from '@/utils/file.ts';
@@ -12,7 +12,7 @@ import { getGenerateTest } from "@/prompts/getGenerateTest.js";
 import { exists } from "@std/fs";
 
 const DEV_MODE = true;
-const SPECIFIC_FILE_PATH = './src/utils/audio/podcast.ts'; // Adjust this path as needed
+const SPECIFIC_FILE_PATH = './src/utils/audio/audioUtils.ts'; // Adjust this path as needed
 const TEST_DIR = resolvePath('./tests'); // Adjust this path as needed
 
 export async function generateTestForFile(filePath: string): Promise<string | null> {
@@ -36,6 +36,7 @@ export async function generateTestForFile(filePath: string): Promise<string | nu
 
     const prompt = getGenerateTest(content);
 
+    config.openAI.model = 'o1-mini';
     const aiResponse = await callOpenAI(prompt, requestId) as string;
     const testContent = extractTypeScriptCode(aiResponse);
 
@@ -134,6 +135,7 @@ export async function regenerateAndRunTest(testFilePath: string, testPath: strin
       ${result.errorMessage}
       `;
 
+      config.openAI.model = 'gpt-4o';
       const llmCheckResponse = await callOpenAI(llmCheckPrompt, requestId, responseFormat) as z.infer<typeof LLMCheckResponseSchema>;
 
       // Process the response

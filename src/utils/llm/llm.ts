@@ -43,10 +43,7 @@ const hashText = async (text: string): Promise<string> => {
   return hashHex;
 };
 
-// Initialize OpenAI client
-const openai = new OpenAI({
-  apiKey: config.openAI.apiKey,
-});
+
 
 export const callOpenAI = async (
   prompt: string, 
@@ -62,6 +59,10 @@ export const callOpenAI = async (
     throw new Error(`Prompt with ${tokenCount} tokens exceeds maximum token limit ${config.openAI.maxTokens}`);
   }
 
+  // Initialize OpenAI client
+  const openai = new OpenAI({
+    apiKey: config.openAI.apiKey,
+  });
 
   const cacheKeyInput = JSON.stringify({
     model: config.openAI.model,
@@ -103,16 +104,26 @@ export const callOpenAI = async (
     let reply;
 
     if (responseFormat) {
-      completion = await openai.beta.chat.completions.parse({
-        model: config.openAI.model,
-        messages: [
-          { role: 'system', content: 'You are a helpful assistant.' },
-          { role: 'user', content: prompt },
-        ],
-        max_tokens: config.openAI.maxTokens,
-        temperature: config.openAI.temperature,
-        response_format: responseFormat,
-      });
+      if (config.openAI.model === 'o1-mini') {
+        completion = await openai.beta.chat.completions.parse({
+          model: config.openAI.model,
+          messages: [
+            { role: 'user', content: prompt }
+          ],
+          max_completion_tokens: config.openAI.maxTokens,
+        });
+      } else {
+        completion = await openai.beta.chat.completions.parse({
+          model: config.openAI.model,
+          messages: [
+            { role: 'system', content: 'You are a helpful assistant.' },
+            { role: 'user', content: prompt }
+          ],
+          max_tokens: config.openAI.maxTokens,
+          temperature: config.openAI.temperature,
+          response_format: responseFormat,
+        });
+      }
 
       const completionMessage = completion.choices[0].message;
 
@@ -121,19 +132,33 @@ export const callOpenAI = async (
         logger.error(`Error completion refusal: ${completionMessage.refusal}`, { requestId });
         reply = completionMessage.refusal;
       } else {
-        reply = completionMessage.parsed;
+        if (config.openAI.model === 'o1-mini') {
+          reply = completionMessage.content;
+        } else {
+          reply = completionMessage.parsed;
+        }
       }
 
     } else {
-      completion = await openai.chat.completions.create({
-        model: config.openAI.model,
-        messages: [
-          { role: 'system', content: 'You are a helpful assistant.' },
-          { role: 'user', content: prompt },
-        ],
-        max_tokens: config.openAI.maxTokens,
-        temperature: config.openAI.temperature,
-      });
+      if (config.openAI.model === 'o1-mini') {
+        completion = await openai.chat.completions.create({
+          model: config.openAI.model,
+          messages: [
+            { role: 'user', content: prompt },
+          ],
+          max_completion_tokens: config.openAI.maxTokens,
+        });
+      } else {
+        completion = await openai.chat.completions.create({
+          model: config.openAI.model,
+          messages: [
+            { role: 'system', content: 'You are a helpful assistant.' },
+            { role: 'user', content: prompt },
+          ],
+          max_tokens: config.openAI.maxTokens,
+          temperature: config.openAI.temperature,
+        });
+      }
       reply = completion.choices?.[0]?.message?.content?.trim();
     }
     
