@@ -1,25 +1,30 @@
 /**
- * This module provides functionality to interact with the OpenAI API and handle 
- * caching of responses. It includes the following exported functions:
- * 
- * - `callOpenAI(options: CallOpenAIOptions): Promise<string | Record<string, any>>`
- *   This function sends a prompt to the OpenAI API and returns the response. 
- *   It supports caching to improve performance by storing responses for 7 days. 
- *   The function automatically manages cache hits and misses, and handles the 
- *   OpenAI API request flow and error handling.
- *   
- *   The `options` parameter is an object that includes:
- *     - `prompt`: A non-empty string with the prompt to send to OpenAI.
- *     - `requestId`: An optional string for logging purposes.
- *     - `responseFormat`: An optional format for parsing the response.
- *     - `configOverrides`: Optional overrides for the default OpenAI configuration.
+ * This module provides functionality to interact with the OpenAI API, including calling the API with prompts
+ * and caching responses to minimize redundant API calls.
  *
- * - `extractTypeScriptCode(response: string): string | null`
- *   This function extracts TypeScript code blocks from an OpenAI API response string.
- *   It returns the extracted TypeScript code or `null` if none is found.
+ * @module OpenAI Interaction
  *
- * Note: Ensure that the cache directory is correctly set up and accessible with 
- * the appropriate permissions, as the caching mechanism relies on it.
+ * @function callOpenAI
+ * @param {CallOpenAIOptions} options - Options for calling the OpenAI API.
+ * @param {string} options.prompt - The prompt to send to the OpenAI API (must be a non-empty string).
+ * @param {string} [options.requestId] - An optional request identifier for logging.
+ * @param {AutoParseableResponseFormat<Record<string, any>>} [options.responseFormat] - Optional response format.
+ * @param {Partial<OpenAIConfig>} [options.configOverrides] - Optional configuration overrides for the OpenAI client.
+ * @returns {Promise<string | Record<string, any>>} The response from the OpenAI API or cached response.
+ *
+ * @function extractTypeScriptCode
+ * @param {string} response - The raw response from the OpenAI API.
+ * @returns {string | null} The extracted TypeScript code or null if not found.
+ *
+ * Usage:
+ * 1. To call the OpenAI API:
+ *    ```typescript
+ *    const response = await callOpenAI({ prompt: "Your prompt here" });
+ *    ```
+ * 2. To extract TypeScript code from the response:
+ *    ```typescript
+ *    const code = extractTypeScriptCode(response);
+ *    ```
  */
 
 import { ensureDir } from '@/utils/file.ts';

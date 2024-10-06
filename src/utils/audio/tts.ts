@@ -1,28 +1,28 @@
 /**
- * @fileoverview This module provides utilities for processing text-to-speech (TTS) requests,
- * including hashing text, splitting text into chunks, and converting text to MP3 audio files
- * using OpenAI's TTS API with caching support.
- *
- * The primary exported function is `createAudioFromText`, which:
- * - Converts a given plain text to an MP3 audio file using specified voice.
- * - Handles texts longer than 4096 characters by splitting them into smaller chunks.
- * - Utilizes caching to avoid redundant API calls for previously processed chunks.
- * - Requires a request ID for logging and a voice type from OpenAI's supported voices.
- *
- * Usage:
+ * @module TTS Audio Generation
  * 
- * ```typescript
- * import { createAudioFromText } from './yourModule';
- *
- * const audioFilePath = await createAudioFromText(
- *   'Your text to convert to speech.',
- *   'unique-request-id',
- *   'alloy'
- * );
- * console.log('Generated audio file at:', audioFilePath);
- * ```
- *
- * Dependencies from the `src` directory are imported using the `@/` alias.
+ * This module provides functions to convert text to speech using OpenAI's Text-to-Speech (TTS) API. 
+ * The main exported function is `createAudioFromText`, which handles text splitting, 
+ * caching of generated audio files, and the merging of multiple audio files into one.
+ * 
+ * ### Functions
+ * 
+ * - `createAudioFromText(text: string, requestId: string, voice: string): Promise<string>`
+ * 
+ * ### Usage
+ * 
+ * 1. **createAudioFromText**: 
+ *    - Converts the provided text into an MP3 audio file. 
+ *    - If the text exceeds 4096 characters, it will be split into smaller chunks. 
+ *    - It checks the cache for existing audio files and only generates new ones if necessary.
+ *    - Parameters:
+ *      - `text`: The plain text to convert to speech.
+ *      - `requestId`: A unique identifier for the request, used in logging.
+ *      - `voice`: The voice to use for the TTS conversion.
+ *    - Returns a promise that resolves to the path of the generated or cached MP3 file.
+ * 
+ * @example
+ * const audioFilePath = await createAudioFromText("Hello, world!", "12345", "alloy");
  */
 
 import { resolve } from '@std/path';

@@ -1,35 +1,23 @@
 /**
- * Provides a logging utility with functions to log messages at various levels:
- * debug, info, warning, error, and critical. Each log entry captures the source
- * information from where the log is called, helping in tracing the log origins.
+ * @module Logger
  * 
- * Usage:
+ * This module sets up a logging system using Deno's standard logging library. It provides a logger instance with methods to log messages at various severity levels (debug, info, warning, error, critical). The logger captures source information, such as the calling function and file location, to provide context in log entries.
  * 
- * Import the logger and use it to log messages:
+ * ## Usage
+ * 
+ * To use the logger, simply import the default export from this module and call the desired logging method:
  * 
  * ```typescript
- * import logger from './path/to/logger';
+ * import logger from '@/path/to/logger.ts';
  * 
- * // Log a debug message
- * logger.debug('Debugging message');
- * 
- * // Log an info message with additional context
- * logger.info('Informational message', { requestId: '12345' });
- * 
- * // Log a warning
+ * logger.debug('This is a debug message');
+ * logger.info('This is an info message', { additional: 'data' });
  * logger.warning('Warning message');
- * 
- * // Log an error
- * logger.error('Error message', { errorDetails: 'Error details here' });
- * 
- * // Log a critical issue
- * logger.critical('Critical issue occurred');
+ * logger.error('An error occurred', { errorCode: 500 });
+ * logger.critical('Critical issue detected');
  * ```
  * 
- * The logger is set up to output to both the console and a file, with custom
- * formatting for each. The console outputs human-readable logs, while the file
- * stores structured JSONL logs. The logging setup is automatically initialized
- * when the module is imported.
+ * The logger automatically includes source information in the logs, and you can pass additional arguments which will be included in the log output.
  */
 
 import {

@@ -1,41 +1,39 @@
 /**
- * Provides a set of functions to perform various types of editing and verification on markdown content using AI.
- *
+ * @module MarkdownEditing
+ * 
+ * This module provides a set of functions to perform various editing tasks on markdown content using the OpenAI API.
+ * 
+ * Each function takes in a string of markdown content and a request ID, and returns a Promise that resolves to a string with the edited content.
+ * 
  * @function developmentalEdit
- * Analyzes the structure and content of the markdown and suggests improvements.
- * @param {string} markdownContent - The markdown content to be edited.
+ * @param {string} markdownContent - The markdown content to be analyzed and improved.
  * @param {string} requestId - A unique identifier for the request.
- * @returns {Promise<string>} A promise that resolves to the edited markdown content.
- *
+ * @returns {Promise<string>} - A promise that resolves to the improved markdown content after developmental editing.
+ * 
  * @function lineEdit
- * Improves the sentence structure, tone, and style of the markdown content.
- * @param {string} markdownContent - The markdown content to be edited.
+ * @param {string} markdownContent - The markdown content to be improved for sentence structure, tone, and style.
  * @param {string} requestId - A unique identifier for the request.
- * @returns {Promise<string>} A promise that resolves to the edited markdown content.
- *
+ * @returns {Promise<string>} - A promise that resolves to the improved markdown content after line editing.
+ * 
  * @function copyEdit
- * Corrects grammatical errors, punctuation, and syntax in the markdown content.
- * @param {string} markdownContent - The markdown content to be edited.
+ * @param {string} markdownContent - The markdown content to be corrected for grammatical errors and syntax.
  * @param {string} requestId - A unique identifier for the request.
- * @returns {Promise<string>} A promise that resolves to the edited markdown content.
- *
+ * @returns {Promise<string>} - A promise that resolves to the corrected markdown content after copy editing.
+ * 
  * @function proofread
- * Checks for typos or formatting errors in the markdown content and corrects them.
- * @param {string} markdownContent - The markdown content to be proofread.
+ * @param {string} markdownContent - The markdown content to be checked for typos and formatting errors.
  * @param {string} requestId - A unique identifier for the request.
- * @returns {Promise<string>} A promise that resolves to the proofread markdown content.
- *
+ * @returns {Promise<string>} - A promise that resolves to the corrected markdown content after proofreading.
+ * 
  * @function technicalEdit
- * Ensures the technical accuracy and clarity of the markdown content.
- * @param {string} markdownContent - The markdown content to be edited.
+ * @param {string} markdownContent - The markdown content to be ensured for technical accuracy and clarity.
  * @param {string} requestId - A unique identifier for the request.
- * @returns {Promise<string>} A promise that resolves to the technically edited markdown content.
- *
+ * @returns {Promise<string>} - A promise that resolves to the improved markdown content after technical editing.
+ * 
  * @function factCheck
- * Verifies the correctness of claims, data, and references in the markdown content.
- * @param {string} markdownContent - The markdown content to be fact-checked.
+ * @param {string} markdownContent - The markdown content to be verified for correctness of claims and data.
  * @param {string} requestId - A unique identifier for the request.
- * @returns {Promise<string>} A promise that resolves to the fact-checked markdown content.
+ * @returns {Promise<string>} - A promise that resolves to the verified markdown content after fact-checking.
  */
 
 import { callOpenAI } from '../llm/llm.ts';

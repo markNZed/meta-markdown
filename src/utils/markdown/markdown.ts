@@ -1,18 +1,49 @@
 /**
- * This module provides functions for creating and manipulating Markdown Abstract Syntax Trees (ASTs).
+ * @module MarkdownProcessor
  * 
- * - `createHeading(depth, text)`: Creates a heading node with a specified depth (1 to 6) and text content.
- * - `createParagraph(text)`: Creates a paragraph node with the given text content.
- * - `parseMarkdown(markdownContent)`: Parses Markdown content into an AST of type `Root`.
- * - `stringifyMarkdown(ast)`: Converts an AST of type `Root` back into a Markdown string.
- * - `insertHeading(ast, headingNode, position)`: Inserts a heading node into the AST at the specified position.
- * - `summarizeContentAI(ast, requestId)`: Summarizes the content of the AST using AI. Returns a promise that resolves to a summary string.
- * - `improveStyleAI(ast, requestId)`: Improves the style of the AST content using AI. Returns a promise that resolves to an improved `Root` AST node.
- * - `checkGrammarAI(ast, requestId)`: Checks and corrects grammar in the AST content using AI. Returns a promise that resolves to a grammatically corrected `Root` AST node.
- * - `parseMarkdownToAST(markdownContent)`: Parses Markdown content into a `MarkdownNode` AST.
- * - `addTimestamp(ast)`: Adds a timestamp paragraph node to the beginning of the AST.
+ * This module provides functions to manipulate and analyze Markdown content through an Abstract Syntax Tree (AST).
  * 
- * Make sure to handle exceptions and logging as necessary, especially when using AI functions, to ensure robust implementation.
+ * ## Exported Functions
+ * 
+ * ### createHeading(depth: 1 | 2 | 3 | 4 | 5 | 6, text: string): Heading
+ * Creates a heading node of a specified depth with the provided text. Depth must be between 1 and 6.
+ * 
+ * ### createParagraph(text: string): Paragraph
+ * Creates a paragraph node with the given text.
+ * 
+ * ### parseMarkdown(markdownContent: string): Root
+ * Parses a Markdown string into a Root AST node.
+ * 
+ * ### stringifyMarkdown(ast: Root): string
+ * Converts a Root AST node back into a Markdown string.
+ * 
+ * ### insertHeading(ast: Root, headingNode: Heading, position: number): void
+ * Inserts a heading node into the AST at the specified position.
+ * 
+ * ### summarizeContentAI(ast: Root, requestId: string): Promise<string>
+ * Summarizes the content of the AST using AI and returns a summary string.
+ * 
+ * ### improveStyleAI(ast: Root, requestId: string): Promise<Root>
+ * Improves the style of the AST content using AI and returns the revised AST node.
+ * 
+ * ### checkGrammarAI(ast: Root, requestId: string): Promise<Root>
+ * Checks and corrects grammar in the AST content using AI and returns the grammatically corrected AST node.
+ * 
+ * ### parseMarkdownToAST(markdownContent: string): MarkdownNode
+ * Parses Markdown content into a MarkdownNode AST.
+ * 
+ * ### addTimestamp(ast: MarkdownNode): void
+ * Adds a timestamp paragraph node indicating the last updated time to the AST.
+ * 
+ * ## Usage
+ * Import the functions as needed and use them to manipulate Markdown content or interact with AI for summarization, style improvement, and grammar checking.
+ * 
+ * Example:
+ * ```typescript
+ * import { createHeading, parseMarkdown } from '@/your-module-path';
+ * const ast = parseMarkdown('# My Heading');
+ * const headingNode = createHeading(1, 'Introduction');
+ * ```
  */
 
 import {unified} from "npm:unified";

@@ -1,25 +1,30 @@
 /**
- * This module provides configuration settings for an application that integrates with OpenAI's API.
- * It exports a configuration object, `config`, which contains settings loaded from environment
- * variables and a `.env` file. These settings are useful for managing the application's integration
- * with OpenAI, as well as some directory paths and limits used within the application.
- *
- * The configuration is structured in the following way:
- *
- * - `openAI`: Contains settings specific to the OpenAI API, such as:
- *   - `apiKey`: The API key used for authentication with OpenAI.
- *   - `model`: The OpenAI model name to be used for requests.
- *   - `max_completion_tokens`: The maximum number of tokens for OpenAI's completion.
- *   - `temperature`: (optional) The temperature parameter for OpenAI's responses.
- *   - `maxInputTokens`: The maximum number of input tokens allowed.
- *
- * - `markdownDir`: The directory path where markdown files are stored.
- * - `maxLogEntryLength`: The maximum length allowed for log entries.
- * - `rootDir`: The root directory of the workspace.
- * - `cacheDir`: The directory path where cache files are stored.
- *
- * To use the configuration, simply import the `config` object from this module and access the
- * desired properties as needed in your application.
+ * @module Configuration
+ * 
+ * This module provides configuration settings for the application, including OpenAI API parameters 
+ * and paths for markdown and cache directories. It reads environment variables from a `.env` file 
+ * and merges them with system environment variables.
+ * 
+ * @typedef {Object} OpenAIConfig
+ * @property {string} apiKey - The API key for OpenAI.
+ * @property {string} model - The model to be used with OpenAI.
+ * @property {number} max_completion_tokens - The maximum number of tokens to complete.
+ * @property {number} [temperature] - The sampling temperature for responses.
+ * @property {number} maxInputTokens - The maximum number of input tokens.
+ * 
+ * @typedef {Object} AppConfig
+ * @property {OpenAIConfig} openAI - Configuration settings for the OpenAI API.
+ * @property {string} markdownDir - The directory where markdown files are stored.
+ * @property {number} maxLogEntryLength - The maximum length of log entries.
+ * @property {string} rootDir - The root directory of the application.
+ * @property {string} cacheDir - The directory used for caching.
+ * 
+ * @constant {AppConfig} config - The application configuration object that contains all the settings.
+ * 
+ * @example
+ * // Accessing the configuration values
+ * import { config } from '@/path/to/this/module';
+ * console.log(config.openAI.apiKey); // Logs the OpenAI API key
  */
 
 import { config as envConfig } from "https://deno.land/x/dotenv@v3.2.2/mod.ts";

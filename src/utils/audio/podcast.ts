@@ -1,18 +1,22 @@
 /**
- * @file Provides functionality to convert Markdown content, represented as an Abstract Syntax Tree (AST),
- * into an MP3 file using OpenAI's Text-to-Speech API. The conversion process supports multiple speakers 
- * with distinct voices, which are mapped from the provided configuration. The main exported function 
- * `convertToPodcast` handles the conversion by extracting speaker and text information from the AST, 
- * generating audio for each speaker, and merging these audio segments into a single MP3 file.
+ * @module PodcastConverter
  * 
- * @exports convertToPodcast
+ * This module provides functionality to convert Markdown content (in AST format)
+ * into an MP3 file using OpenAI's Text-to-Speech API. It supports multiple speakers
+ * with distinct voices as specified in the configuration.
  * 
  * @function convertToPodcast
- * @param {Root} tree - The Markdown AST structure representing the content to convert.
- * @param {object} parameters - Operation parameters (currently unused in the conversion process).
- * @param {string} requestId - A unique identifier for the conversion request, used for logging and file management.
- * @param {object} config - Configuration object containing a mapping of speakers to TTS voices, extracted from YAML front matter.
- * @returns {Promise<Uint8Array>} A promise that resolves to the generated MP3 file as a Uint8Array.
+ * @param {Root} tree - The Markdown AST representing the content to be converted.
+ * @param {any} parameters - Operation parameters (currently unused).
+ * @param {string} requestId - A unique identifier for the conversion request.
+ * @param {any} config - Configuration object containing speaker mapping from YAML front matter.
+ * @returns {Promise<Uint8Array>} - A promise that resolves to the generated MP3 as a Uint8Array.
+ * 
+ * @example
+ * const mp3Buffer = await convertToPodcast(markdownAst, {}, 'unique-request-id', config);
+ * 
+ * The convertToPodcast function utilizes the createAudioFromText function to generate audio files
+ * for each speaker's text and merges them into a single MP3 file stored in a cache directory.
  */
 
 import { createAudioFromText } from './tts.ts';

@@ -1,19 +1,22 @@
 /**
- * @function getPodcastScript
- * @description Generates a podcast script suitable for a conversation between two characters, Ken (the host) and Judy (the guest expert), based on a given essay content. This script is designed to be engaging, insightful, and conversational, aimed at university-educated general listeners. The script maintains a balance between depth and accessibility, avoiding technical jargon while ensuring the discussion remains intellectually stimulating.
+ * Generates a podcast script based on the provided content.
  * 
- * @param {string} content - The essay content for which the podcast script will be generated.
- * @returns {string} A formatted podcast script that alternates between Ken and Judy's dialogue, using plain text suitable for text-to-speech conversion.
+ * This function creates a structured dialogue between two characters: Ken, the host, and Judy, the guest expert. 
+ * The script is designed for a podcast targeting university-educated listeners who appreciate in-depth discussions 
+ * but require clear explanations of complex ideas.
+ * 
+ * @param {string} content - The essay or topic content that the podcast script will be based on.
+ * 
+ * @returns {string} A formatted podcast script that follows a specific structure:
+ * - Each speaker's turn is marked with `<!-- host -->` for Ken and `<!-- guest -->` for Judy.
+ * - The script avoids technical jargon and is suitable for text-to-speech conversion.
  * 
  * @example
- * const content = "Some essay content...";
- * const script = getPodcastScript(content);
+ * const script = getPodcastScript("Your essay content here.");
  * console.log(script);
- * 
- * @note The generated script starts each speaker's turn with either <!-- host --> or <!-- guest -->. It avoids any special formatting or meta-language, ensuring a clean text format.
  */
 
-export const getPodcastScript = (content) => {
+export const getPodcastScript = (content: string) => {
   return `Generate a podcast script for the show titled "The Podcast". The format is a conversation between two characters: a host named Ken and a guest named Judy.
 
 Characters:

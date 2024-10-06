@@ -1,21 +1,20 @@
 /**
- * @fileoverview This module provides a function to list all relevant TypeScript (.ts) files
- * within the 'src' directory of the project. The exported function, `listTsFiles`, scans the
- * directory, excluding 'server.ts', test files, and certain directories such as 'node_modules',
- * 'dist', and 'scripts' (except 'scripts/blocks'). It returns an array of absolute paths to 
- * these files, which can be used for further processing.
- *
- * Usage:
- * - Import the function from this module.
- * - Call `listTsFiles()` to get a Promise that resolves to an array of file paths.
- *
- * Example:
+ * @module FileUtilities
  * 
- * import { listTsFiles } from './path/to/this/file';
+ * This module provides utility functions for managing TypeScript files within a specified source directory.
  * 
- * listTsFiles().then(files => {
- *   console.log(files);
- * });
+ * @function listTsFiles
+ * @returns {Promise<string[]>} - A promise that resolves to an array of absolute paths to relevant TypeScript (.ts) files 
+ * within the 'src' directory, excluding server.ts, test files, and specific directories like node_modules, dist, and scripts (except blocks).
+ * 
+ * @example
+ * // Usage example
+ * import { listTsFiles } from '@/utils/fileUtilities.ts';
+ * 
+ * (async () => {
+ *   const tsFiles = await listTsFiles();
+ *   console.log(tsFiles);
+ * })();
  */
 
 import { walk } from "https://deno.land/std@0.203.0/fs/mod.ts";

@@ -1,17 +1,24 @@
 /**
- * Exports functions related to generating tests for TypeScript projects.
- *
+ * @module Test Generation Utility
+ * 
+ * This module provides a utility function to generate a test template for 
+ * TypeScript files based on the project's context and utility overviews.
+ * 
  * @function getGenerateTest
- * @description Generates a detailed test plan and overview for a TypeScript project given the project description. The function outlines the key features, directory structure, and utility overviews, guiding the creation of sanity tests for major functionalities without focusing on edge cases or error handling. The function supports rapid exploration of functionality by emphasizing prototype development.
- *
- * Usage:
- * - Import the function using: `import { getGenerateTest } from 'your-file-path';`.
- * - Call `getGenerateTest(content)` where `content` is a string containing the project description and context.
- *
- * Import paths within the src directory should use "@/". For instance, `import { convertToPodcast } from '@/utils/audio/podcast.ts';`.
+ * @param {string} content - The content of the TypeScript file for which tests 
+ *                           should be generated. It should contain the main behavior 
+ *                           to be tested.
+ * 
+ * @returns {string} A formatted string containing the project overview, key 
+ *                   features, directory structure, utility overviews, and 
+ *                   instructions for generating tests.
+ * 
+ * @example
+ * const testContent = getGenerateTest('path/to/your/typescript/file.ts');
+ * console.log(testContent); // Outputs the test generation template.
  */
 
-export const getGenerateTest = (content) => {
+export const getGenerateTest = (content: string) => {
     return `**Project Overview:**
 
 The project is an **AI-Powered Markdown Manipulation Tool** developed using **Deno**. It facilitates the editing, summarizing, and converting of Markdown files by leveraging the **OpenAI API**. The tool supports both script-based and notebook-based workflows, utilizing Deno for JavaScript/TypeScript execution and the Deno kernel with Jupyter for interactive notebooks.

@@ -1,16 +1,17 @@
 /**
- * This module exports a function to rewrite markdown content for a specific audience using OpenAI's language model.
- *
+ * @module RewriteForAudience
+ * 
+ * This module provides a function to rewrite markdown content for a specific audience using OpenAI's language model.
+ * 
  * @function rewriteForAudience
- * @async
- * @param {string} markdownContent - The original markdown content that needs to be rewritten.
- * @param {string} audience - The target audience for which the content should be rewritten.
- * @param {string} requestId - A unique identifier for the request, used for tracking and logging.
- * @returns {Promise<string>} A promise that resolves to the rewritten markdown content tailored for the specified audience.
- *
- * Usage:
- * Call this function with the original markdown content, the desired audience, and a unique request identifier. 
- * The function uses OpenAI to generate a version of the content that is more suitable for the specified audience.
+ * @param {string} markdownContent - The markdown content to be rewritten.
+ * @param {string} audience - The target audience for whom the content should be tailored.
+ * @param {string} requestId - A unique identifier for the request, used for tracking purposes.
+ * @returns {Promise<string>} A promise that resolves to the rewritten markdown content suitable for the specified audience.
+ * 
+ * @example
+ * const rewrittenContent = await rewriteForAudience("# Hello World", "children", "12345");
+ * console.log(rewrittenContent); // Outputs the rewritten content tailored for children.
  */
 
 import { callOpenAI } from '../llm/llm.ts';

@@ -1,13 +1,26 @@
 /**
- * This module provides utility functions for file path resolution and directory management.
+ * Utility functions for file and directory path resolution and management.
  *
- * Functions:
+ * @module FileUtils
  *
- * - `resolvePath(filePath: string): string`: Resolves a given file path to an absolute path based on the root directory specified in the configuration. If the path is already absolute, it returns the path unchanged. Use this function to ensure paths are consistent relative to the application root.
+ * @function resolvePath
+ * @param {string} filePath - The file path to resolve. It can be an absolute path or a relative path.
+ * @returns {string} The resolved absolute file path based on the configured root directory.
  *
- * - `getFilePaths(input: string | string[]): Promise<string[]>`: Asynchronously retrieves file paths from given input(s). The input can be a single path or an array of paths, which can be files, directories, or glob patterns. This function returns an array of file paths, recursively including markdown files if a directory is specified.
+ * @function getFilePaths
+ * @param {string | string[]} input - A single file path, an array of file paths, or a glob pattern to match files.
+ * @returns {Promise<string[]>} A promise that resolves to an array of absolute file paths of found markdown files.
  *
- * - `ensureDir(dirPath: string): Promise<void>`: Ensures that a directory exists at the specified path, creating it if necessary. This is useful for preparing the filesystem for file operations that require a directory to be present.
+ * @function ensureDir
+ * @param {string} dirPath - The directory path to ensure exists. If it doesn't exist, it will be created.
+ * @returns {Promise<void>} A promise that resolves when the directory has been ensured to exist.
+ *
+ * @description
+ * Use these functions to manage file paths and directories within your Deno application.
+ * `resolvePath` helps convert relative paths to absolute paths based on a configured root directory.
+ * `getFilePaths` allows you to retrieve file paths from either files, directories, or glob patterns,
+ * specifically targeting markdown files. `ensureDir` ensures that a specified directory exists,
+ * creating it if necessary.
  */
 
 import { config } from '@/config.ts';

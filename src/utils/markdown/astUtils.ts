@@ -1,18 +1,23 @@
 /**
- * This module provides functions to manipulate Markdown abstract syntax trees (AST).
+ * @module MarkdownUtils
+ * 
+ * This module provides utility functions for manipulating Markdown Abstract Syntax Trees (AST).
  * 
  * @function findNodesByType
- * @description Finds and returns all nodes of a specified type within a given Markdown AST.
- * @param {MarkdownNode} ast - The root node of the Markdown AST to search through.
- * @param {string} type - The type of nodes to search for within the AST.
+ * @param {MarkdownNode} ast - The root node of the Markdown AST to search within.
+ * @param {string} type - The type of nodes to find within the AST.
  * @returns {MarkdownNode[]} An array of nodes that match the specified type.
  * 
+ * @example
+ * const nodes = findNodesByType(ast, 'heading');
+ * 
  * @function replaceNode
- * @description Replaces a specified node with a new node within a given Markdown AST.
  * @param {MarkdownNode} ast - The root node of the Markdown AST to modify.
- * @param {MarkdownNode} targetNode - The node in the AST to replace.
- * @param {MarkdownNode} newNode - The new node to replace the target node with.
- * @returns {void}
+ * @param {MarkdownNode} targetNode - The node to be replaced in the AST.
+ * @param {MarkdownNode} newNode - The new node that will replace the target node.
+ * 
+ * @example
+ * replaceNode(ast, oldNode, newNode);
  */
 
 import { MarkdownNode } from '../../types/markdown.ts';

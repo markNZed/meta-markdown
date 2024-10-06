@@ -1,23 +1,30 @@
 /**
- * This module provides functions to traverse a directory structure, count tokens in Markdown files, and print the structure in a readable format.
+ * @module Directory Token Counter
  * 
- * Exported Functions:
+ * This module provides functionality to build and print the directory structure with token counts
+ * for Markdown files. It includes methods to recursively traverse directories, count tokens in files,
+ * and print the structure in a human-readable format.
  * 
- * - `buildDirectoryStructure(dirPath: string): Promise<DirectoryStructure>`: Asynchronously builds a hierarchical representation of a directory structure starting from the specified `dirPath`. It includes token counts for Markdown files using the `countTokens` function from '@/utils/llm/tokenizer.ts'.
+ * @exports
  * 
- * - `printDirectoryStructure(structure: DirectoryStructure, indent?: string): number`: Recursively prints the directory structure in a tree-like format including token counts. It returns the total token count for the printed structure.
+ * - `buildDirectoryStructure(dirPath: string): Promise<DirectoryStructure>`: 
+ *   Recursively builds the directory structure starting from the given directory path. 
+ *   It returns a promise that resolves to a `DirectoryStructure` object representing the 
+ *   directory and its contents.
  * 
- * - `summarizeDirectory(dirPath: string): Promise<{ structure: DirectoryStructure; totalTokens: number }>`: Combines the functionality of `buildDirectoryStructure` and `printDirectoryStructure` to provide a summary of the directory structure with token counts, returning both the structure and the total number of tokens.
+ * - `printDirectoryStructure(structure: DirectoryStructure, indent?: string): number`: 
+ *   Prints the directory structure to the console in a tree-like format, showing the token count 
+ *   for each file and the total tokens for each directory. Returns the total token count for the 
+ *   current directory.
  * 
- * Usage:
+ * - `summarizeDirectory(dirPath: string): Promise<{ structure: DirectoryStructure; totalTokens: number }>`: 
+ *   Summarizes the directory structure for the given path, returning a promise that resolves to an 
+ *   object containing the directory structure and the total token count.
  * 
- * If running this script directly with Deno, provide a directory path to analyze:
- * 
- * ```shell
- * deno run --allow-read --import-map=import_map.json tokenCount.ts <directory_path>
- * ```
- * 
- * This will output the directory structure with token counts and the overall total token count.
+ * @example
+ * // To use the module, you can call summarizeDirectory with a directory path:
+ * const summary = await summarizeDirectory('./my-directory');
+ * console.log(summary.totalTokens);
  */
 
 import { countTokens } from "@/utils/llm/tokenizer.ts";

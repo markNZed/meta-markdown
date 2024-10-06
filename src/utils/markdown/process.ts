@@ -1,10 +1,23 @@
 /**
- * Processes markdown files by applying specified transformations to their abstract syntax trees (ASTs).
- *
- * @param {string | string[]} filePathsOrPatterns - A single file path, an array of file paths, or glob patterns to identify markdown files to process.
- * @param {MarkdownProcessor | MarkdownProcessor[]} processFunctions - A single function or an array of functions to process the markdown AST. Each function can modify the AST in place and may return a promise for asynchronous operations.
- *
- * The `processMarkdownFiles` function reads markdown files, parses them into ASTs, applies the provided processing functions to modify the ASTs, and writes the modified content back to the files. It handles both single and multiple file paths, as well as glob patterns for file selection.
+ * @module Markdown Processing
+ * 
+ * This module provides a function to process Markdown files by applying specified processing functions to their Abstract Syntax Tree (AST).
+ * 
+ * @function processMarkdownFiles
+ * @param {string | string[]} filePathsOrPatterns - A single file path or an array of file paths or glob patterns to locate the Markdown files to process.
+ * @param {MarkdownProcessor | MarkdownProcessor[]} processFunctions - A single processing function or an array of processing functions that will be applied to the AST of each Markdown file. Each function receives the AST as an argument and can return either void or a Promise that resolves to void.
+ * 
+ * @example
+ * // Define a processing function
+ * const exampleProcessor: MarkdownProcessor = async (ast) => {
+ *   // Modify the AST here
+ * };
+ * 
+ * // Process a single file
+ * await processMarkdownFiles('path/to/file.md', exampleProcessor);
+ * 
+ * // Process multiple files with an array of functions
+ * await processMarkdownFiles(['path/to/*.md', 'another/path/*.md'], [exampleProcessor, anotherProcessor]);
  */
 
 import { readMarkdown, writeMarkdown } from './fileIO.ts';

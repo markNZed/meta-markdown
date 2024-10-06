@@ -1,28 +1,29 @@
 /**
- * Provides functionality to merge multiple audio files into a single output file using FFmpeg.
- * The primary exported function is `mergeAudioFiles`, which accepts a parameter object of type `MergeAudioParams`.
+ * @module AudioMerger
  * 
- * Usage:
+ * This module provides functions to merge multiple audio files into a single audio file using FFmpeg's concat demuxer.
  * 
- * ```typescript
- * import { mergeAudioFiles, MergeAudioParams } from 'your-file-path';
+ * @example
+ * import { mergeAudioFiles } from '@/path/to/this/module';
  * 
- * const params: MergeAudioParams = {
+ * const params = {
  *   inputFiles: ['audio1.mp3', 'audio2.mp3'],
- *   outputFile: 'merged_audio.mp3',
- *   requestId: 'unique_request_id',
- *   cacheDir: '/path/to/cache'
+ *   outputFile: 'output.mp3',
+ *   requestId: 'unique-request-id',
+ *   cacheDir: '/path/to/cache',
  * };
  * 
  * await mergeAudioFiles(params);
- * ```
  * 
- * - `inputFiles`: An array of strings representing the paths of the audio files to be merged.
- * - `outputFile`: A string specifying the path where the merged audio file will be saved.
- * - `requestId`: A unique identifier for the request, used for logging purposes.
- * - `cacheDir`: A directory path used to store temporary files during the merging process.
+ * @typedef {Object} MergeAudioParams
+ * @property {string[]} inputFiles - An array of paths to the input audio files to be merged.
+ * @property {string} outputFile - The path to the output audio file.
+ * @property {string} requestId - A unique identifier for the request, used for logging.
+ * @property {string} cacheDir - The directory to store temporary files during the merging process.
  * 
- * The function handles errors by logging them and throwing an exception if the merging process fails.
+ * @function mergeAudioFiles
+ * @param {MergeAudioParams} params - The parameters for merging audio files.
+ * @returns {Promise<void>} A promise that resolves when the merging process is complete.
  */
 
 import { join } from "https://deno.land/std@0.203.0/path/mod.ts";

@@ -1,13 +1,29 @@
 /**
- * This module provides functions to read, write, and format Markdown files.
+ * A module for reading, writing, and formatting Markdown files.
  *
- * - `readMarkdown(filePath: string): Promise<string>`: Reads a Markdown file from the specified relative path and returns its content as a string. Throws an error if the file cannot be read.
+ * @module MarkdownFileHandler
  * 
- * - `writeMarkdown(filePath: string, content: string): Promise<void>`: Writes the specified content to a Markdown file at the given relative path. Throws an error if the file cannot be written.
+ * @function readMarkdown
+ * @param {string} filePath - The relative path to the Markdown file to read.
+ * @returns {Promise<string>} - A promise that resolves to the content of the Markdown file as a string. 
+ * @throws Will throw an error if the file cannot be read or is not found.
  * 
- * - `formatMarkdown(filePath: string): Promise<void>`: Formats a Markdown file at the specified relative path using remark with preset linting and stringification. Throws an error if the file cannot be formatted.
- *
- * Uses configuration from '@/config.ts' for the base directory of Markdown files.
+ * @function writeMarkdown
+ * @param {string} filePath - The relative path to the Markdown file to write to.
+ * @param {string} content - The content to write to the Markdown file.
+ * @returns {Promise<void>} - A promise that resolves when the content has been written.
+ * @throws Will throw an error if the file cannot be written.
+ * 
+ * @function formatMarkdown
+ * @param {string} filePath - The relative path to the Markdown file to format.
+ * @returns {Promise<void>} - A promise that resolves when the Markdown file has been formatted.
+ * @throws Will throw an error if the Markdown cannot be formatted.
+ * 
+ * @example
+ * // Example usage:
+ * const content = await readMarkdown('example.md');
+ * await writeMarkdown('example.md', '# New Content');
+ * await formatMarkdown('example.md');
  */
 
 import { remark } from "npm:remark";
