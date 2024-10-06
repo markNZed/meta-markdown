@@ -1,17 +1,13 @@
 /**
- * This module provides utility functions for resolving file paths, retrieving file paths, 
- * and ensuring directories exist in the file system.
- * 
- * - `resolvePath(filePath: string): string`: Resolves a given file path to an absolute path 
- *   based on the configured root directory. It returns the absolute path.
- * 
- * - `getFilePaths(input: string | string[]): Promise<string[]>`: Asynchronously retrieves a 
- *   list of file paths from the provided input, which can be a single path or an array of paths. 
- *   It handles individual files, directories (recursively collecting markdown files), and 
- *   glob patterns.
- * 
- * - `ensureDir(dirPath: string): Promise<void>`: Ensures that a directory exists at the given 
- *   path, creating it if necessary. It does nothing if the directory already exists.
+ * This module provides utility functions for file path resolution and directory management.
+ *
+ * Functions:
+ *
+ * - `resolvePath(filePath: string): string`: Resolves a given file path to an absolute path based on the root directory specified in the configuration. If the path is already absolute, it returns the path unchanged. Use this function to ensure paths are consistent relative to the application root.
+ *
+ * - `getFilePaths(input: string | string[]): Promise<string[]>`: Asynchronously retrieves file paths from given input(s). The input can be a single path or an array of paths, which can be files, directories, or glob patterns. This function returns an array of file paths, recursively including markdown files if a directory is specified.
+ *
+ * - `ensureDir(dirPath: string): Promise<void>`: Ensures that a directory exists at the specified path, creating it if necessary. This is useful for preparing the filesystem for file operations that require a directory to be present.
  */
 
 import { config } from '@/config.ts';

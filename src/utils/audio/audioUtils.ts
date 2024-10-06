@@ -1,25 +1,28 @@
 /**
- * This module provides functionality to merge multiple audio files into a single output file using FFmpeg.
- * The main exported function `mergeAudioFiles` takes a set of parameters specifying the input files, output file,
- * a request ID for logging, and a cache directory for temporary files.
+ * Provides functionality to merge multiple audio files into a single output file using FFmpeg.
+ * The primary exported function is `mergeAudioFiles`, which accepts a parameter object of type `MergeAudioParams`.
  * 
  * Usage:
  * 
  * ```typescript
- * import { mergeAudioFiles, MergeAudioParams } from './yourModulePath';
+ * import { mergeAudioFiles, MergeAudioParams } from 'your-file-path';
  * 
  * const params: MergeAudioParams = {
  *   inputFiles: ['audio1.mp3', 'audio2.mp3'],
- *   outputFile: 'mergedAudio.mp3',
- *   requestId: 'unique-request-id',
- *   cacheDir: '/path/to/cache',
+ *   outputFile: 'merged_audio.mp3',
+ *   requestId: 'unique_request_id',
+ *   cacheDir: '/path/to/cache'
  * };
  * 
  * await mergeAudioFiles(params);
  * ```
  * 
- * The function will throw an error if the merging process fails, which can be caught and handled by the caller.
- * Ensure that FFmpeg is installed and accessible in the system PATH as the function relies on it for processing.
+ * - `inputFiles`: An array of strings representing the paths of the audio files to be merged.
+ * - `outputFile`: A string specifying the path where the merged audio file will be saved.
+ * - `requestId`: A unique identifier for the request, used for logging purposes.
+ * - `cacheDir`: A directory path used to store temporary files during the merging process.
+ * 
+ * The function handles errors by logging them and throwing an exception if the merging process fails.
  */
 
 import { join } from "https://deno.land/std@0.203.0/path/mod.ts";

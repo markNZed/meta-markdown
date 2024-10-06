@@ -1,3 +1,25 @@
+/**
+ * This module provides functions to traverse a directory structure, count tokens in Markdown files, and print the structure in a readable format.
+ * 
+ * Exported Functions:
+ * 
+ * - `buildDirectoryStructure(dirPath: string): Promise<DirectoryStructure>`: Asynchronously builds a hierarchical representation of a directory structure starting from the specified `dirPath`. It includes token counts for Markdown files using the `countTokens` function from '@/utils/llm/tokenizer.ts'.
+ * 
+ * - `printDirectoryStructure(structure: DirectoryStructure, indent?: string): number`: Recursively prints the directory structure in a tree-like format including token counts. It returns the total token count for the printed structure.
+ * 
+ * - `summarizeDirectory(dirPath: string): Promise<{ structure: DirectoryStructure; totalTokens: number }>`: Combines the functionality of `buildDirectoryStructure` and `printDirectoryStructure` to provide a summary of the directory structure with token counts, returning both the structure and the total number of tokens.
+ * 
+ * Usage:
+ * 
+ * If running this script directly with Deno, provide a directory path to analyze:
+ * 
+ * ```shell
+ * deno run --allow-read --import-map=import_map.json tokenCount.ts <directory_path>
+ * ```
+ * 
+ * This will output the directory structure with token counts and the overall total token count.
+ */
+
 import { countTokens } from "@/utils/llm/tokenizer.ts";
 
 /**

@@ -1,24 +1,35 @@
 /**
- * This module provides a logging utility with enhanced features for capturing source information.
- * It includes custom formatters for both console and file logging, along with the ability to track
- * additional metadata like request IDs and source information.
- *
- * Exported Functions:
- *
- * - `loggerWithSource.debug(msg: string, ...args: any[]): void`: Logs a debug message with source info.
- * - `loggerWithSource.info(msg: string, ...args: any[]): void`: Logs an info message with source info.
- * - `loggerWithSource.warning(msg: string, ...args: any[]): void`: Logs a warning message with source info.
- * - `loggerWithSource.error(msg: string, ...args: any[]): void`: Logs an error message with source info.
- * - `loggerWithSource.critical(msg: string, ...args: any[]): void`: Logs a critical message with source info.
- *
+ * Provides a logging utility with functions to log messages at various levels:
+ * debug, info, warning, error, and critical. Each log entry captures the source
+ * information from where the log is called, helping in tracing the log origins.
+ * 
  * Usage:
- * Import the default export `loggerWithSource` to log messages at various levels while automatically
- * capturing the calling function's source information. Additional arguments can be passed to include extra
- * metadata or context.
- *
- * Note:
- * Ensure that the logger is initialized before using it by awaiting the logger setup within your application
- * startup sequence.
+ * 
+ * Import the logger and use it to log messages:
+ * 
+ * ```typescript
+ * import logger from './path/to/logger';
+ * 
+ * // Log a debug message
+ * logger.debug('Debugging message');
+ * 
+ * // Log an info message with additional context
+ * logger.info('Informational message', { requestId: '12345' });
+ * 
+ * // Log a warning
+ * logger.warning('Warning message');
+ * 
+ * // Log an error
+ * logger.error('Error message', { errorDetails: 'Error details here' });
+ * 
+ * // Log a critical issue
+ * logger.critical('Critical issue occurred');
+ * ```
+ * 
+ * The logger is set up to output to both the console and a file, with custom
+ * formatting for each. The console outputs human-readable logs, while the file
+ * stores structured JSONL logs. The logging setup is automatically initialized
+ * when the module is imported.
  */
 
 import {

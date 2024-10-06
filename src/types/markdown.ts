@@ -1,15 +1,14 @@
 /**
- * Provides an interface for representing nodes in a Markdown abstract syntax tree (AST).
+ * This file exports an interface `MarkdownNode` that represents a node in a Markdown abstract syntax tree (AST).
  * 
- * @interface MarkdownNode
+ * Interface `MarkdownNode`:
+ * - `type` (string): Specifies the type of the node (e.g., 'heading', 'paragraph').
+ * - `depth?` (number): Optional. Represents the depth of the node, typically used for headings.
+ * - `value?` (string): Optional. Contains the text value of the node, if applicable.
+ * - `children?` (MarkdownNode[]): Optional. An array of child nodes, allowing for nested structures.
  * 
- * @property {string} type - The type of the Markdown node, such as 'heading', 'paragraph', etc.
- * @property {number} [depth] - Optional. The depth of the node, typically used for headings.
- * @property {string} [value] - Optional. The textual value of the node, applicable for text nodes.
- * @property {MarkdownNode[]} [children] - Optional. An array of child nodes, representing nested structures.
- * 
- * Exported functions or interfaces implementing this structure can be used to parse or manipulate
- * Markdown content by traversing the tree structure and accessing the properties of each node.
+ * Usage:
+ * Implement this interface to create objects representing various elements of a Markdown document.
  */
 
 export interface MarkdownNode {

@@ -1,27 +1,25 @@
 /**
- * @fileoverview Configuration module for handling environment variables and default settings.
- * 
- * This module imports environment variables from a `.env` file and the system,
- * and provides a configuration object for use in applications. The configuration
- * includes settings for OpenAI API integration, directory paths, and logging.
+ * This module provides configuration settings for an application that integrates with OpenAI's API.
+ * It exports a configuration object, `config`, which contains settings loaded from environment
+ * variables and a `.env` file. These settings are useful for managing the application's integration
+ * with OpenAI, as well as some directory paths and limits used within the application.
  *
- * @example
- * import { config } from '@/path/to/this/module';
- * 
- * console.log(config.openAI.apiKey);  // Access OpenAI API key
- * console.log(config.markdownDir);    // Get directory for markdown files
+ * The configuration is structured in the following way:
  *
- * @exports
- * @constant {Object} config - Configuration object with the following properties:
- *   @property {Object} openAI - OpenAI API configuration
- *     @property {string} apiKey - API key for OpenAI
- *     @property {string} model - Model name for OpenAI (default: 'gpt-4o')
- *     @property {number} max_completion_tokens - Maximum number of tokens (default: 150)
- *     @property {number} temperature - Sampling temperature for OpenAI (default: 0.7)
- *   @property {string} markdownDir - Directory path for markdown files
- *   @property {number} maxLogEntryLength - Maximum length for log entries
- *   @property {string} rootDir - Root directory path
- *   @property {string} cacheDir - Directory path for cache files
+ * - `openAI`: Contains settings specific to the OpenAI API, such as:
+ *   - `apiKey`: The API key used for authentication with OpenAI.
+ *   - `model`: The OpenAI model name to be used for requests.
+ *   - `max_completion_tokens`: The maximum number of tokens for OpenAI's completion.
+ *   - `temperature`: (optional) The temperature parameter for OpenAI's responses.
+ *   - `maxInputTokens`: The maximum number of input tokens allowed.
+ *
+ * - `markdownDir`: The directory path where markdown files are stored.
+ * - `maxLogEntryLength`: The maximum length allowed for log entries.
+ * - `rootDir`: The root directory of the workspace.
+ * - `cacheDir`: The directory path where cache files are stored.
+ *
+ * To use the configuration, simply import the `config` object from this module and access the
+ * desired properties as needed in your application.
  */
 
 import { config as envConfig } from "https://deno.land/x/dotenv@v3.2.2/mod.ts";

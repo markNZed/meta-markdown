@@ -1,28 +1,28 @@
 /**
- * This module provides a function to convert text to speech using OpenAI's Text-to-Speech (TTS) API 
- * with caching and chunk management for texts exceeding 4096 characters.
+ * @fileoverview This module provides utilities for processing text-to-speech (TTS) requests,
+ * including hashing text, splitting text into chunks, and converting text to MP3 audio files
+ * using OpenAI's TTS API with caching support.
  *
- * Exported Function:
+ * The primary exported function is `createAudioFromText`, which:
+ * - Converts a given plain text to an MP3 audio file using specified voice.
+ * - Handles texts longer than 4096 characters by splitting them into smaller chunks.
+ * - Utilizes caching to avoid redundant API calls for previously processed chunks.
+ * - Requires a request ID for logging and a voice type from OpenAI's supported voices.
+ *
+ * Usage:
  * 
- * - `createAudioFromText(text: string, requestId: string, voice: string): Promise<string>`
- *   - Converts the given text to an MP3 file using the specified voice.
- *   - Text longer than 4096 characters is split into smaller chunks.
- *   - Each chunk is sent to OpenAI's TTS API; results are cached to reduce redundant API calls.
- *   - If the audio for a chunk is already cached, it retrieves the cached version.
- *   - The resulting MP3 files from each chunk are merged into a single MP3 file.
- *   - Returns the file path of the final MP3.
- * 
- * How to Use:
- * 
- * 1. Call `createAudioFromText` with the desired text, a unique request ID for logging, and a voice 
- *    identifier ('alloy', 'echo', 'fable', 'onyx', 'nova', 'shimmer').
- * 2. Handle the returned promise, which resolves to the path of the generated MP3 file.
- * 
- * Dependencies:
- * 
- * - Uses OpenAI's TTS API, requiring a valid API key in the configuration (`config.openAI.apiKey`).
- * - Caches audio chunks in a directory specified by `config.cacheDir`.
- * - Utilizes `mergeAudioFiles` from `./audioUtils.ts` to combine audio chunks.
+ * ```typescript
+ * import { createAudioFromText } from './yourModule';
+ *
+ * const audioFilePath = await createAudioFromText(
+ *   'Your text to convert to speech.',
+ *   'unique-request-id',
+ *   'alloy'
+ * );
+ * console.log('Generated audio file at:', audioFilePath);
+ * ```
+ *
+ * Dependencies from the `src` directory are imported using the `@/` alias.
  */
 
 import { resolve } from '@std/path';

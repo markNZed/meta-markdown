@@ -1,19 +1,13 @@
 /**
- * This module provides utility functions for handling Markdown files, including reading,
- * writing, and formatting. It utilizes the Deno runtime for file operations and the remark
- * library for Markdown processing.
+ * This module provides functions to read, write, and format Markdown files.
  *
- * Exported Functions:
+ * - `readMarkdown(filePath: string): Promise<string>`: Reads a Markdown file from the specified relative path and returns its content as a string. Throws an error if the file cannot be read.
  * 
- * - `readMarkdown(filePath: string): Promise<string>`: Reads the content of a Markdown file
- *   specified by `filePath` and returns it as a string. Throws an error if the file cannot be read.
+ * - `writeMarkdown(filePath: string, content: string): Promise<void>`: Writes the specified content to a Markdown file at the given relative path. Throws an error if the file cannot be written.
+ * 
+ * - `formatMarkdown(filePath: string): Promise<void>`: Formats a Markdown file at the specified relative path using remark with preset linting and stringification. Throws an error if the file cannot be formatted.
  *
- * - `writeMarkdown(filePath: string, content: string): Promise<void>`: Writes the specified
- *   `content` to a Markdown file at `filePath`. Ensures the directory exists and throws an error
- *   if the file cannot be written.
- *
- * - `formatMarkdown(filePath: string): Promise<void>`: Formats the Markdown file at `filePath`
- *   using remark with preset linting and stringification rules. Throws an error if formatting fails.
+ * Uses configuration from '@/config.ts' for the base directory of Markdown files.
  */
 
 import { remark } from "npm:remark";

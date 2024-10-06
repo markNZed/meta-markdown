@@ -1,12 +1,10 @@
 /**
- * Processes Markdown files by applying a series of transformations to their Abstract Syntax Trees (AST).
- * 
- * @param filePathsOrPatterns - A single file path, an array of file paths, or glob patterns specifying the Markdown files to process.
- * @param processFunctions - A single function or an array of functions that take a MarkdownNode and may return a promise. Each function is applied to the AST of each Markdown file.
- * 
- * This function reads the specified Markdown files, parses them into an AST, applies each provided processing function to the AST, and then writes the updated content back to the files.
- * 
- * The processing functions can be synchronous or asynchronous, allowing for flexible transformation logic.
+ * Processes markdown files by applying specified transformations to their abstract syntax trees (ASTs).
+ *
+ * @param {string | string[]} filePathsOrPatterns - A single file path, an array of file paths, or glob patterns to identify markdown files to process.
+ * @param {MarkdownProcessor | MarkdownProcessor[]} processFunctions - A single function or an array of functions to process the markdown AST. Each function can modify the AST in place and may return a promise for asynchronous operations.
+ *
+ * The `processMarkdownFiles` function reads markdown files, parses them into ASTs, applies the provided processing functions to modify the ASTs, and writes the modified content back to the files. It handles both single and multiple file paths, as well as glob patterns for file selection.
  */
 
 import { readMarkdown, writeMarkdown } from './fileIO.ts';

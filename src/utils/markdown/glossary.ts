@@ -1,12 +1,16 @@
 /**
- * Provides functions to generate a glossary from markdown content.
+ * Generates a glossary from the provided markdown content.
+ * 
+ * This function extracts key terms from markdown content and provides a glossary with definitions by utilizing
+ * the OpenAI language model. It sends the markdown content as a prompt to the OpenAI API and returns the
+ * generated response as a glossary.
  *
- * @function generateGlossary
- * @param {string} markdownContent - The markdown content from which to extract key terms and definitions.
- * @param {string} requestId - A unique identifier for the request, used for tracking purposes.
- * @returns {Promise<string>} A promise that resolves to a glossary string with definitions of key terms extracted from the markdown content.
+ * @param markdownContent - The markdown content from which to extract key terms and generate a glossary.
+ * @param requestId - A unique identifier for the request, used for tracking purposes.
+ * @returns A promise that resolves to a string containing the generated glossary.
  *
- * This function uses the OpenAI API to analyze the given markdown content and extract key terms to create a glossary.
+ * Dependencies:
+ * - Uses the `callOpenAI` function from '@/llm/llm.ts' to interact with the OpenAI API.
  */
 
 import { parseMarkdown, stringifyMarkdown } from './markdown.ts';

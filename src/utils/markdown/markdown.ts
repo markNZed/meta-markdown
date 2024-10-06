@@ -1,32 +1,18 @@
 /**
- * This module provides functions for creating and manipulating Markdown Abstract Syntax Trees (ASTs)
- * using the `unified` library with `remark-parse` and `remark-stringify`. It includes utilities
- * for creating Markdown nodes such as headings and paragraphs, parsing Markdown content into an AST,
- * and converting an AST back into a Markdown string. Additionally, it offers AI-assisted functions
- * for summarizing content, improving style, and checking grammar using OpenAI's services.
- *
- * Exported Functions:
+ * This module provides functions for creating and manipulating Markdown Abstract Syntax Trees (ASTs).
  * 
- * - `createHeading(depth, text)`: Creates a heading node with the specified depth (1 to 6) and text content.
- *   Throws an error if the depth is outside the valid range.
- * 
+ * - `createHeading(depth, text)`: Creates a heading node with a specified depth (1 to 6) and text content.
  * - `createParagraph(text)`: Creates a paragraph node with the given text content.
- * 
- * - `parseMarkdown(markdownContent)`: Parses a Markdown string into an AST of type Root.
- * 
- * - `stringifyMarkdown(ast)`: Converts an AST of type Root back into a Markdown string.
- * 
+ * - `parseMarkdown(markdownContent)`: Parses Markdown content into an AST of type `Root`.
+ * - `stringifyMarkdown(ast)`: Converts an AST of type `Root` back into a Markdown string.
  * - `insertHeading(ast, headingNode, position)`: Inserts a heading node into the AST at the specified position.
+ * - `summarizeContentAI(ast, requestId)`: Summarizes the content of the AST using AI. Returns a promise that resolves to a summary string.
+ * - `improveStyleAI(ast, requestId)`: Improves the style of the AST content using AI. Returns a promise that resolves to an improved `Root` AST node.
+ * - `checkGrammarAI(ast, requestId)`: Checks and corrects grammar in the AST content using AI. Returns a promise that resolves to a grammatically corrected `Root` AST node.
+ * - `parseMarkdownToAST(markdownContent)`: Parses Markdown content into a `MarkdownNode` AST.
+ * - `addTimestamp(ast)`: Adds a timestamp paragraph node to the beginning of the AST.
  * 
- * - `summarizeContentAI(ast, requestId)`: Summarizes the content of the AST using AI, returning a promise that resolves to the summary string.
- * 
- * - `improveStyleAI(ast, requestId)`: Improves the style of the AST content using AI, returning a promise that resolves to the improved AST.
- * 
- * - `checkGrammarAI(ast, requestId)`: Checks and corrects grammar in the AST content using AI, returning a promise that resolves to the corrected AST.
- * 
- * - `parseMarkdownToAST(markdownContent)`: Parses a Markdown string into an AST of type MarkdownNode.
- * 
- * - `addTimestamp(ast)`: Adds a timestamp paragraph node to the beginning of the AST, indicating the last update time.
+ * Make sure to handle exceptions and logging as necessary, especially when using AI functions, to ensure robust implementation.
  */
 
 import {unified} from "npm:unified";

@@ -1,18 +1,18 @@
 /**
- * This module provides functionality to convert Markdown content, represented as an Abstract Syntax Tree (AST),
- * into an MP3 file using OpenAI's Text-to-Speech API. It supports handling multiple speakers with distinct voices,
- * as defined in the configuration.
- *
- * Exported Functions:
- *
- * - `convertToPodcast(tree: Root, parameters: any, requestId: string, config: any): Promise<Uint8Array>`
- *   Converts the provided Markdown AST into an MP3 file. The function requires a unique request ID and a configuration
- *   object containing the speaker mapping from the YAML front matter. It returns a Promise that resolves to the generated
- *   MP3 file as a Uint8Array.
- *
- * - `extractConversation(tree: Root): Array`
- *   Extracts conversation blocks from the provided Markdown AST. Each block contains a speaker and their corresponding text.
- *   It returns an array of these conversation blocks.
+ * @file Provides functionality to convert Markdown content, represented as an Abstract Syntax Tree (AST),
+ * into an MP3 file using OpenAI's Text-to-Speech API. The conversion process supports multiple speakers 
+ * with distinct voices, which are mapped from the provided configuration. The main exported function 
+ * `convertToPodcast` handles the conversion by extracting speaker and text information from the AST, 
+ * generating audio for each speaker, and merging these audio segments into a single MP3 file.
+ * 
+ * @exports convertToPodcast
+ * 
+ * @function convertToPodcast
+ * @param {Root} tree - The Markdown AST structure representing the content to convert.
+ * @param {object} parameters - Operation parameters (currently unused in the conversion process).
+ * @param {string} requestId - A unique identifier for the conversion request, used for logging and file management.
+ * @param {object} config - Configuration object containing a mapping of speakers to TTS voices, extracted from YAML front matter.
+ * @returns {Promise<Uint8Array>} A promise that resolves to the generated MP3 file as a Uint8Array.
  */
 
 import { createAudioFromText } from './tts.ts';

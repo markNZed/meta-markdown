@@ -1,11 +1,19 @@
 /**
- * @fileoverview This module exports a function for counting the number of tokens in a given string using the GPT-3 encoder.
- * 
+ * This module exports a function to count the number of tokens in a given text string.
+ *
  * @function countTokens
- * @description Counts the number of tokens in a given string using the GPT-3 encoder.
- * @param {string} text - The text to be tokenized.
- * @returns {number} The number of tokens in the provided text.
+ * @param {string} text - The input text string to be tokenized.
+ * @returns {number} The number of tokens in the input text.
  * @throws {TypeError} Throws an error if the input is not a string.
+ *
+ * Usage:
+ * ```typescript
+ * import { countTokens } from './path/to/module';
+ *
+ * const text = "Hello, world!";
+ * const tokenCount = countTokens(text);
+ * console.log(tokenCount); // Outputs the number of tokens
+ * ```
  */
 
 import { encode } from 'npm:gpt-3-encoder'; // Updated version
