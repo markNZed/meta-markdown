@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# Run Deno tests before committing
+echo "Running Deno tests..."
+deno test
+
+# Check if tests passed
+if [ $? -ne 0 ]; then
+    echo "Deno tests failed. Commit aborted."
+    exit 1
+fi
+
+echo "Deno tests passed. Proceeding with commit."
