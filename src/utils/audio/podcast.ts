@@ -3,9 +3,10 @@ import logger from '../logger.ts';
 import { resolve } from "https://deno.land/std@0.203.0/path/mod.ts";
 import { mergeAudioFiles, MergeAudioParams } from './audioUtils.ts';
 import type { Root } from "npm:@types/mdast";
+import { config } from '@/config.ts';
 
 // Initialize cache directory
-const CACHE_DIR = resolve('../../tts-cache');
+const CACHE_DIR = resolve(config.cacheDir, 'tts');
 
 /**
  * Converts the Markdown content (in AST format) into an MP3 using OpenAI's Text-to-Speech API,

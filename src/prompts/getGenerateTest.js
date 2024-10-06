@@ -106,7 +106,20 @@ The project is an **AI-Powered Markdown Manipulation Tool** developed using **De
 
 **Instructions for Generating Tests:**
 
-Given the above project context, directory structure, and utility overviews, please generate comprehensive unit tests for the specified TypeScript file. Ensure that the tests cover all major functionalities, edge cases, and error handling as defined by the utility functions and project requirements.
+Given the above project context, directory structure, and utility overviews, please generate sanity tests, checking the main behavior, for the specified TypeScript file. Ensure that the tests cover all major functionalities, edge cases, and error handling as defined by the utility functions and project requirements.
+
+Import asserts from "@std/assert"
+
+Import files in the src directory using "@/" e.g.
+import { convertToPodcast } from '@/utils/audio/podcast.ts';
+
+Do not mock any functions.
+
+Do not test for edge cases.
+
+Do not test for error handling.
+
+This is a prototype so quality is secondary to rapid exploration of functionality.
 
 **Target File for Test Generation:**
 

@@ -1,7 +1,6 @@
 // Import assertions from the standard library as per your import map
 import {
   assertEquals,
-  assertThrows,
   assertRejects,
 } from "@std/assert";
 import {

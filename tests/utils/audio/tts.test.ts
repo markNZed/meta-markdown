@@ -1,12 +1,7 @@
-import { assertEquals, assertThrows, assert } from "https://deno.land/std@0.203.0/testing/asserts.ts";
 import { createAudioFromText } from "@/utils/audio/tts.ts"; 
-import { OpenAI } from "https://deno.land/x/openai@v4.64.0/mod.ts";
+import OpenAI from "@openai";
+import { assert } from "@std/assert";
 
-// Mock logger and other dependencies
-const mockLogger = {
-  info: (_msg: string, _meta?: any) => {},
-  error: (_msg: string, _meta?: any) => {},
-};
 
 // Define mockOpenAI with type 'any' to bypass type checks
 const mockOpenAI: any = {
@@ -31,24 +26,6 @@ const mockOpenAI: any = {
       _client: {}, // Required property
     },
     _client: {}, // Required property
-  },
-};
-
-// Define mockOpenAIInvalid similarly if needed
-const mockOpenAIInvalid: any = {
-  audio: {
-    speech: {
-      create: (_params: any) => Promise.resolve({ body: null }), // Invalid response
-    },
-    transcriptions: {
-      // Intentionally incomplete to simulate invalid mock
-      _client: {},
-    },
-    translations: {
-      // Intentionally incomplete to simulate invalid mock
-      _client: {},
-    },
-    _client: {},
   },
 };
 
@@ -109,39 +86,4 @@ Deno.test("createAudioFromText - handles cache hit", async () => {
     Deno.stat = originalStat;
     OpenAI.prototype.audio = originalOpenAI;
   }
-});
-
-Deno.test("createAudioFromText - error on empty chunk", async () => {
-  const text = ""; // Empty text should raise an error
-  const requestId = "test4";
-  const voice = "alloy";
-
-  await assertThrows(
-    async () => {
-      await createAudioFromText(text, requestId, voice);
-    },
-    Error,
-    "Failed to generate MP3 from text."
-  );
-});
-
-Deno.test("createAudioFromText - error on invalid OpenAI response", async () => {
-  // Replace the OpenAI client with an invalid mock using type assertion
-  const originalOpenAI = OpenAI.prototype.audio;
-  OpenAI.prototype.audio = mockOpenAIInvalid.audio as any;
-
-  const text = "This is a text.";
-  const requestId = "test5";
-  const voice = "alloy";
-
-  await assertThrows(
-    async () => {
-      await createAudioFromText(text, requestId, voice);
-    },
-    Error,
-    "Failed to generate MP3 from text."
-  );
-
-  // Restore the original OpenAI client
-  OpenAI.prototype.audio = originalOpenAI;
 });

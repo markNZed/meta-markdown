@@ -1,4 +1,4 @@
-import { ensureDir } from "https://deno.land/std@0.203.0/fs/mod.ts";
+import { ensureDir } from '@/utils/file.ts';
 import OpenAI from "@openai";
 import { type AutoParseableResponseFormat } from "@openai/parser";
 import { config } from '@/config.ts';

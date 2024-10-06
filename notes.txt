@@ -1,8 +1,11 @@
+Tests are probably muhc easier to produce in JS rather than TS
+deps.ts could allow for easy mocking with sinon
+  Could use a custom import_map.json and pass with --import-map
 Preference for importing with @/
 Before generating doc create a sanity test for the file and check that this passes.
 Then if it does not improve it
 Then add the doc and check it still runs
-You can use Deno's TypeScript compiler API to perform a basic syntax check.
+Deno's TypeScript compiler API to perform a basic syntax check.
 
 deno test --allow-all --filter "getFilePaths" tests/utils/file.test.ts
 
@@ -36,8 +39,9 @@ Build markdown features with scripts
 
 Duplicate Text Detection and Monitoring
 Define what good documentation is
-  System prompt ?
+  System prompt
 Sanity tests
+End-to-end tests
 
 UI options:
   CLI https://github.com/c4spar/deno-cliffy

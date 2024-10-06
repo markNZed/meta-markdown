@@ -12,7 +12,7 @@ import { getGenerateTest } from "@/prompts/getGenerateTest.js";
 import { exists } from "@std/fs";
 
 const DEV_MODE = true;
-const SPECIFIC_FILE_PATH = './src/utils/audio/tts.ts'; // Adjust this path as needed
+const SPECIFIC_FILE_PATH = './src/utils/audio/podcast.ts'; // Adjust this path as needed
 const TEST_DIR = resolvePath('./tests'); // Adjust this path as needed
 
 export async function generateTestForFile(filePath: string): Promise<string | null> {
@@ -159,7 +159,7 @@ export async function regenerateAndRunTest(testFilePath: string, testPath: strin
 
       const originalContent = await Deno.readTextFile(testFilePath);
 
-      const prompt = `
+      const content = `
 You are an expert TypeScript developer. A unit test failed for the following code. Please regenerate a different version of the unit test. The resulting code should be written in TypeScript and use Deno.test.
 
 Original code:
@@ -177,6 +177,8 @@ Test Output:
 ${result.errorMessage}
 \`\`\`
       `;
+
+      const prompt = getGenerateTest(content);
 
       const aiResponse = await callOpenAI(prompt, requestId) as string;
       const newTestContent = extractTypeScriptCode(aiResponse);
