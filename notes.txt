@@ -32,6 +32,14 @@ Build markdown features with scripts
       ME --> LE
       ME --> CE2
 
+Critical Review Loop Set up an automated "critique mode" that takes the current draft of a Markdown file and runs it through all these AI-powered edits sequentially. This would generate a detailed "critique report" that highlights developmental, line-level, and grammatical issues along with style suggestions, offering critical feedback without needing another human to review it.
+
+Peer Review Simulation: AI can simulate a constructive peer review by using multiple perspectives, much like having colleagues provide feedback.
+
+Automated Summarization and Review Reports: Using the summarization capabilities in summarizeAll.ts and getSummaryPrompt.ts, the writer can automatically generate a review summary of the entire documentation.
+
+Meta Operation: Enable a "document structuring assistant" that helps the writer modularize their documentation, providing suggestions on breaking down long sections and organizing content more effectively.
+
 Duplicate Text Detection and Monitoring
 Define what good documentation is
   System prompt

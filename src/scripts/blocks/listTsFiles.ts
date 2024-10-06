@@ -1,20 +1,20 @@
 /**
- * @module FileUtilities
+ * @module File Utilities
  * 
- * This module provides utility functions for managing TypeScript files within a specified source directory.
+ * This module provides functions to interact with the file system, specifically to list TypeScript files
+ * within a specified source directory while excluding certain files and directories.
  * 
  * @function listTsFiles
- * @returns {Promise<string[]>} - A promise that resolves to an array of absolute paths to relevant TypeScript (.ts) files 
- * within the 'src' directory, excluding server.ts, test files, and specific directories like node_modules, dist, and scripts (except blocks).
+ * @description Asynchronously lists all relevant TypeScript (.ts) files within the src directory,
+ * excluding specific files such as server.ts, test files, and certain directories like node_modules,
+ * dist, and scripts (except blocks).
+ * 
+ * @returns {Promise<string[]>} - A promise that resolves to an array of absolute paths to the relevant
+ * TypeScript files. If no files are found or an error occurs, it returns an empty array.
  * 
  * @example
- * // Usage example
- * import { listTsFiles } from '@/utils/fileUtilities.ts';
- * 
- * (async () => {
- *   const tsFiles = await listTsFiles();
- *   console.log(tsFiles);
- * })();
+ * const files = await listTsFiles();
+ * console.log(files); // Logs the list of relevant TypeScript files.
  */
 
 import { walk } from "https://deno.land/std@0.203.0/fs/mod.ts";
@@ -65,11 +65,11 @@ export async function listTsFiles(): Promise<string[]> {
 
     // Exclude specific files and directories
     if (
-      entry.path.includes('node_modules') ||
-      entry.path.includes('dist') ||
-      entry.path.includes('.devcontainer') || 
-      entry.path.endsWith('server.ts') || // Exclude server.ts
-      (entry.path.includes('scripts') && !entry.path.includes('scripts/blocks')) // Exclude scripts dir except blocks
+      entry.path.includes('node_modules')
+      || entry.path.includes('dist')
+      || entry.path.includes('.devcontainer')
+      || entry.path.endsWith('server.ts') // Exclude server.ts
+      //|| (entry.path.includes('scripts') && !entry.path.includes('scripts/blocks')) // Exclude scripts dir except blocks
     ) {
       logger.debug(`Excluding file from ${entry.path}`, { requestId: 'listTsFiles' });
       continue;

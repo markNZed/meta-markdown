@@ -1,4 +1,24 @@
-// src/scripts/demo.ts
+/**
+ * @module MarkdownDemo
+ * 
+ * This module demonstrates various operations on Markdown files, including reading, parsing, modifying, and writing Markdown content.
+ * 
+ * The primary exported function is `main`, which orchestrates the entire process of enhancing a Markdown file. 
+ * 
+ * ## Usage
+ * 
+ * Call the `main()` function to execute the Markdown manipulation process. This function will:
+ * 1. Read a specified Markdown file.
+ * 2. Parse the content into an Abstract Syntax Tree (AST).
+ * 3. Insert a new heading into the AST.
+ * 4. Generate a summary of the document using AI.
+ * 5. Improve the style of the summary using AI.
+ * 6. Perform a grammar check on the summary using AI.
+ * 7. Convert the modified AST back to Markdown format.
+ * 8. Write the enhanced Markdown to a new file.
+ * 
+ * Note: Ensure that the necessary utility functions for reading, writing, and processing Markdown are correctly imported from their respective modules.
+ */
 
 import { readMarkdown, writeMarkdown } from '@/utils/markdown/fileIO.ts';
 import {

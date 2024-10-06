@@ -1,17 +1,37 @@
-// src/scripts/summarizeAll.ts
-
 /**
- * summarizeAll.ts
- *
- * This script summarizes all relevant files in the project by:
- * 1. Scanning the directory for .ts, .js, .json, and .md files.
- * 2. Counting tokens in each file using tokenCount.ts.
- * 3. Allocating summary tokens proportionally based on token counts and config.openAI.max_completion_tokens.
- * 4. Generating individual summaries, handling large documents by chunking.
- * 5. Combining summaries into an overall summary using a tree-like merging strategy.
- *
- * Usage:
- *   deno run --allow-read --allow-write --allow-env src/scripts/summarizeAll.ts
+ * @module Summarization
+ * 
+ * This module provides functions for generating summaries of text content 
+ * using OpenAI's API. It includes functionality for splitting content into 
+ * manageable chunks, recursively summarizing content, and orchestrating the 
+ * overall summarization process for multiple files.
+ * 
+ * @function generateSummary
+ * @param {string} content - The text content to summarize.
+ * @param {number} max_completion_tokens - The maximum number of tokens for the summary.
+ * @param {string} filePath - The path of the file being summarized (for logging purposes).
+ * @returns {Promise<string>} A promise that resolves to the summary string.
+ * 
+ * @function splitIntoChunks
+ * @param {string} content - The text content to split.
+ * @param {number} maxTokens - The maximum number of tokens per chunk.
+ * @returns {string[]} An array of content chunks.
+ * 
+ * @function recursiveSummarize
+ * @param {string} content - The text content to summarize.
+ * @param {number} maxTokens - The maximum number of tokens for a chunk.
+ * @param {number} summaryTokens - The maximum number of tokens for the summary generation.
+ * @param {string} filePath - The path of the file being summarized (for logging purposes).
+ * @returns {Promise<string>} A promise that resolves to the summary string.
+ * 
+ * @function summarizeAllFiles
+ * @description Orchestrates the summarization process for all markdown files 
+ * in the configured directory, generating an overall summary and writing it 
+ * to 'overall_summary.md'.
+ * 
+ * @example
+ * // To use the summarization functions, you can call summarizeAllFiles.
+ * await summarizeAllFiles();
  */
 
 import { buildDirectoryStructure } from '@/scripts/blocks/tokenCount.ts';

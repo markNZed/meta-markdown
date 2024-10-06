@@ -1,4 +1,36 @@
-// src/scripts/generateAndRunTests.ts
+/**
+ * @module Test Generation Utilities
+ * 
+ * This module provides functions to generate, run, and regenerate tests for TypeScript files using OpenAI's API.
+ * 
+ * @function generateTestForFile
+ * @param {string} filePath - The path to the TypeScript file for which to generate a test.
+ * @returns {Promise<string | null>} - Returns the path of the generated test file or null if the generation failed.
+ * 
+ * @function runTest
+ * @param {string} testFilePath - The path to the test file to be executed.
+ * @returns {Promise<{ success: boolean; errorMessage?: string }>} - Returns an object indicating success status and an error message if applicable.
+ * 
+ * @function regenerateAndRunTest
+ * @param {string} testFilePath - The path to the original test file.
+ * @param {string} testPath - The path to the test file that needs to be regenerated.
+ * @param {number} attempt - The current attempt number for regeneration.
+ * @returns {Promise<boolean>} - Returns true if the test passes or if regeneration is successful, false otherwise.
+ * 
+ * @function processFile
+ * @param {string} filePath - The path to the TypeScript file to process.
+ * @param {{ total: number; passed: number; failed: number }} summary - An object to keep track of test counts.
+ * @param {string} requestId - A unique identifier for the request.
+ * @returns {Promise<void>} - A promise that resolves when the file has been processed.
+ * 
+ * @function main
+ * @returns {Promise<void>} - The main entry point for the module, processing TypeScript files and generating tests.
+ * 
+ * Usage:
+ * Call the `main` function to start processing TypeScript files and generating tests automatically.
+ * You can also use the other exported functions for more granular control over test generation and execution.
+ */
+
 import { config } from '@/config.ts';
 import { listTsFiles } from '@/scripts/blocks/listTsFiles.ts';
 import { callOpenAI } from '@/utils/llm/llm.ts';

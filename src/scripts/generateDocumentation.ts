@@ -1,4 +1,22 @@
-// src/scripts/generateDocumentation.ts
+/**
+ * @module DocumentationGenerator
+ * 
+ * This module provides functionality to generate JSDoc comments for TypeScript files. 
+ * It includes the following exported functions:
+ * 
+ * @function generateDocumentationForFile
+ * @param {string} filePath - The absolute path to the TypeScript file for which to generate documentation.
+ * @returns {Promise<void>} A promise that resolves when the documentation has been successfully generated and updated in the specified file.
+ * 
+ * @function main
+ * @returns {Promise<void>} A promise that resolves when the documentation generation process is complete. It processes all relevant TypeScript files unless in development mode, where it can process a specific file.
+ * 
+ * Usage:
+ * - To generate documentation for a single TypeScript file, call `generateDocumentationForFile` with the file's path.
+ * - To run the documentation generation for all files, invoke the `main` function.
+ * 
+ * Note: In development mode, you can specify a particular file to process by adjusting the `SPECIFIC_FILE_PATH` variable.
+ */
 
 import { listTsFiles } from './blocks/listTsFiles.ts'; // Import the function to list TypeScript files
 import { callOpenAI } from '@/utils/llm/llm.ts';
