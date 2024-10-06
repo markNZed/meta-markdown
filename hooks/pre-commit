@@ -2,7 +2,7 @@
 
 # Run Deno tests before committing
 echo "Running Deno tests..."
-deno test
+deno run test
 
 # Check if tests passed
 if [ $? -ne 0 ]; then
