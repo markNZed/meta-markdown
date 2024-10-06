@@ -66,9 +66,9 @@ export const config: AppConfig = {
   openAI:{
     apiKey: env.OPENAI_API_KEY || '',
     model: env.OPENAI_MODEL || 'gpt-4o-mini',
-    max_completion_tokens: parseInt(env.OPENAI_MAX_COMPLETION_TOKENS) || 150,
+    max_completion_tokens: parseInt(env.OPENAI_MAX_COMPLETION_TOKENS) || 2048,
     temperature: parseFloat(env.OPENAI_TEMPERATURE) || 0.7,
-    maxInputTokens: parseInt(env.OPENAI_MAX_INPUT_TOKENS) || 2048,
+    maxInputTokens: parseInt(env.OPENAI_MAX_INPUT_TOKENS) || 4096,
   },
   markdownDir: env.MARKDOWN_DIR || resolve(ROOT_DIR, 'markdown_example'),
   maxLogEntryLength: 1000,

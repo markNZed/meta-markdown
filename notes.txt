@@ -1,3 +1,5 @@
+Notebook that identifes the most important critique and proposes solutions.
+  The user can review inline and accept/reject
 
 Tests are probably much easier to produce in JS rather than TS
 deps.ts could allow for easy mocking with sinon
