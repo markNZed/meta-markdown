@@ -8,7 +8,7 @@ import { extractTypeScriptCode } from '@/utils/llm/llm.ts';
 import { dirname, join, relative, basename, extname } from 'https://deno.land/std@0.203.0/path/mod.ts';
 import { zodResponseFormat } from "npm:openai/helpers/zod";
 import { z } from "npm:zod";
-import { getGenerateTest } from "@/prompts/getGenerateTest.js";
+import { getGenerateTest } from "../prompts/getGenerateTest.ts";
 import { exists } from "@std/fs";
 
 const DEV_MODE = true;

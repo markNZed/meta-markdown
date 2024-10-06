@@ -1,3 +1,16 @@
+/**
+ * Exports functions related to generating tests for TypeScript projects.
+ *
+ * @function getGenerateTest
+ * @description Generates a detailed test plan and overview for a TypeScript project given the project description. The function outlines the key features, directory structure, and utility overviews, guiding the creation of sanity tests for major functionalities without focusing on edge cases or error handling. The function supports rapid exploration of functionality by emphasizing prototype development.
+ *
+ * Usage:
+ * - Import the function using: `import { getGenerateTest } from 'your-file-path';`.
+ * - Call `getGenerateTest(content)` where `content` is a string containing the project description and context.
+ *
+ * Import paths within the src directory should use "@/". For instance, `import { convertToPodcast } from '@/utils/audio/podcast.ts';`.
+ */
+
 export const getGenerateTest = (content) => {
     return `**Project Overview:**
 

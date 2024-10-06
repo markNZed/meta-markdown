@@ -4,7 +4,8 @@
 # Script Name: concatenate_project.sh
 # Description: Concatenates relevant project documentation and
 #              code files into a single file for AI review.
-#              For .ts files, only extracts header comments.
+#              For .ts files, extracts header comments unless specified
+#              to include full content based on inclusion list.
 # Usage:        ./concatenate_project.sh
 # ------------------------------------------------------------------
 
@@ -26,6 +27,9 @@ INCLUDE_EXTENSIONS=("*.js" "*.ts" "*.json" "*.md" "*.ipynb" "*.txt")
 # Define file regex patterns to exclude (e.g., "package-lock.json", "some-other-file.json")
 EXCLUDE_FILES=("package-lock.json" ".env" "convert-js-to-ts.js" "lock.json" "notes.txt")
 
+# Define list of .ts files or glob patterns to include full content
+INCLUDE_FULL_TS_FILES=("./src/config.ts") # Add paths or glob patterns as needed
+
 # Function to check if a file matches any exclude patterns
 should_exclude_file() {
     local file="$1"
@@ -35,6 +39,18 @@ should_exclude_file() {
         fi
     done
     return 1 # The file does not match any exclusion patterns
+}
+
+# Function to check if a .ts file should include full content
+should_include_full_ts() {
+    local file="$1"
+    for pattern in "${INCLUDE_FULL_TS_FILES[@]}"; do
+        # Use glob matching
+        if [[ "$file" == $pattern ]]; then
+            return 0 # The file matches an inclusion pattern
+        fi
+    done
+    return 1 # The file does not match any inclusion patterns
 }
 
 # Function to extract header comments from a .ts file
@@ -119,12 +135,18 @@ for FILE in $FILES; do
     EXT="${FILE##*.}"
 
     if [[ "$EXT" == "ts" ]]; then
-        # Extract and append only header comments for .ts files
-        HEADER_COMMENTS=$(extract_ts_header_comments "$FILE")
-        if [[ -n "$HEADER_COMMENTS" ]]; then
-            echo "$HEADER_COMMENTS" >> "$OUTPUT_FILE"
+        # Check if the .ts file should include full content
+        if should_include_full_ts "$FILE"; then
+            # Append the entire .ts file content
+            cat "$FILE" >> "$OUTPUT_FILE"
         else
-            echo "// No header comments found." >> "$OUTPUT_FILE"
+            # Extract and append only header comments for .ts files
+            HEADER_COMMENTS=$(extract_ts_header_comments "$FILE")
+            if [[ -n "$HEADER_COMMENTS" ]]; then
+                echo "$HEADER_COMMENTS" >> "$OUTPUT_FILE"
+            else
+                echo "// No header comments found." >> "$OUTPUT_FILE"
+            fi
         fi
     else
         # Append the entire file content for other file types
