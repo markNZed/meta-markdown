@@ -1,34 +1,32 @@
 /**
- * @module Test Generation Utilities
+ * @module Test Generation
  * 
- * This module provides functions to generate, run, and regenerate tests for TypeScript files using OpenAI's API.
+ * This module provides functionality to generate, run, and regenerate unit tests for TypeScript files.
+ * It includes the following exported functions:
  * 
- * @function generateTestForFile
- * @param {string} filePath - The path to the TypeScript file for which to generate a test.
- * @returns {Promise<string | null>} - Returns the path of the generated test file or null if the generation failed.
+ * - `generateTestForFile(filePath: string): Promise<string | null>`: 
+ *   Generates a unit test for the specified TypeScript file. Returns the path of the created test file or null if the test file already exists or generation fails.
  * 
- * @function runTest
- * @param {string} testFilePath - The path to the test file to be executed.
- * @returns {Promise<{ success: boolean; errorMessage?: string }>} - Returns an object indicating success status and an error message if applicable.
+ * - `runTest(testFilePath: string): Promise<{ success: boolean; errorMessage?: string }>`: 
+ *   Executes the specified test file and returns the result indicating success or failure along with any error messages.
  * 
- * @function regenerateAndRunTest
- * @param {string} testFilePath - The path to the original test file.
- * @param {string} testPath - The path to the test file that needs to be regenerated.
- * @param {number} attempt - The current attempt number for regeneration.
- * @returns {Promise<boolean>} - Returns true if the test passes or if regeneration is successful, false otherwise.
+ * - `regenerateAndRunTest(testFilePath: string, testPath: string, attempt: number): Promise<boolean>`: 
+ *   Attempts to run the test and, if it fails, regenerates the test up to two additional attempts based on analysis of the failure.
  * 
- * @function processFile
- * @param {string} filePath - The path to the TypeScript file to process.
- * @param {{ total: number; passed: number; failed: number }} summary - An object to keep track of test counts.
- * @param {string} requestId - A unique identifier for the request.
- * @returns {Promise<void>} - A promise that resolves when the file has been processed.
+ * - `processFile(filePath: string, summary: { total: number; passed: number; failed: number }, requestId: string): Promise<void>`: 
+ *   Processes a specified TypeScript file by generating and running its test, updating the summary of total, passed, and failed tests.
  * 
- * @function main
- * @returns {Promise<void>} - The main entry point for the module, processing TypeScript files and generating tests.
+ * - `main(): Promise<void>`: 
+ *   The main entry point for the module. It lists TypeScript files, processes them for test generation, and logs the overall summary.
  * 
  * Usage:
- * Call the `main` function to start processing TypeScript files and generating tests automatically.
- * You can also use the other exported functions for more granular control over test generation and execution.
+ * 1. Call `main()` to initiate the test generation process for all TypeScript files in the project.
+ * 2. Use `generateTestForFile` to create tests for individual files.
+ * 3. Use `runTest` to execute specific test files and check their results.
+ * 4. Use `regenerateAndRunTest` to regenerate tests based on failure analysis.
+ * 5. Use `processFile` to handle individual files including test generation and result tracking.
+ 
+ * @hash c1b2f58962234959988d1cf00a819b50541a980ea53998e2dc323d8d2c685930
  */
 
 import { config } from '@/config.ts';

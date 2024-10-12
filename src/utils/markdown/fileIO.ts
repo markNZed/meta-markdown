@@ -1,29 +1,38 @@
 /**
- * A module for reading, writing, and formatting Markdown files.
+ * Markdown File Utility Module
  *
- * @module MarkdownFileHandler
- * 
+ * This module provides functions to read, write, and format Markdown files.
+ * It utilizes Deno's file system capabilities and the remark library for formatting.
+ *
+ * @module MarkdownFileUtils
+ *
  * @function readMarkdown
  * @param {string} filePath - The relative path to the Markdown file to read.
- * @returns {Promise<string>} - A promise that resolves to the content of the Markdown file as a string. 
+ * @returns {Promise<string>} - A promise that resolves to the content of the Markdown file as a string.
  * @throws Will throw an error if the file cannot be read or is not found.
- * 
+ *
  * @function writeMarkdown
- * @param {string} filePath - The relative path to the Markdown file to write to.
+ * @param {string} filePath - The relative path to the Markdown file to write.
  * @param {string} content - The content to write to the Markdown file.
  * @returns {Promise<void>} - A promise that resolves when the content has been written.
  * @throws Will throw an error if the file cannot be written.
- * 
+ *
  * @function formatMarkdown
  * @param {string} filePath - The relative path to the Markdown file to format.
  * @returns {Promise<void>} - A promise that resolves when the Markdown file has been formatted.
  * @throws Will throw an error if the Markdown cannot be formatted.
- * 
+ *
  * @example
- * // Example usage:
+ * // To read a Markdown file
  * const content = await readMarkdown('example.md');
- * await writeMarkdown('example.md', '# New Content');
+ *
+ * // To write to a Markdown file
+ * await writeMarkdown('example.md', '# Hello World');
+ *
+ * // To format a Markdown file
  * await formatMarkdown('example.md');
+ 
+ * @hash 1b7dfefd5f989124297200ee313568e437f5d239ac8bdf299226b39bcb45be97
  */
 
 import { remark } from "remark";

@@ -1,28 +1,21 @@
 /**
- * @module TTS Audio Generation
+ * @module TextToSpeech
  * 
- * This module provides functions to convert text to speech using OpenAI's Text-to-Speech (TTS) API. 
- * The main exported function is `createAudioFromText`, which handles text splitting, 
- * caching of generated audio files, and the merging of multiple audio files into one.
+ * This module provides functionality to convert text to speech using OpenAI's Text-to-Speech (TTS) API,
+ * with caching and chunking for long text inputs. It exports the following function:
+ *
+ * @function createAudioFromText
  * 
- * ### Functions
- * 
- * - `createAudioFromText(text: string, requestId: string, voice: string): Promise<string>`
- * 
- * ### Usage
- * 
- * 1. **createAudioFromText**: 
- *    - Converts the provided text into an MP3 audio file. 
- *    - If the text exceeds 4096 characters, it will be split into smaller chunks. 
- *    - It checks the cache for existing audio files and only generates new ones if necessary.
- *    - Parameters:
- *      - `text`: The plain text to convert to speech.
- *      - `requestId`: A unique identifier for the request, used in logging.
- *      - `voice`: The voice to use for the TTS conversion.
- *    - Returns a promise that resolves to the path of the generated or cached MP3 file.
- * 
+ * @param {string} text - The plain text to convert to speech. Text longer than 4096 characters will be split into chunks.
+ * @param {string} requestId - A unique identifier for the TTS request, used for logging purposes.
+ * @param {string} voice - The voice to use for TTS, which can be one of the predefined options such as 'alloy', 'echo', 'fable', 'onyx', 'nova', or 'shimmer'.
+ * @returns {Promise<string>} - A promise that resolves to the path of the generated MP3 file, either a single file or a merged file if multiple chunks were processed.
+ *
  * @example
- * const audioFilePath = await createAudioFromText("Hello, world!", "12345", "alloy");
+ * const audioFilePath = await createAudioFromText("Hello, world!", "request-123", "alloy");
+ * console.log(`Audio file created at: ${audioFilePath}`);
+ 
+ * @hash c6b5d661daa9a630422fcae7c78351163731a644e87177077be2f0e615454b30
  */
 
 import { resolve } from '@std/path';

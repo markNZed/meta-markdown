@@ -1,23 +1,33 @@
 /**
- * @module Logger
+ * Logger module providing a customizable logging interface with source information.
+ *
+ * This module exports a logger instance with methods for different log levels 
+ * (debug, info, warning, error, critical) that automatically capture and include 
+ * the source information of the logging call.
+ *
+ * Usage:
  * 
- * This module sets up a logging system using Deno's standard logging library. It provides a logger instance with methods to log messages at various severity levels (debug, info, warning, error, critical). The logger captures source information, such as the calling function and file location, to provide context in log entries.
- * 
- * ## Usage
- * 
- * To use the logger, simply import the default export from this module and call the desired logging method:
+ * Import the logger instance and use it as follows:
  * 
  * ```typescript
  * import logger from '@/path/to/logger.ts';
  * 
- * logger.debug('This is a debug message');
- * logger.info('This is an info message', { additional: 'data' });
- * logger.warning('Warning message');
- * logger.error('An error occurred', { errorCode: 500 });
- * logger.critical('Critical issue detected');
+ * logger.debug('Debug message', additionalData);
+ * logger.info('Info message', additionalData);
+ * logger.warning('Warning message', additionalData);
+ * logger.error('Error message', additionalData);
+ * logger.critical('Critical message', additionalData);
  * ```
- * 
- * The logger automatically includes source information in the logs, and you can pass additional arguments which will be included in the log output.
+ *
+ * Each log level method accepts a message string and any number of additional 
+ * arguments, which will be logged alongside the message. The source information
+ * (function name, file path, and line/column numbers) is automatically added to 
+ * each log entry.
+ *
+ * Ensure that the logger is initialized before using it. The logger setup occurs 
+ * automatically when this module is imported.
+ 
+ * @hash 391ddd06d747c9ca0d5e6769f6fb6457338e9a7378fe952258231f49ef228292
  */
 
 import {

@@ -1,37 +1,36 @@
 /**
  * @module Summarization
- * 
- * This module provides functions for generating summaries of text content 
- * using OpenAI's API. It includes functionality for splitting content into 
- * manageable chunks, recursively summarizing content, and orchestrating the 
- * overall summarization process for multiple files.
- * 
+ * This module provides functions to generate summaries for text content using OpenAI's API,
+ * manage content chunking based on token limits, and orchestrate the summarization process
+ * for multiple files. The main functions exported from this module are:
+ *
  * @function generateSummary
  * @param {string} content - The text content to summarize.
  * @param {number} max_completion_tokens - The maximum number of tokens for the summary.
  * @param {string} filePath - The path of the file being summarized (for logging purposes).
  * @returns {Promise<string>} A promise that resolves to the summary string.
- * 
+ *
  * @function splitIntoChunks
  * @param {string} content - The text content to split.
  * @param {number} maxTokens - The maximum number of tokens per chunk.
  * @returns {string[]} An array of content chunks.
- * 
+ *
  * @function recursiveSummarize
  * @param {string} content - The text content to summarize.
  * @param {number} maxTokens - The maximum number of tokens for a chunk.
- * @param {number} summaryTokens - The maximum number of tokens for the summary generation.
+ * @param {number} summaryTokens - The maximum number of tokens for the summary.
  * @param {string} filePath - The path of the file being summarized (for logging purposes).
  * @returns {Promise<string>} A promise that resolves to the summary string.
- * 
+ *
  * @function summarizeAllFiles
- * @description Orchestrates the summarization process for all markdown files 
- * in the configured directory, generating an overall summary and writing it 
- * to 'overall_summary.md'.
- * 
- * @example
- * // To use the summarization functions, you can call summarizeAllFiles.
- * await summarizeAllFiles();
+ * Main function to orchestrate the summarization process across multiple files,
+ * reading content from files, allocating tokens, and generating an overall summary.
+ *
+ * Usage:
+ * Import the functions from this module to utilize the summarization capabilities.
+ * Ensure that the OpenAI API is properly configured in the application settings.
+ 
+ * @hash b6a351e75b7d00fb40f0cbedc8b0262d1f4084351243f0ade35f160cbbf73fe9
  */
 
 import { buildDirectoryStructure } from '@/scripts/blocks/tokenCount.ts';

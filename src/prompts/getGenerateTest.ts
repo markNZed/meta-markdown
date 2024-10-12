@@ -1,21 +1,23 @@
 /**
- * @module Test Generation Utility
+ * Generates a project overview and instructions for using the AI-Powered Markdown Manipulation Tool.
+ *
+ * @param {string} content - The content to include in the project overview.
  * 
- * This module provides a utility function to generate a test template for 
- * TypeScript files based on the project's context and utility overviews.
- * 
- * @function getGenerateTest
- * @param {string} content - The content of the TypeScript file for which tests 
- *                           should be generated. It should contain the main behavior 
- *                           to be tested.
- * 
- * @returns {string} A formatted string containing the project overview, key 
- *                   features, directory structure, utility overviews, and 
- *                   instructions for generating tests.
- * 
- * @example
- * const testContent = getGenerateTest('path/to/your/typescript/file.ts');
- * console.log(testContent); // Outputs the test generation template.
+ * The generated overview provides insights into the tool's functionality, including 
+ * Markdown editing, AI integration for summarization and grammar checks, file management, 
+ * logging, audio processing, testing, and server capabilities.
+ *
+ * This function is useful for creating documentation or README sections that describe 
+ * the project and its features. It can be called with a string argument that represents 
+ * the content to be included in the overview.
+ *
+ * Example usage:
+ * const overview = getGenerateTest("Your specific content here.");
+ *
+ * This will return a Markdown formatted string that can be directly used in documentation
+ * or for further processing.
+ 
+ * @hash acdd5a5efaa7b629ebb88a632d00403ce5c64be3d487dc523813ccc598fc4e78
  */
 
 export const getGenerateTest = (content: string) => {

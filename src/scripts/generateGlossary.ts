@@ -1,20 +1,23 @@
 /**
- * @module GlossaryGenerator
- * 
  * This module provides functionality to read a Markdown file, generate a glossary from its content,
  * and write the updated content back to a new Markdown file.
- * 
- * @example
- * To use the functions in this module, ensure you have an 'example.md' file in the same directory.
- * 
- * 1. Call the `main` function to read the Markdown file, generate a glossary, 
- *    and write the updated content to 'example_with_glossary_and_index.md'.
- * 
- * The process will automatically append the generated glossary at the end of the original content.
+ *
+ * @module MarkdownGlossary
  * 
  * @async
  * @function main
- * @returns {Promise<void>} A promise that resolves when the Markdown file has been processed.
+ * 
+ * @description The main function reads an example Markdown file named 'example.md', generates a glossary
+ * based on its content, appends the glossary to the original content, and writes the resulting content
+ * to 'example_with_glossary_and_index.md'.
+ * 
+ * @example
+ * // Execute the main function to process the Markdown file
+ * main();
+ * 
+ * @returns {Promise<void>} A promise that resolves when the Markdown file has been updated successfully.
+ 
+ * @hash 2a84dc77ee3da8ec247f6adbb9482cfddddcc8044a3b796955c37119a1b361f5
  */
 
 import { readMarkdown, writeMarkdown } from '@/utils/markdown/fileIO.ts';

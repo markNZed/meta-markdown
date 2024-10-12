@@ -1,23 +1,34 @@
 /**
  * @module MarkdownDemo
  * 
- * This module demonstrates various operations on Markdown files, including reading, parsing, modifying, and writing Markdown content.
+ * This module demonstrates Markdown manipulation using various utility functions.
  * 
- * The primary exported function is `main`, which orchestrates the entire process of enhancing a Markdown file. 
+ * @function main
+ * @async
+ * @description 
+ * The main function orchestrates the reading, parsing, enhancing, and writing of 
+ * Markdown content. It performs the following steps:
+ * 1. Reads a Markdown file from the specified path.
+ * 2. Parses the content into an Abstract Syntax Tree (AST).
+ * 3. Inserts a new heading into the AST.
+ * 4. Generates a summary of the content using AI.
+ * 5. Improves the style of the generated summary using AI.
+ * 6. Checks the grammar of the summary using AI.
+ * 7. Converts the modified AST back to Markdown format.
+ * 8. Writes the enhanced Markdown content to a new file.
  * 
- * ## Usage
+ * @example
+ * To execute the demo, simply call the main function:
  * 
- * Call the `main()` function to execute the Markdown manipulation process. This function will:
- * 1. Read a specified Markdown file.
- * 2. Parse the content into an Abstract Syntax Tree (AST).
- * 3. Insert a new heading into the AST.
- * 4. Generate a summary of the document using AI.
- * 5. Improve the style of the summary using AI.
- * 6. Perform a grammar check on the summary using AI.
- * 7. Convert the modified AST back to Markdown format.
- * 8. Write the enhanced Markdown to a new file.
+ * ```typescript
+ * main();
+ * ```
  * 
- * Note: Ensure that the necessary utility functions for reading, writing, and processing Markdown are correctly imported from their respective modules.
+ * Ensure the necessary dependencies are installed and the utility functions 
+ * are correctly imported from '@/utils/markdown/fileIO.ts' and 
+ * '@/utils/markdown/markdown.ts'.
+ 
+ * @hash 6df3f6443dc4d2d2a94d18669eb42f962c19e98b9569d9cbb8be4c8c53b72234
  */
 
 import { readMarkdown, writeMarkdown } from '@/utils/markdown/fileIO.ts';

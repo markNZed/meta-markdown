@@ -1,21 +1,33 @@
 /**
- * This module provides a simple user interaction functionality through alerts, prompts, and confirmations.
+ * @module MessagePrompt
  * 
- * Usage:
- * - The `alert` function displays a message to the user and requires them to acknowledge it by pressing "OK".
- * - The `confirm` function prompts the user with a message and returns a boolean indicating whether the user pressed "OK" (true) or "Cancel" (false).
- * - The `prompt` function displays a dialog that prompts the user for input, returning the input value as a string, or null if the user cancels.
+ * This module provides functions to display alerts, confirmations, and prompts to the user.
  * 
- * Example:
+ * @function alertMessage
+ * @description Displays an alert message to the user.
  * 
- * ```typescript
- * alert("Welcome to the application.");
- * const userConfirmed = confirm("Do you want to continue?");
- * if (userConfirmed) {
- *     const userName = prompt("What is your name?");
- *     console.log(`Hello, ${userName}!`);
- * }
- * ```
+ * @function logAcknowledgedMessage
+ * @description Logs a message to the console indicating that the alert has been acknowledged.
+ * 
+ * @function confirmProceed
+ * @returns {boolean} Indicates whether the user wants to proceed after confirmation.
+ * 
+ * @function promptForName
+ * @returns {string | null} The name entered by the user or null if canceled.
+ * 
+ * @function promptForAge
+ * @returns {string | null} The age entered by the user or null if canceled.
+ * 
+ * @example
+ * alertMessage("Please acknowledge the message.");
+ * logAcknowledgedMessage();
+ * const shouldProceed = confirmProceed();
+ * const name = promptForName();
+ * const age = promptForAge();
+ * 
+ * This module is intended for simple user interaction through dialog boxes.
+ 
+ * @hash f015100c1258bb2c29cf20e79e8b32dfae031dc706e5cb952965a128336396f2
  */
 
 alert("Please acknowledge the message.");

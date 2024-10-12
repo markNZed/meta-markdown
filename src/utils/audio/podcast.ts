@@ -1,22 +1,25 @@
 /**
  * @module PodcastConverter
  * 
- * This module provides functionality to convert Markdown content (in AST format)
- * into an MP3 file using OpenAI's Text-to-Speech API. It supports multiple speakers
- * with distinct voices as specified in the configuration.
+ * This module provides functionality to convert Markdown content in AST format 
+ * into an MP3 file using OpenAI's Text-to-Speech API, supporting multiple speakers 
+ * with distinct voices.
  * 
  * @function convertToPodcast
  * @param {Root} tree - The Markdown AST representing the content to be converted.
  * @param {any} parameters - Operation parameters (currently unused).
  * @param {string} requestId - A unique identifier for the conversion request.
- * @param {any} config - Configuration object containing speaker mapping from YAML front matter.
+ * @param {any} config - Configuration object containing speaker mappings from YAML front matter.
  * @returns {Promise<Uint8Array>} - A promise that resolves to the generated MP3 as a Uint8Array.
  * 
  * @example
- * const mp3Buffer = await convertToPodcast(markdownAst, {}, 'unique-request-id', config);
+ * const mp3Data = await convertToPodcast(markdownAst, {}, 'request123', config);
  * 
- * The convertToPodcast function utilizes the createAudioFromText function to generate audio files
- * for each speaker's text and merges them into a single MP3 file stored in a cache directory.
+ * @function extractConversation
+ * @param {Root} tree - The Markdown AST to extract conversation blocks from.
+ * @returns {Array} - An array of conversation blocks, each containing a speaker and their corresponding text.
+ 
+ * @hash 0a96d0fea73ea80abcd52319ec5afcaf25d8bb6bfe40a0dfac7efddd32525790
  */
 
 import { createAudioFromText } from './tts.ts';

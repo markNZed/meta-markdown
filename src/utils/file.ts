@@ -1,26 +1,33 @@
 /**
- * Utility functions for file and directory path resolution and management.
- *
- * @module FileUtils
- *
+ * @module FileUtilities
+ * 
+ * This module provides utility functions for file and directory operations, including resolving paths,
+ * retrieving file paths from directories, and ensuring that directories exist.
+ * 
  * @function resolvePath
- * @param {string} filePath - The file path to resolve. It can be an absolute path or a relative path.
- * @returns {string} The resolved absolute file path based on the configured root directory.
- *
+ * @param {string} filePath - The file path to resolve. Can be an absolute path or a relative path.
+ * @returns {string} - The resolved absolute file path based on the configured root directory.
+ * 
  * @function getFilePaths
- * @param {string | string[]} input - A single file path, an array of file paths, or a glob pattern to match files.
- * @returns {Promise<string[]>} A promise that resolves to an array of absolute file paths of found markdown files.
- *
+ * @param {string | string[]} input - A single file path, array of file paths, or glob pattern to search for files.
+ * @returns {Promise<string[]>} - A promise that resolves to an array of file paths. It collects paths for both files and
+ * directories, recursively searching for markdown files in directories.
+ * 
  * @function ensureDir
- * @param {string} dirPath - The directory path to ensure exists. If it doesn't exist, it will be created.
- * @returns {Promise<void>} A promise that resolves when the directory has been ensured to exist.
- *
- * @description
- * Use these functions to manage file paths and directories within your Deno application.
- * `resolvePath` helps convert relative paths to absolute paths based on a configured root directory.
- * `getFilePaths` allows you to retrieve file paths from either files, directories, or glob patterns,
- * specifically targeting markdown files. `ensureDir` ensures that a specified directory exists,
- * creating it if necessary.
+ * @param {string} dirPath - The directory path to ensure exists.
+ * @returns {Promise<void>} - A promise that resolves when the directory exists, creating it if necessary.
+ * 
+ * @example
+ * // Resolving a file path
+ * const absolutePath = resolvePath('relative/path/to/file.txt');
+ * 
+ * // Getting file paths
+ * const files = await getFilePaths(['path/to/dir', 'path/to/file.txt', '*.md']);
+ * 
+ * // Ensuring a directory exists
+ * await ensureDir('path/to/directory');
+ 
+ * @hash e28f0c8a9beab722b4d86a028d890e9c638bb095e9008ec8fd5517308f2dcbcb
  */
 
 import { config } from '@/config.ts';

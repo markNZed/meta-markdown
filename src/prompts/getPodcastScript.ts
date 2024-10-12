@@ -1,19 +1,23 @@
 /**
- * Generates a podcast script based on the provided content.
+ * Generates a podcast script based on the provided content for a show titled "The Podcast".
  * 
- * This function creates a structured dialogue between two characters: Ken, the host, and Judy, the guest expert. 
- * The script is designed for a podcast targeting university-educated listeners who appreciate in-depth discussions 
- * but require clear explanations of complex ideas.
+ * The script is structured as a conversation between two characters: Ken (the host) and Judy (the guest expert).
  * 
- * @param {string} content - The essay or topic content that the podcast script will be based on.
+ * @param {string} content - The essay or topic content to be transformed into a podcast script. 
+ * The script will explain complex ideas in an engaging and accessible manner for a university-educated audience.
  * 
- * @returns {string} A formatted podcast script that follows a specific structure:
- * - Each speaker's turn is marked with `<!-- host -->` for Ken and `<!-- guest -->` for Judy.
- * - The script avoids technical jargon and is suitable for text-to-speech conversion.
+ * @returns {string} - A formatted podcast script that balances depth and accessibility, 
+ * structured with alternating dialogue between Ken and Judy, suitable for text-to-speech conversion.
  * 
- * @example
+ * The generated script will:
+ * - Start each speaker's turn with either `<!-- host -->` or `<!-- guest -->`.
+ * - Avoid any special formatting or meta-language.
+ * - Encourage critical thinking and ensure the audience can relate to the discussed concepts.
+ * 
+ * Example usage:
  * const script = getPodcastScript("Your essay content here.");
- * console.log(script);
+ 
+ * @hash 5d74d1cebf2d36551fdb931c6c3150e63d646852f75b9eabec77f5b5e5fff0d0
  */
 
 export const getPodcastScript = (content: string) => {

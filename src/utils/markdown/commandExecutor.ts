@@ -1,4 +1,37 @@
-// src/utils/markdown/commandExecutor.ts
+/**
+ * @module CommandExecutor
+ * 
+ * This module provides functions to manipulate a Markdown Abstract Syntax Tree (AST) by executing 
+ * a batch of commands, including insertions, deletions, modifications, and movements of nodes.
+ * 
+ * @example
+ * // To use the executeCommands function:
+ * const ast: MarkdownNode = ...; // Your Markdown AST
+ * const commandBatch: CommandBatch = {
+ *   commands: [
+ *     { action: 'insert', target: 'nodeId', position: 'before', node: { type: 'paragraph', value: 'Hello World' } },
+ *     { action: 'delete', target: 'nodeIdToDelete' },
+ *   ]
+ * };
+ * executeCommands(ast, commandBatch);
+ * 
+ * @function executeCommands
+ * @param {MarkdownNode} ast - The root of the Markdown AST to manipulate.
+ * @param {CommandBatch} commandBatch - A batch of commands to execute on the AST.
+ * 
+ * Each command in the commandBatch should have an action property that specifies the type of 
+ * operation to perform, such as 'insert', 'delete', 'move', 'modify', or 'replace'.
+ * 
+ * The following command types are supported:
+ * 
+ * - **InsertCommand**: Inserts a new node at a specified position relative to a target node.
+ * - **DeleteCommand**: Deletes a specified target node from the AST.
+ * - **MoveCommand**: Moves a specified node to a new position relative to a destination node.
+ * - **ModifyCommand**: Modifies the properties or value of a specified target node.
+ * - **ReplaceCommand**: Replaces a target node with a new node.
+ 
+ * @hash 553b7a81e3f6892962aaf3d2125d650952adca54bf591a4a97f6b9dfc7f3d4d5
+ */
 
 import { MarkdownNode } from '@/types/markdown.ts';
 import { CommandBatch, InsertCommand, DeleteCommand, MoveCommand, ModifyCommand, ReplaceCommand } from './commandSchema.ts';

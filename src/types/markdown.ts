@@ -1,22 +1,29 @@
 /**
  * @module MarkdownNode
  * 
- * This module exports the `MarkdownNode` interface, which represents a node in a Markdown document.
+ * This module exports the `MarkdownNode` interface which represents a node in the Markdown Abstract Syntax Tree (AST).
  * 
  * @interface MarkdownNode
- * @property {string} type - The type of the node (e.g., heading, paragraph).
- * @property {number} [depth] - The depth level of the node, applicable for heading nodes.
- * @property {string} [value] - The textual content of the node.
- * @property {MarkdownNode[]} [children] - An optional array of child nodes, allowing for nested structures.
+ * @extends Parent
+ * 
+ * @property {string} id - A unique identifier for the node.
+ * @property {string} type - The type of the node (e.g., 'heading', 'paragraph', etc.).
+ * @property {number} [depth] - The depth of the node, applicable for heading types.
+ * @property {string} [value] - The text content for text nodes.
+ * @property {Record<string, any>} [properties] - Additional properties associated with the node.
+ * @property {MarkdownNode[]} [children] - An array of child nodes.
  * 
  * @example
- * // Example usage of MarkdownNode interface
- * const headingNode: MarkdownNode = {
- *     type: 'heading',
- *     depth: 1,
- *     value: 'Introduction',
- *     children: []
+ * const node: MarkdownNode = {
+ *   id: '1',
+ *   type: 'heading',
+ *   depth: 1,
+ *   value: 'Introduction',
+ *   properties: {},
+ *   children: []
  * };
+ 
+ * @hash daeb077a46ca11504f4c14fe9a3a97cccccaa7efdf6a903c08fe67de2711acf4
  */
 
 import { Parent } from 'npm:unist';

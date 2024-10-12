@@ -1,23 +1,26 @@
 /**
- * @module Markdown Processing
+ * @module MarkdownProcessor
  * 
- * This module provides a function to process Markdown files by applying specified processing functions to their Abstract Syntax Tree (AST).
+ * This module provides functions to process Markdown files using specified processing functions.
  * 
  * @function processMarkdownFiles
- * @param {string | string[]} filePathsOrPatterns - A single file path or an array of file paths or glob patterns to locate the Markdown files to process.
- * @param {MarkdownProcessor | MarkdownProcessor[]} processFunctions - A single processing function or an array of processing functions that will be applied to the AST of each Markdown file. Each function receives the AST as an argument and can return either void or a Promise that resolves to void.
+ * 
+ * @param {string | string[]} filePathsOrPatterns - A file path or an array of file paths/patterns to Markdown files that you want to process.
+ * @param {MarkdownProcessor | MarkdownProcessor[]} processFunctions - A single processing function or an array of processing functions to apply to the parsed Markdown AST.
  * 
  * @example
- * // Define a processing function
- * const exampleProcessor: MarkdownProcessor = async (ast) => {
- *   // Modify the AST here
+ * 
+ * import { processMarkdownFiles } from '@/path/to/your/module';
+ * 
+ * const myProcessor = async (ast) => {
+ *   // Modify the ast as needed
  * };
  * 
- * // Process a single file
- * await processMarkdownFiles('path/to/file.md', exampleProcessor);
+ * await processMarkdownFiles('src/docs/*.md', myProcessor);
  * 
- * // Process multiple files with an array of functions
- * await processMarkdownFiles(['path/to/*.md', 'another/path/*.md'], [exampleProcessor, anotherProcessor]);
+ * This will read all Markdown files matching the pattern, parse them into ASTs, apply the processing function(s) to each AST, and then write the modified content back to the files.
+ 
+ * @hash 53a3f5801abe8afa52391d9eeb6449641f7e87dd8acf15611154efbf1a3e1be0
  */
 
 import { readMarkdown, writeMarkdown } from './fileIO.ts';

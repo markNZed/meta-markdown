@@ -1,30 +1,39 @@
 /**
- * This module provides functionality to interact with the OpenAI API, including calling the API with prompts
- * and caching responses to minimize redundant API calls.
- *
- * @module OpenAI Interaction
- *
+ * @module OpenAIInteraction
+ * 
+ * This module provides functions to interact with the OpenAI API and manage responses through caching.
+ * 
  * @function callOpenAI
  * @param {CallOpenAIOptions} options - Options for calling the OpenAI API.
- * @param {string} options.prompt - The prompt to send to the OpenAI API (must be a non-empty string).
- * @param {string} [options.requestId] - An optional request identifier for logging.
- * @param {AutoParseableResponseFormat<Record<string, any>>} [options.responseFormat] - Optional response format.
- * @param {Partial<OpenAIConfig>} [options.configOverrides] - Optional configuration overrides for the OpenAI client.
- * @returns {Promise<string | Record<string, any>>} The response from the OpenAI API or cached response.
- *
+ * @param {string} options.prompt - The prompt to send to the OpenAI API. Must be a non-empty string.
+ * @param {string} [options.requestId] - An optional identifier for tracking the request.
+ * @param {AutoParseableResponseFormat<Record<string, any>>} [options.responseFormat] - Optional format for parsing the response.
+ * @param {Partial<OpenAIConfig>} [options.configOverrides] - Optional overrides for the default OpenAI configuration.
+ * @returns {Promise<string | Record<string, any>>} - Returns the response from the OpenAI API, either as a string or structured data.
+ * 
  * @function extractTypeScriptCode
  * @param {string} response - The raw response from the OpenAI API.
- * @returns {string | null} The extracted TypeScript code or null if not found.
- *
+ * @returns {string | null} - The extracted TypeScript code or null if not found.
+ * 
  * Usage:
- * 1. To call the OpenAI API:
- *    ```typescript
- *    const response = await callOpenAI({ prompt: "Your prompt here" });
- *    ```
- * 2. To extract TypeScript code from the response:
- *    ```typescript
- *    const code = extractTypeScriptCode(response);
- *    ```
+ * 
+ * To call the OpenAI API, use the `callOpenAI` function with the necessary options. 
+ * Example:
+ * 
+ * ```typescript
+ * const response = await callOpenAI({
+ *   prompt: "What is TypeScript?",
+ *   requestId: "unique-request-id"
+ * });
+ * ```
+ * 
+ * To extract TypeScript code from the API response, use the `extractTypeScriptCode` function:
+ * 
+ * ```typescript
+ * const code = extractTypeScriptCode(response);
+ * ```
+ 
+ * @hash d2650d0980bc61eae4821365d71c324cc4bebedceff5bccaca44f1a0d4772a04
  */
 
 import { ensureDir } from '@/utils/file.ts';

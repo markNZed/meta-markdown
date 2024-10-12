@@ -1,30 +1,32 @@
 /**
- * @module Configuration
+ * @module Config
  * 
- * This module provides configuration settings for the application, including OpenAI API parameters 
- * and paths for markdown and cache directories. It reads environment variables from a `.env` file 
- * and merges them with system environment variables.
+ * This module loads environment configuration settings from a .env file and merges them with system environment variables.
+ * It exports the configuration for the application, which includes settings for OpenAI integration and directory paths.
  * 
  * @typedef {Object} OpenAIConfig
  * @property {string} apiKey - The API key for OpenAI.
- * @property {string} model - The model to be used with OpenAI.
- * @property {number} max_completion_tokens - The maximum number of tokens to complete.
- * @property {number} [temperature] - The sampling temperature for responses.
- * @property {number} maxInputTokens - The maximum number of input tokens.
+ * @property {string} model - The model to be used for OpenAI requests.
+ * @property {number} max_completion_tokens - The maximum number of tokens for OpenAI completions.
+ * @property {number} [temperature] - The sampling temperature for OpenAI completions (optional).
+ * @property {number} maxInputTokens - The maximum number of input tokens for OpenAI requests.
  * 
  * @typedef {Object} AppConfig
- * @property {OpenAIConfig} openAI - Configuration settings for the OpenAI API.
- * @property {string} markdownDir - The directory where markdown files are stored.
+ * @property {OpenAIConfig} openAI - Configuration settings for OpenAI.
+ * @property {string} markdownDir - The directory path for markdown files.
  * @property {number} maxLogEntryLength - The maximum length of log entries.
- * @property {string} rootDir - The root directory of the application.
- * @property {string} cacheDir - The directory used for caching.
+ * @property {string} rootDir - The root directory for the application.
+ * @property {string} cacheDir - The directory path for caching.
  * 
- * @constant {AppConfig} config - The application configuration object that contains all the settings.
+ * @constant {AppConfig} config - The merged configuration object containing application settings.
  * 
  * @example
- * // Accessing the configuration values
+ * // Importing the config in another module
  * import { config } from '@/path/to/this/module';
- * console.log(config.openAI.apiKey); // Logs the OpenAI API key
+ * 
+ * console.log(config.openAI.apiKey); // Access the OpenAI API key
+ 
+ * @hash 4da32a734ef9a7dff3959b9ea7c8b1de26376a0ece2714df5febaf9fdd35eadb
  */
 
 import { config as envConfig } from "https://deno.land/x/dotenv@v3.2.2/mod.ts";

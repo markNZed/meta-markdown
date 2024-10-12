@@ -1,29 +1,35 @@
 /**
  * @module AudioMerger
  * 
- * This module provides functions to merge multiple audio files into a single audio file using FFmpeg's concat demuxer.
+ * This module provides functionality to merge multiple audio files into a single audio file using FFmpeg's concat demuxer.
  * 
- * @example
- * import { mergeAudioFiles } from '@/path/to/this/module';
- * 
- * const params = {
- *   inputFiles: ['audio1.mp3', 'audio2.mp3'],
- *   outputFile: 'output.mp3',
- *   requestId: 'unique-request-id',
- *   cacheDir: '/path/to/cache',
- * };
- * 
- * await mergeAudioFiles(params);
- * 
- * @typedef {Object} MergeAudioParams
- * @property {string[]} inputFiles - An array of paths to the input audio files to be merged.
- * @property {string} outputFile - The path to the output audio file.
- * @property {string} requestId - A unique identifier for the request, used for logging.
- * @property {string} cacheDir - The directory to store temporary files during the merging process.
+ * @export
  * 
  * @function mergeAudioFiles
  * @param {MergeAudioParams} params - The parameters for merging audio files.
- * @returns {Promise<void>} A promise that resolves when the merging process is complete.
+ * @param {string[]} params.inputFiles - An array of paths to the input audio files to be merged.
+ * @param {string} params.outputFile - The path where the merged audio file will be saved.
+ * @param {string} params.requestId - A unique identifier for the merge request, used for logging purposes.
+ * @param {string} params.cacheDir - The directory where temporary files will be created during the merge process.
+ * @returns {Promise<void>} A promise that resolves when the audio files have been successfully merged.
+ * 
+ * @throws {Error} Throws an error if no input files are provided, if FFmpeg fails to execute, or if any other error occurs during the merging process.
+ * 
+ * @example
+ * import { mergeAudioFiles } from '@/path/to/module';
+ * 
+ * const params = {
+ *   inputFiles: ['audio1.mp3', 'audio2.mp3'],
+ *   outputFile: 'merged.mp3',
+ *   requestId: '123456',
+ *   cacheDir: '/tmp'
+ * };
+ * 
+ * mergeAudioFiles(params)
+ *   .then(() => console.log('Merging completed successfully.'))
+ *   .catch(error => console.error('Error during merging:', error));
+ 
+ * @hash 531fc4ea8bc4285f58ca37eb719860d5222b7f90b495ddd7e64725fe8f00952f
  */
 
 import { join } from "https://deno.land/std@0.203.0/path/mod.ts";

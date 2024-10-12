@@ -1,4 +1,29 @@
-// scripts/applyCommands.ts
+/**
+ * @module ApplyCommands
+ * 
+ * This module provides a function to process a Markdown file by applying commands
+ * generated from a Language Model (LLM) based on the file's Abstract Syntax Tree (AST).
+ * 
+ * @function main
+ * 
+ * @description
+ * The main function reads a Markdown file, parses its content into an AST, assigns
+ * unique IDs to the nodes, generates a prompt for the LLM to create commands, executes
+ * those commands on the AST, and writes the modified content back to a new Markdown file.
+ * 
+ * @async
+ * 
+ * @throws {Error} Throws an error if any step in the process fails, including reading,
+ * parsing, command execution, or writing the output.
+ * 
+ * @usage
+ * To use this module, ensure that the required Markdown file is available at the path
+ * specified in the `inputFilePath` variable. Run the `main` function to execute the 
+ * command processing workflow, which will read from the input file and write the 
+ * results to the output file specified in the `outputFilePath` variable.
+ 
+ * @hash 1ee8b8aa23443af6460cf327ad725e735a070f529cfefc7a4fffe367c3e4c5f0
+ */
 
 import { unified } from 'unified';
 import remarkParse from 'remark-parse';

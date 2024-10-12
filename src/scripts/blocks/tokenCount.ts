@@ -1,30 +1,33 @@
 /**
- * @module Directory Token Counter
+ * @module DirectoryTokenCounter
  * 
- * This module provides functionality to build and print the directory structure with token counts
- * for Markdown files. It includes methods to recursively traverse directories, count tokens in files,
- * and print the structure in a human-readable format.
- * 
- * @exports
+ * This module provides functions to build and print a directory structure with token counts for Markdown files. 
+ * It exports the following functions:
  * 
  * - `buildDirectoryStructure(dirPath: string): Promise<DirectoryStructure>`: 
- *   Recursively builds the directory structure starting from the given directory path. 
- *   It returns a promise that resolves to a `DirectoryStructure` object representing the 
- *   directory and its contents.
+ *   Recursively builds a directory structure from the specified directory path and calculates token counts for Markdown files.
+ *   @param dirPath - The path of the directory to traverse.
+ *   @returns A promise that resolves to a DirectoryStructure object representing the directory and its contents.
  * 
  * - `printDirectoryStructure(structure: DirectoryStructure, indent?: string): number`: 
- *   Prints the directory structure to the console in a tree-like format, showing the token count 
- *   for each file and the total tokens for each directory. Returns the total token count for the 
- *   current directory.
+ *   Prints the directory structure in a tree-like format and returns the total token count for the current directory.
+ *   @param structure - The DirectoryStructure object to print.
+ *   @param indent - The current indentation level (used for recursion).
+ *   @returns The total token count for the current directory.
  * 
  * - `summarizeDirectory(dirPath: string): Promise<{ structure: DirectoryStructure; totalTokens: number }>`: 
- *   Summarizes the directory structure for the given path, returning a promise that resolves to an 
- *   object containing the directory structure and the total token count.
+ *   Summarizes the directory structure and total token counts for the specified directory path.
+ *   @param dirPath - The directory path to summarize.
+ *   @returns A promise that resolves to an object containing the directory structure and total token count.
  * 
- * @example
- * // To use the module, you can call summarizeDirectory with a directory path:
- * const summary = await summarizeDirectory('./my-directory');
- * console.log(summary.totalTokens);
+ * Example usage:
+ * ```typescript
+ * const dirPath = './your-directory';
+ * const summary = await summarizeDirectory(dirPath);
+ * console.log(summary);
+ * ```
+ 
+ * @hash 86d4c0b7827473b39cea56d6c904cfe35bc6b76947a28232f67eb8f1a2bd8a10
  */
 
 import { countTokens } from "@/utils/llm/tokenizer.ts";

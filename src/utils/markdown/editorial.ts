@@ -1,39 +1,43 @@
 /**
  * @module MarkdownEditing
  * 
- * This module provides a set of functions to perform various editing tasks on markdown content using the OpenAI API.
- * 
- * Each function takes in a string of markdown content and a request ID, and returns a Promise that resolves to a string with the edited content.
+ * This module provides functions for various types of editorial processing of markdown content using OpenAI's language model.
  * 
  * @function developmentalEdit
  * @param {string} markdownContent - The markdown content to be analyzed and improved.
- * @param {string} requestId - A unique identifier for the request.
- * @returns {Promise<string>} - A promise that resolves to the improved markdown content after developmental editing.
+ * @param {string} requestId - The unique identifier for the request.
+ * @returns {Promise<string>} A promise that resolves to the improved markdown content from a developmental editing perspective.
  * 
  * @function lineEdit
- * @param {string} markdownContent - The markdown content to be improved for sentence structure, tone, and style.
- * @param {string} requestId - A unique identifier for the request.
- * @returns {Promise<string>} - A promise that resolves to the improved markdown content after line editing.
+ * @param {string} markdownContent - The markdown content to be refined.
+ * @param {string} requestId - The unique identifier for the request.
+ * @returns {Promise<string>} A promise that resolves to the improved markdown content from a line editing perspective.
  * 
  * @function copyEdit
- * @param {string} markdownContent - The markdown content to be corrected for grammatical errors and syntax.
- * @param {string} requestId - A unique identifier for the request.
- * @returns {Promise<string>} - A promise that resolves to the corrected markdown content after copy editing.
+ * @param {string} markdownContent - The markdown content to be corrected.
+ * @param {string} requestId - The unique identifier for the request.
+ * @returns {Promise<string>} A promise that resolves to the improved markdown content from a copy editing perspective.
  * 
  * @function proofread
- * @param {string} markdownContent - The markdown content to be checked for typos and formatting errors.
- * @param {string} requestId - A unique identifier for the request.
- * @returns {Promise<string>} - A promise that resolves to the corrected markdown content after proofreading.
+ * @param {string} markdownContent - The markdown content to be proofread.
+ * @param {string} requestId - The unique identifier for the request.
+ * @returns {Promise<string>} A promise that resolves to the corrected markdown content after proofreading.
  * 
  * @function technicalEdit
- * @param {string} markdownContent - The markdown content to be ensured for technical accuracy and clarity.
- * @param {string} requestId - A unique identifier for the request.
- * @returns {Promise<string>} - A promise that resolves to the improved markdown content after technical editing.
+ * @param {string} markdownContent - The markdown content requiring technical accuracy checks.
+ * @param {string} requestId - The unique identifier for the request.
+ * @returns {Promise<string>} A promise that resolves to the improved markdown content from a technical editing perspective.
  * 
  * @function factCheck
- * @param {string} markdownContent - The markdown content to be verified for correctness of claims and data.
- * @param {string} requestId - A unique identifier for the request.
- * @returns {Promise<string>} - A promise that resolves to the verified markdown content after fact-checking.
+ * @param {string} markdownContent - The markdown content to be fact-checked.
+ * @param {string} requestId - The unique identifier for the request.
+ * @returns {Promise<string>} A promise that resolves to the corrected markdown content after fact-checking.
+ * 
+ * @example
+ * const editedContent = await developmentalEdit("## My Markdown", "request123");
+ * console.log(editedContent);
+ 
+ * @hash 62bffd3be95d399508a042564f1b2b06834e6b478176e869e10bb23dc437b09f
  */
 
 import { callOpenAI } from '../llm/llm.ts';

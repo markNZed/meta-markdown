@@ -1,21 +1,27 @@
 /**
  * @module DocumentationGenerator
  * 
- * This module provides functionality to generate JSDoc comments for TypeScript files. 
+ * This module provides functionality to generate JSDoc comments for TypeScript files.
  * It includes the following exported functions:
  * 
- * @function generateDocumentationForFile
- * @param {string} filePath - The absolute path to the TypeScript file for which to generate documentation.
- * @returns {Promise<void>} A promise that resolves when the documentation has been successfully generated and updated in the specified file.
+ * - `generateDocumentationForFile(filePath: string): Promise<void>`: 
+ *   Generates and updates JSDoc comments for the specified TypeScript file. 
+ *   It reads the file, checks for existing comments, computes a hash to detect changes, 
+ *   and generates new documentation using an AI model. The updated content is then 
+ *   written back to the file. 
  * 
- * @function main
- * @returns {Promise<void>} A promise that resolves when the documentation generation process is complete. It processes all relevant TypeScript files unless in development mode, where it can process a specific file.
+ *   **Usage**: Call this function with the absolute path to the TypeScript file you wish 
+ *   to document.
  * 
- * Usage:
- * - To generate documentation for a single TypeScript file, call `generateDocumentationForFile` with the file's path.
- * - To run the documentation generation for all files, invoke the `main` function.
+ * - `main(): Promise<void>`: 
+ *   The main entry point for the script. It gathers all relevant TypeScript files and 
+ *   invokes `generateDocumentationForFile` for each file. In development mode, it can 
+ *   process a specific file or the first file in the list. 
  * 
- * Note: In development mode, you can specify a particular file to process by adjusting the `SPECIFIC_FILE_PATH` variable.
+ *   **Usage**: This function is called automatically if the script is run directly. 
+ *   It processes all TypeScript files in production mode or a single file in development mode.
+ 
+ * @hash 24d3d0b939f65c33dc248d46687342c1d3ef0262a674cfc4a77aa37080f74e7f
  */
 
 import { listTsFiles } from './blocks/listTsFiles.ts'; // Import the function to list TypeScript files
@@ -36,6 +42,12 @@ const SPECIFIC_FILE_PATH = './src/utils/logger.ts'; // Adjust this path as neede
 const HEADER_COMMENT_REGEX = /^(?:\s*(?:\/\/.*|\/\*[\s\S]*?\*\/))+\s*/;
 
 /**
+ * Regular expression to extract the hash from the JSDoc comment.
+ * Ensures that the hash is exactly 64 hexadecimal characters (SHA-256).
+ */
+const HASH_REGEX = /@hash\s+([a-fA-F0-9]{64})/;
+
+/**
  * Extracts the first JSDoc comment block from a given text.
  * Assumes that the JSDoc comment is not enclosed within markdown code blocks.
  *
@@ -50,7 +62,6 @@ function extractJSDocComment(response: string): string | null {
   return jsDocMatch ? jsDocMatch[0] : null;
 }
 
-
 /**
  * Executes a Deno syntax check on the specified file.
  * @param filePath The path to the TypeScript file to check.
@@ -58,10 +69,10 @@ function extractJSDocComment(response: string): string | null {
  */
 async function checkSyntax(filePath: string): Promise<boolean> {
   try {
-    const cmd = new Deno.Command("deno", {
-      args: ["check", filePath],
-      stdout: "piped",
-      stderr: "piped",
+    const cmd = new Deno.Command('deno', {
+      args: ['check', filePath],
+      stdout: 'piped',
+      stderr: 'piped',
     });
 
     const { success, stdout, stderr } = await cmd.output();
@@ -109,8 +120,34 @@ function reformatJSDoc(response: string): string | null {
 }
 
 /**
- * Generates JSDoc comments for a TypeScript file and updates the file.
+ * Computes the SHA-256 hash of the given text.
+ * @param text The text to hash.
+ * @returns A promise that resolves to the hex string of the hash.
+ */
+async function computeHash(text: string): Promise<string> {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(text);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  const hashHex = hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
+  return hashHex;
+}
+
+/**
+ * Sanitizes the AI-generated JSDoc comment by replacing any occurrences of `@hash`
+ * that might interfere with metadata.
  * 
+ * @param {string} comment - The AI-generated JSDoc comment.
+ * @returns {string} - The sanitized JSDoc comment.
+ */
+function sanitizeJSDoc(comment: string): string {
+  // Replace any internal `@hash` occurrences to avoid confusion with our metadata `@hash`
+  return comment.replace(/@hash/g, '@hash_placeholder');
+}
+
+/**
+ * Generates JSDoc comments for a TypeScript file and updates the file.
+ *
  * @param {string} filePath - The absolute path to the TypeScript file.
  */
 export async function generateDocumentationForFile(filePath: string): Promise<void> {
@@ -122,8 +159,25 @@ export async function generateDocumentationForFile(filePath: string): Promise<vo
     // Read the content of the TypeScript file
     const originalContent = await Deno.readTextFile(filePath);
 
+    // Extract existing header comments
+    const headerMatch = originalContent.match(HEADER_COMMENT_REGEX);
+    const existingHeader = headerMatch ? headerMatch[0] : '';
+
     // Remove existing header comments to get clean code for documentation generation
-    const contentWithoutHeader = originalContent.replace(HEADER_COMMENT_REGEX, '');
+    const contentWithoutHeader = originalContent.slice(existingHeader.length);
+
+    // Extract stored hash from existing header
+    const hashMatch = existingHeader.match(HASH_REGEX);
+    const storedHash = hashMatch ? hashMatch[1] : null;
+
+    // Compute hash of the content without header
+    const computedHash = await computeHash(contentWithoutHeader);
+
+    // Compare stored hash and computed hash
+    if (storedHash === computedHash) {
+      logger.info(`File ${filePath} has not changed. Skipping documentation update.`, { requestId });
+      return;
+    }
 
     // Create a prompt to generate JSDoc comments using the clean content
     const prompt = `
@@ -131,8 +185,8 @@ You are an expert TypeScript developer. I will provide you with TypeScript code,
 
 - The JSDoc comment should start with /** and end with */.
 - Use proper JSDoc syntax.
-- Any import paths from the src directory should use "@/" (e.g., '@/utils/audio/podcast.ts').
-- The comment should explain how to use any exported functions
+- Any import paths from the src directory should use "@/". (e.g., '@/utils/audio/podcast.ts').
+- The comment should explain how to use any exported functions.
 
 Please return only the JSDoc comment.
 
@@ -143,7 +197,7 @@ ${contentWithoutHeader}
 `;
 
     // Call the OpenAI API to generate documentation
-    const aiResponse = await callOpenAI({prompt, requestId});
+    const aiResponse = await callOpenAI({ prompt, requestId });
 
     // Log the raw AI response for debugging
     logger.debug(`Raw AI response for ${filePath}:\n${aiResponse}`, { requestId });
@@ -168,8 +222,20 @@ ${contentWithoutHeader}
       logger.info(`Successfully extracted JSDoc comments for file ${filePath}.`, { requestId });
     }
 
-    // Log the extracted comments for debugging
-    logger.debug(`Extracted JSDoc comments for ${filePath}:\n${documentedComments}`, { requestId });
+    // Before processing the comment, sanitize it to avoid any accidental @hash conflicts
+    documentedComments = sanitizeJSDoc(documentedComments);
+
+    // Insert or replace the @hash tag within the JSDoc comment
+    if (HASH_REGEX.test(documentedComments)) {
+      // Replace existing @hash
+      documentedComments = documentedComments.replace(HASH_REGEX, `@hash ${computedHash}`);
+    } else {
+      // Insert new @hash before the closing */
+      documentedComments = documentedComments.replace(
+        /\*\/\s*$/,
+        `\n *\n * @hash ${computedHash}\n */`
+      );
+    }
 
     // Combine the new documentation with the content without the old header
     const newContent = `${documentedComments}\n\n${contentWithoutHeader}`;
@@ -187,7 +253,6 @@ ${contentWithoutHeader}
     }
 
     logger.info(`Documentation and syntax check successful for: ${filePath}`, { requestId });
-
   } catch (error: unknown) {
     if (error instanceof Error) {
       logger.error(`Error processing file ${filePath}: ${error.message}`, { requestId });
