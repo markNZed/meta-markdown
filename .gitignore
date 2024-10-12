@@ -13,6 +13,7 @@ npm-debug.log*
 .DS_Store
 
 project_review.txt
+concatenate_project.txt
 tts-cache/
 llm-cache/
 markdown_private/

@@ -9,7 +9,7 @@
     "run-with-permissions": "deno run --allow-all /workspace/src/scripts/demo.ts",
     "watch-scripts": "deno run --allow-run --allow-read --allow-write watch-scripts.ts",
     "cache": "deno cache --lock=lock.json src/**/*.ts",
-    "test": "deno test --allow-all tests"
+    "tests": "deno test --allow-all tests"
   }
 }
   

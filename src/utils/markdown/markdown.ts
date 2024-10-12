@@ -46,22 +46,26 @@
  * ```
  */
 
-import {unified} from "npm:unified";
-import remarkParse from "npm:remark-parse";
-import remarkStringify from "npm:remark-stringify";
+import {unified} from 'unified';
+import remarkParse from "remark-parse";
+import remarkStringify from "remark-stringify";
 import type { Root, Heading, Paragraph, Text } from "npm:@types/mdast";
 import type { Node } from "npm:unist";
 import { callOpenAI } from '../llm/llm.ts';
 import logger from '../logger.ts';
-import { readMarkdown, writeMarkdown } from './fileIO.ts';
+import { MarkdownNode } from '@/types/markdown.ts';
+import { generateUniqueId } from './helpers.ts';
 
 
 /**
  * Defines a Processor instance with Root as input and string as output.
  */
+// Initialize the processor with explicit types
+// Initialize the processor without unnecessary casts
 const processor = unified()
-  .use(remarkParse)
-  .use(remarkStringify);
+  .use(remarkParse)  // TypeScript should correctly infer the types here
+  .use(remarkStringify);  // If TypeScript complains, cast to `unknown`
+
 
 /**
  * Creates a heading node of a specific depth with the given text.
@@ -206,27 +210,52 @@ export const checkGrammarAI = async (ast: Root, requestId: string): Promise<Root
   }
 };
 
-import { MarkdownNode } from '../../types/markdown.ts';
-
 export const parseMarkdownToAST = (markdownContent: string): MarkdownNode => {
   const tree = unified().use(remarkParse).parse(markdownContent);
   return tree as MarkdownNode;
 };
 
-export const addTimestamp = (ast: MarkdownNode) => {
-    const timestampNode: MarkdownNode = {
-      type: 'paragraph',
-      children: [
-        {
-          type: 'text',
-          value: `Last updated on ${new Date().toLocaleString()}`,
-        },
-      ],
-    };
 
-    if (!ast.children) {
-        ast.children = []; // Initialize as an empty array if undefined
-    }
-  
+/**
+ * Adds a timestamp paragraph node indicating the last updated time to the AST.
+ *
+ * @param ast - The Markdown AST node to which the timestamp will be added.
+ * @param position - The position where the timestamp should be added ('start' or 'end'). Defaults to 'start'.
+ */
+export const addTimestamp = (ast: MarkdownNode, position: 'start' | 'end' = 'start'): void => {
+  // Generate unique IDs for the new nodes
+  const timestampParagraphId = generateUniqueId();
+  const timestampTextId = generateUniqueId();
+
+  // Create the timestamp text node with a unique ID
+  const timestampTextNode: MarkdownNode = {
+    type: 'text',
+    value: `Last updated on ${new Date().toLocaleString()}`,
+    id: timestampTextId,
+  };
+
+  // Create the timestamp paragraph node with a unique ID and the text child
+  const timestampNode: MarkdownNode = {
+    type: 'paragraph',
+    children: [timestampTextNode],
+    id: timestampParagraphId,
+  };
+
+  // Ensure the AST has a children array
+  if (!ast.children || !Array.isArray(ast.children)) {
+    ast.children = [];
+  }
+
+  // Insert the timestamp node at the specified position
+  if (position === 'start') {
     ast.children.unshift(timestampNode);
+    logger.info(`Added timestamp node ${timestampParagraphId} at the start of the AST.`);
+  } else if (position === 'end') {
+    ast.children.push(timestampNode);
+    logger.info(`Added timestamp node ${timestampParagraphId} at the end of the AST.`);
+  } else {
+    logger.warning(`Invalid position '${position}' specified for addTimestamp. Defaulting to 'start'.`);
+    ast.children.unshift(timestampNode);
+    logger.info(`Added timestamp node ${timestampParagraphId} at the start of the AST.`);
+  }
 };

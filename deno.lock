@@ -14,6 +14,7 @@
     "npm:remark-stringify@*": "11.0.0",
     "npm:remark@*": "15.0.1",
     "npm:unified@*": "11.0.5",
+    "npm:unist-util-visit@*": "5.0.0",
     "npm:unist@*": "0.0.1",
     "npm:zod@*": "3.23.8"
   },

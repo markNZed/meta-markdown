@@ -19,9 +19,16 @@
  * };
  */
 
-export interface MarkdownNode {
-    type: string;
-    depth?: number;
-    value?: string;
-    children?: MarkdownNode[];
+import { Parent } from 'npm:unist';
+
+/**
+ * Represents a node in the Markdown AST with an added unique identifier.
+ */
+export interface MarkdownNode extends Parent {
+  id: string; // Unique identifier for the node
+  type: string; // e.g., 'heading', 'paragraph', etc.
+  depth?: number; // Applicable for headings
+  value?: string; // Text content for text nodes
+  properties?: Record<string, any>; // Additional properties
+  children?: MarkdownNode[]; // Child nodes
 }

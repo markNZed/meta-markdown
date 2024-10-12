@@ -10,7 +10,7 @@
 # ------------------------------------------------------------------
 
 # Set the output file name
-OUTPUT_FILE="project_review.txt"
+OUTPUT_FILE="concatenate_project.txt"
 
 # Remove the output file if it already exists to avoid appending
 if [ -f "$OUTPUT_FILE" ]; then
