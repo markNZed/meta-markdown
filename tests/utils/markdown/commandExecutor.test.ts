@@ -98,11 +98,15 @@ Welcome to the document.
 
   const headingNode = ast.children.find((child: any) => child.type === 'heading');
 
+  // Step 3: Find the text child node within the heading
+  const textNode = headingNode.children.find((child: any) => child.type === 'text');
+
+
   const modifyCommand: CommandBatch = {
     commands: [
       {
         action: 'modify',
-        target: headingNode.id,
+        target: textNode.id,
         value: 'Getting Started'
       }
     ]

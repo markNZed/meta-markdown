@@ -5,7 +5,7 @@ Tests are probably much easier to produce in JS rather than TS
 deps.ts could allow for easy mocking with sinon
   Could use a custom import_map.json and pass with --import-map
 
-deno test --allow-all --filter "getFilePaths" tests/utils/file.test.ts
+deno test --allow-all --filter "getFilePaths" tests
 deno run --allow-read src/scripts/tokenCount.ts markdown_private
 
 Build markdown features with scripts

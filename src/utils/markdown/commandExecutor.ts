@@ -37,6 +37,7 @@ export function executeCommands(ast: MarkdownNode, commandBatch: CommandBatch): 
       }
     } catch (error) {
       logger.error(`Error executing command ${JSON.stringify(command)}: ${error}`);
+      throw error;
     }
   }
 }
