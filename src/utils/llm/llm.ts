@@ -160,6 +160,7 @@ export const callOpenAI = async (
 
     if (responseFormat) {
       if (mergedConfig.model === 'o1-mini') {
+        logger.debug(`Using o1-mini model with response format: ${responseFormat}`, { requestId });
         completion = await openai.beta.chat.completions.parse({
           model: mergedConfig.model,
           messages: [
@@ -168,6 +169,7 @@ export const callOpenAI = async (
           max_completion_tokens: mergedConfig.max_completion_tokens,
         });
       } else {
+        logger.debug(`Using ${mergedConfig.model} model with response format: ${responseFormat}`, { requestId });
         completion = await openai.beta.chat.completions.parse({
           model: mergedConfig.model,
           messages: [
@@ -196,6 +198,7 @@ export const callOpenAI = async (
 
     } else {
       if (mergedConfig.model === 'o1-mini') {
+        logger.debug('Calling OpenAI API with o1-mini model. ', { mergedConfig, requestId });
         completion = await openai.chat.completions.create({
           model: mergedConfig.model,
           messages: [
@@ -204,6 +207,7 @@ export const callOpenAI = async (
           max_completion_tokens: mergedConfig.max_completion_tokens,
         });
       } else {
+        logger.debug(`Calling OpenAI API with ${mergedConfig.model} model.`, { mergedConfig, requestId });
         completion = await openai.chat.completions.create({
           model: mergedConfig.model,
           messages: [
@@ -218,7 +222,7 @@ export const callOpenAI = async (
     }
     
     if (!reply) {
-      throw new Error('No reply received from OpenAI API');
+      throw new Error(`No content received from OpenAI API response: ${JSON.stringify(completion)}`);
     }
 
     // Cache the response
@@ -243,7 +247,7 @@ export const callOpenAI = async (
 };
 
 export function extractCodeBlock(text: string, language: string): string | null {
-  const regex = new RegExp('```\\s*' + language + '\\s*([\\s\\S]*?)```', 'i');
+  const regex = new RegExp('```\\s*' + language + '\\s*([\\s\\S]*)```', 'i');
   const match = regex.exec(text);
   if (match && match[1]) {
       return match[1].trim();

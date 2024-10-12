@@ -80,10 +80,7 @@ async function generateScript() {
 
     // Define the type of script to generate (hard-coded)
     const scriptDescription = `
-Create a TypeScript script that takes a Markdown file, converts it to an Abstract Syntax Tree (AST),
-sends this AST to a Language Model (LLM), and asks the LLM to provide a formal description of the Markdown style used.
-The script should output the formal description of how the Markdown file is formatted.
-Ensure that the script is generic and can be adapted to generate new scripts when the prompt is modified.
+Create a TypeScript script that takes a Markdown file, converts it to an Abstract Syntax Tree (AST), truncates all text values to a maximum of 128 characters, then sends that AST to the LLM and requests a table of content and uses the commands to replace the current table of content with the new updated table of content.
 `;
 
     // Append project summary to the script description for better context
@@ -95,22 +92,25 @@ ${projectSummary}
 `;
 
     // Generate the script code using the LLM
-    const scriptCodePrompt = `Based on the following description and project summary, generate a TypeScript script that performs the specified functionality. The script should have a "main" function that is called at the end of the file.
+    const scriptCodePrompt = `Based on the following description and project summary, generate a TypeScript script that performs the specified functionality. The script should have a "main" function that is called at the end of the file without any arguments. Do not include any command-line argument parsing or direct script execution checks.
 
-${enhancedScriptDescription}
-
-Please ensure the script follows the project's conventions, adopts the same style as existing scripts, and utilizes the available utilities. Include appropriate documentation and error handling.`;
+    ${enhancedScriptDescription}
+    
+    Please ensure the script follows the project's conventions, adopts the same style as existing scripts, and utilizes the available utilities. Include appropriate documentation and error handling.`;
 
     logger.info('Generating script code using LLM...');
     const scriptCodeResponse = await callOpenAI({
         prompt: scriptCodePrompt,
         requestId: 'generate-script-code',
         configOverrides: {
+            model: 'o1-mini',
             maxInputTokens: 32000,
+            max_completion_tokens: 32000,
         }
     });
 
     const scriptCode = extractCodeBlock(scriptCodeResponse as string, 'typescript');
+    //const scriptCode = scriptCodeResponse.trim();
 
     // Generate a relevant file name using the LLM
     const fileNamePrompt = `Based on the following script, suggest a relevant file name including the .ts extension.
