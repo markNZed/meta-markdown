@@ -242,6 +242,16 @@ export const callOpenAI = async (
   }
 };
 
+export function extractCodeBlock(text: string, language: string): string | null {
+  const regex = new RegExp('```\\s*' + language + '\\s*([\\s\\S]*?)```', 'i');
+  const match = regex.exec(text);
+  if (match && match[1]) {
+      return match[1].trim();
+  }
+  return null;
+}
+
+
 /**
  * Extracts TypeScript code from the OpenAI API response.
  * 
