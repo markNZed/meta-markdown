@@ -1,8 +1,10 @@
 FROM denoland/deno
 
 # Install Python and pip for Jupyter
+# default-jre && graphviz for plantuml extension
 RUN apt-get update && \
     apt-get install -y python3 python3-pip python3-dev git ffmpeg sudo curl vim procps && \
+    default-jre && graphviz \
     apt-get clean -y && rm -rf /var/lib/apt/lists/*
 
 # Install Jupyter (you can include --break-system-packages if needed)

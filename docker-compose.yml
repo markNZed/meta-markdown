@@ -1,3 +1,4 @@
+version: '3'
 services:
   devcontainer:
     build:
@@ -12,3 +13,9 @@ services:
       # Expose Jupyter port
       - 8888:8888
     #user: "1000:1000"  # Adjust user ID as per your system, or remove this line if unnecessary
+
+  plantuml-server:
+    image: plantuml/plantuml-server:jetty
+    ports:
+      - "8080:8080"
+    restart: always

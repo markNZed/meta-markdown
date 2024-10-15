@@ -1,7 +1,14 @@
 {
   "recommendations": [
     "ms-toolsai.jupyter",
-    "denoland.vscode-deno"
+    "denoland.vscode-deno",
+    "streetsidesoftware.code-spell-checker",
+    "ms-azuretools.vscode-docker",
+    "mhutchie.git-graph",
+    "klaud10z.gpt-token-counter",
+    "yzhang.markdown-all-in-one",
+    "yzane.markdown-pdf",
+    "jebbs.plantuml",
   ]
 }
 
