@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Run Deno tests before committing
-echo "Running Deno tests..."
-deno run test
+echo "Running Deno tests... $(pwd)" 
+deno task tests
 
 # Check if tests passed
 if [ $? -ne 0 ]; then
