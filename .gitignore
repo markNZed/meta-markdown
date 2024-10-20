@@ -20,3 +20,5 @@ markdown_private/
 markdown_test/
 cache/
 markdown
+workspace.*
+

@@ -153,7 +153,7 @@ ${scriptCode}`;
  */
 async function runShellCommand(args: string[]): Promise<{ success: boolean; errorMessage?: string }> {
     try {
-        const p = await new Deno.Command("sh", {
+        const p = await new Deno.Command("bash", {
             args: args,
             stdout: "piped",
             stderr: "piped",
@@ -187,19 +187,13 @@ async function runShellCommand(args: string[]): Promise<{ success: boolean; erro
  * @returns {Promise<void>}
  */
 async function ensureProjectSummary() {
-    const projectSummaryPath = resolve(config.rootDir, 'concatenate_project.txt');
-    try {
-        await Deno.stat(projectSummaryPath);
-        logger.info('Project summary file exists.');
-    } catch {
-        logger.info('Project summary file does not exist. Running concatenate_project.sh...');
-        const scriptPath = resolve(config.rootDir, 'concatenate_project.sh');
-        const result = await runShellCommand([scriptPath]);
+    logger.info('Running concatenate_project.sh...');
+    const scriptPath = resolve(config.rootDir, 'concatenate_project.sh');
+    const result = await runShellCommand([scriptPath]);
 
-        if (!result.success) {
-            logger.error('Failed to execute concatenate_project.sh:', result.errorMessage);
-            throw new Error(`concatenate_project.sh failed: ${result.errorMessage}`);
-        }
+    if (!result.success) {
+        logger.error('Failed to execute concatenate_project.sh:', result.errorMessage);
+        throw new Error(`concatenate_project.sh failed: ${result.errorMessage}`);
     }
 }
 

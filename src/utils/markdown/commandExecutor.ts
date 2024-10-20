@@ -38,6 +38,8 @@ import { CommandBatch, InsertCommand, DeleteCommand, MoveCommand, ModifyCommand,
 import logger from '@/utils/logger.ts';
 import { findNodeById, findParentAndIndex, findNodeAndParent, generateUniqueId } from '@/utils/markdown/helpers.ts';
 
+export * from './commandSchema.ts';
+
 /**
  * Executes a batch of commands on the AST.
  * @param {MarkdownNode} ast - The root of the Markdown AST.
