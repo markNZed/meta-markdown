@@ -3,15 +3,29 @@ FROM denoland/deno
 # Install Python and pip for Jupyter
 # default-jre && graphviz for plantuml extension
 RUN apt-get update && \
-    apt-get install -y python3 python3-pip python3-dev git ffmpeg sudo curl vim procps && \
-    default-jre && graphviz \
-    apt-get clean -y && rm -rf /var/lib/apt/lists/*
+    apt-get install -y \
+    python3 \
+    python3-pip \
+    python3-dev git \
+    ffmpeg \
+    sudo \
+    curl \
+    vim \
+    procps \
+    default-jre \
+    graphviz \
+    && apt-get clean -y && rm -rf /var/lib/apt/lists/*
 
 # Install Jupyter (you can include --break-system-packages if needed)
 RUN pip3 install jupyter --break-system-packages
 
 # Install the Deno Jupyter kernel before switching to the 'deno' user
 RUN deno jupyter --unstable --install
+
+RUN apt-get update && apt-get install -y \
+    libgtk-3-0 \
+    && apt-get clean -y && rm -rf /var/lib/apt/lists/*
+
 
 # Expose the default port for Jupyter
 EXPOSE 8888
