@@ -1,4 +1,4 @@
-Using planuml for diagrams.
+Using plantuml for diagrams.
   Would be better to place diagrams in separate files and include in MD
   Can preview with alt-d in real time
   Need to modify settings to point to local plantuml server
@@ -6,7 +6,7 @@ Using planuml for diagrams.
   Inlining UML is better for llm
     Could have script that injects UML
 
-Notebook that identifes the most important critique and proposes solutions.
+Notebook that identifies the most important critique and proposes solutions.
   The user can review inline and accept/reject
 
 Tests are probably much easier to produce in JS rather than TS
