@@ -99,7 +99,7 @@ export const callOpenAI = async (
   } = options;
 
   if (typeof prompt !== 'string' || prompt.trim().length === 0) {
-    throw new Error('Invalid prompt: Prompt must be a non-empty string.');
+    throw new Error(`Invalid prompt: Prompt must be a non-empty string. ${prompt}`);
   }
 
   // Merge default config with any overrides
